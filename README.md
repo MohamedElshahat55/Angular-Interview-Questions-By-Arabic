@@ -113,7 +113,8 @@ of(101, 102)
 <div dir="auto" align="right">
 الفرق بين RxJS of و RxJS from ببساطة هو في نوع المدخلات اللي كل واحد فيهم بيتعامل معاها وطريقة تحويلهم لـ Observable
 
-of - 1
+### of - 1
+
 بتاخد مجموعة من القيم (زي "a" و "b" و "c") وتحولهم لـ observable sequence، يعني كل قيمة بتطلع لوحدها.
 
 ```typescript
@@ -122,7 +123,8 @@ of("a", "b", "c").subscribe((e) => console.log(e));
 
 في الحالة دي، كل حرف هيظهر في السطر على حدة.
 
-from - 2
+### from - 2
+
 بتاخد array أو حاجة شبهه (زي promise) وتحوّله لـ observable، يعني كل عنصر جوه الـ array بيتعامل معاه كجزء من الـ observable.
 
 ```typescript
