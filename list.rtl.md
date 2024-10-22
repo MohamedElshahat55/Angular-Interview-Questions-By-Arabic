@@ -29,12 +29,12 @@
 
 ## Explain RxJS Observable
 
-Observable في RxJS هو طريقة لتبادل البيانات بين اللي بينتجها ( producer) واللي بيستخدمها ( consumer). تخيل إن فيه حد بيبعث لك بيانات، بس مش هتبعت لك غير لما تطلبها (ده نظام pull)، أو ممكن البيانات تتبعت لك من غير ما تطلبها (ده نظام push).
+<div dir="auto" align="right">
+الإجابة المبسطة: الـ Observable في RxJS هو طريقة لتبادل البيانات بين اللي بينتجها (الـ producer) واللي بيستخدمها (الـ consumer). تخيل إن فيه حد بيبعث لك بيانات، بس مش هتبعت لك غير لما تطلبها (ده نظام الـ pull)، أو ممكن البيانات تتبعت لك من غير ما تطلبها (ده نظام الـ push).
 
-في JavaScript العادي، أنت اللي بتطلب البيانات (ده زي pull). لكن في RxJS Observable، البيانات بتتبعت لك تلقائيًا أول ما تعمل subscribe للـ Observable (ده نظام push).
+في الـ JavaScript العادي، أنت اللي بتطلب البيانات (ده زي الـ pull). لكن في الـ RxJS Observable، البيانات بتتبعت لك تلقائيًا أول ما تعمل subscribe للـ Observable (ده نظام الـ push).
 
-في Angular، Observable بتبدأ تشتغل لما تعملها subscribe، وبتقدر تعمل كده إما باستخدام subscribe مباشرةً أو باستخدام async pipe.
+في Angular، الـ Observable بتبدأ تشتغل لما تعملها subscribe، وبتقدر تعمل كده إما باستخدام subscribe مباشرةً أو باستخدام async pipe.
 
-وأي دالة في HttpClient في Angular، زي اللي بتعمل طلبات HTTP، بترجع Observable، يعني البيانات بتتبعت لك أول ما تعمل subscribe ليها.
-
+وأي دالة في HttpClient في Angular، زي اللي بتعمل طلبات HTTP، بترجع Observable، يعني البيانات بتتبعت لك أول ما تعمل subscribe ليها.</div>
 [⬆️ Back to Top](#top)
