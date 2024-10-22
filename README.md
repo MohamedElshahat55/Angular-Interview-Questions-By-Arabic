@@ -5,7 +5,7 @@
 ### Table of Contents
 
 | No. | Questions                                                                                                                                                                                                                                                                                                        |
-| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
 | 1   | [Explain RxJS Observable?](#explain-rxjs-observable)                                                                                                                                                                                                                                                             |
 | 2   | [What are RxJS operators?](#what-are-rxjs-operators)                                                                                                                                                                                                                                                             |
 | 3   | [What is Observable.pipe() and how to use it?](#what-is-observablepipe-and-how-to-use-it)                                                                                                                                                                                                                        |
@@ -28,6 +28,7 @@
 | 20  | [What are the best practices for managing Observable subscriptions in Angular and ensuring there are no memory leaks?](#what-is-the-difference-between-subject-behaviorsubject-replaysubject-and-asyncsubject-in-rxjs-how-do-they-differ-in-terms-of-behavior-and-use-cases)                                     |
 | 21  | [what are the differences between cold observable and hot observable?](#what-are-the-differences-between-cold-observable-and-hot-observable)                                                                                                                                                                     |
 | 22  | [What are the differences between Observables and Promises?](#what-are-the-differences-between-observables-and-promises)                                                                                                                                                                                         |
+| 23  | [What is a higher-order Observable?](#what-is-a-higher-order-observable)                                                                                                                                                                                                                                         |     |
 
 ## Explain RxJS Observable
 
@@ -1338,5 +1339,117 @@ hotObservable.next(Math.random());
 
 بيبدأ بس لما تعمل اشتراك وممكن يطلعلك قيم متعددة.
 عندها operators قوية جدًا بتخليك تتعامل مع البيانات بسهولة، وده بيفرق كتير في المشاريع الكبيرة.
+
+</div>
+<hr/>
+
+## What is a higher-order Observable?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+الـ Higher-order Observable ببساطة هو Observable اللي بيطلع Observables تانية، بدل ما يطلع قيم عادية زي أرقام أو نصوص. يعني تقدر تقول إنه بيطلع Observable داخل Observable
+
+### إمتى بنحتاج الـ Higher-order Observable؟
+
+لما يكون عندك عمليات غير متزامنة كتيرة، زي إنك تعمل طلبات HTTP متتابعة أو تتعامل مع أحداث معينة بشكل مرتب، هنا بيجي دور الـ Higher-order Observable. هو بيساعدك على إنك "تسلسل" العمليات دي بشكل مرتب وفعال.
+
+### إزاي بنتعامل مع الـ Higher-order Observable؟
+
+عشان نتعامل مع الـ Higher-order Observables، بنستخدم Operators زي:
+mergeMap
+switchMap
+concatMap
+
+الـ Operators دي بتساعد على "flatten " أو "دمج" الـObservables اللي طالعين من الـ Higher-order Observable عشان يكون عندك Observable واحد في النهاية، وتقدر تشترك فيه بشكل عادي وتتعامل مع القيم اللي بتطلع منه.
+
+### كل Operator بيشتغل إزاي؟
+
+#### mergeMap
+
+بيعمل flatten للـObservables اللي بتطلع من الـObservable الأصلي، ويشغلهم كلهم بالتوازي. يعني لو فيه أكتر من Observable طالع، كلهم هيشتغلوا في نفس الوقت.
+
+#### switchMap
+
+ده بيعمل flatten زي mergeMap، لكن الفرق إنه بيبدل الاشتراك لو فيه Observable جديد طلع. يعني لو فيه Observable جديد طلع، بيكنسل القديم ويشتغل على الجديد بس.
+
+#### concatMap
+
+ده بيشتغل زيهم بس بالتتابع. يعني كل Observable يخلص الأول قبل ما اللي بعده يبدأ، وده بيفيد لما يكون فيه ترتيب مهم لازم يتبع.
+
+#### 💡 مثال
+
+ <div dir="auto" align="left">
+
+```typescript
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+
+@Injectable({
+  providedIn: "root",
+})
+export class UserService {
+  private apiUrl = "https://jsonplaceholder.typicode.com/users";
+
+  constructor(private http: HttpClient) {}
+
+  getUserById(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}`);
+  }
+}
+```
+
+</div>
+ نعمل component فيه input عشان المستخدم يكتب ID، ونعمل اشتراك (subscribe) في القيمة:
+
+ <div dir="auto" align="left">
+
+```typescript
+import { Component, OnInit } from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { UserService } from "./user.service";
+import { switchMap, debounceTime, distinctUntilChanged } from "rxjs/operators";
+
+@Component({
+  selector: "app-user-search",
+  template: `
+    <h2>Search for User</h2>
+    <input
+      type="number"
+      [formControl]="userIdControl"
+      placeholder="Enter User ID"
+    />
+
+    <div *ngIf="userData">
+      <h3>User Details:</h3>
+      <p>Name: {{ userData.name }}</p>
+      <p>Email: {{ userData.email }}</p>
+      <p>Address: {{ userData.address.street }}, {{ userData.address.city }}</p>
+    </div>
+  `,
+})
+export class UserSearchComponent implements OnInit {
+  userIdControl = new FormControl();
+  userData: any;
+
+  constructor(private userService: UserService) {}
+
+  ngOnInit() {
+    // Listen for changes in the user ID input
+    this.userIdControl.valueChanges
+      .pipe(
+        debounceTime(300), // Small delay to allow the user to finish typing
+        distinctUntilChanged(), // Ensure the new value is different from the previous one
+        switchMap((id: number) => this.userService.getUserById(id)) // Switch to a new request based on the new ID
+      )
+      .subscribe((data) => {
+        this.userData = data; // Store the user data from the API response
+      });
+  }
+}
+```
+
+</div>
 
 </div>
