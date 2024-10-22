@@ -2,6 +2,8 @@
 
 # Angular RxJS Interview Questions
 
+connect with me on [LinkedIn](www.linkedin.com/in/mohamed-elshahat-4017a1303) for more technical updates and content.
+
 ### Table of Contents
 
 | No. | Questions                                                                                                                                                                                                                                                                                                        |
