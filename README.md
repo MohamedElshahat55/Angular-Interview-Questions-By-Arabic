@@ -29,6 +29,8 @@
 
 ## Explain RxJS Observable
 
+[⬆️ Back to Top](#top)
+
 <div dir="auto" align="right">
 الإجابة المبسطة: الـ Observable في RxJS هو طريقة لتبادل البيانات بين اللي بينتجها (الـ producer) واللي بيستخدمها (الـ consumer). تخيل إن فيه حد بيبعث لك بيانات، بس مش هتبعت لك غير لما تطلبها (ده نظام الـ pull)، أو ممكن البيانات تتبعت لك من غير ما تطلبها (ده نظام الـ push).
 
@@ -36,5 +38,46 @@
 
 في Angular، الـ Observable بتبدأ تشتغل لما تعملها subscribe، وبتقدر تعمل كده إما باستخدام subscribe مباشرةً أو باستخدام async pipe.
 
-وأي دالة في HttpClient في Angular، زي اللي بتعمل طلبات HTTP، بترجع Observable، يعني البيانات بتتبعت لك أول ما تعمل subscribe ليها.</div>
+</div>
+
+## What are RxJS operators?
+
 [⬆️ Back to Top](#top)
+
+<div dir="rtl" align='right'>
+RxJS operators ببساطة هما  (functions) بتساعدك في التعامل مع **Observables** بطريقة مرنة وسهلة، وبتنقسم لنوعين:
+
+### **Pipeable Operators**
+
+دي العمليات اللي بتشتغل مع `Observable.pipe()`. زي مثلاً:
+
+- **map**: بتاخد **observable** وتعدل على الداتا اللي فيه.
+- **switchMap**: بتبدل بين **observables** بطريقة ذكية لما فيه طلبات جديدة.
+- **mergeMap** و**concatMap**: لدمج أو تسلسل **observables**.
+- **takeUntil**: بتوقف **observable** لما يحصل حاجة معينة.
+- **retry** و**catchError** و**throwError**: للتعامل مع الأخطاء وإعادة المحاولة لو في مشكلة.
+
+دي كل العمليات اللي ممكن تستخدمها في `pipe()`، يعني بتاخد **observable** وتعمل عليه شغل وتطلعلك **observable** جديد.
+
+مثال على استيراد **pipeable operators**:
+
+```typescript
+import { map, switchMap, debounceTime, catchError } from "rxjs/operators";
+```
+
+### 2. **Creation Operators**:
+
+دي العمليات اللي بتقدر تستخدمها كدوال مستقلة لإنشاء **observables**. زي مثلاً:
+
+- **of**: لإنشاء **observable** من قيمة أو مجموعة قيم.
+- **from**: بيعمل **observable** من **array** أو **promise**.
+- **interval**: بينشئ **observable** بيرجع أرقام على فترات زمنية محددة.
+- **fromEvent**: لإنشاء **observable** من الأحداث اللي بتحصل على DOM زي الـ `click`.
+
+مثال على استيراد **creation operators**:
+
+```typescript
+import { of, from, interval, fromEvent } from "rxjs";
+```
+
+</div>
