@@ -813,6 +813,8 @@ export class MultiFilterComponent implements OnInit {
 بنحدد نوع الحدث اللي عايزين نسمعه (زي 'click'، 'keyup'، 'mousemove'، إلخ).
 بعد كده بنستخدم الـobservable الناتج عشان نعمل اشتراك (subscription) ونتعامل مع الحدث.
 
+<div dir="auto" align="left">
+
 ```typescript
 import { fromEvent } from "rxjs";
 import { filter } from "rxjs/operators";
@@ -827,5 +829,7 @@ clicks$.subscribe((event) => {
   console.log("Clicked on the left side!", event);
 });
 ```
+
+</div>
 
 </div>
