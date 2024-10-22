@@ -2,26 +2,28 @@
 
 # Angular RxJS Interview Questions
 
-| No. | Questions                                                                                                                          |
-| --- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | [Explain RxJS Observable?](#explain-rxjs-observable)                                                                               |
-| 2   | [What are RxJS operators?](#what-are-rxjs-operators)                                                                               |
-| 3   | [What is Observable.pipe() and how to use it?](#what-is-observablepipe-and-how-to-use-it)                                          |
-| 4   | [What is the difference between RxJS of and from?](#what-is-the-difference-between-rxjs-of-and-from)                               |
-| 5   | [Explain RxJS map operator?](#explain-rxjs-map-operator)                                                                           |
-| 6   | [Explain RxJS switchMap operator?](#explain-rxjs-switchmap-operator)                                                               |
-| 7   | [Explain RxJS mergeMap operator?](#explain-rxjs-mergemap-operator)                                                                 |
-| 8   | [Explain RxJS concatMap operator?](#explain-rxjs-concatmap-operator)                                                               |
-| 9   | [Explain RxJS exhaustMap operator?](#explain-rxjs-exhaustmap-operator)                                                             |
-| 10  | [How will you handle errors on observable using RxJS throwError?](#how-will-you-handle-errors-on-observable-using-rxjs-throwerror) |
-| 11  | [How will you handle errors on observable using RxJS catchError?](#how-will-you-handle-errors-on-observable-using-rxjs-catcherror) |
-| 12  | [Explain RxJS retry operator?](#explain-rxjs-retry-operator)                                                                       |
-| 13  | [Explain RxJS filter operator?](#explain-rxjs-filter-operator)                                                                     |
-| 14  | [Explain RxJS tap operator?](#explain-rxjs-tap-operator)                                                                           |
-| 15  | [Explain RxJS takeUntil operator?](#explain-rxjs-takeUntil-operator)                                                               |
-| 16  | [Explain RxJS debounceTime operator?](#explain-rxjs-debouncetime-operator)                                                         |
-| 17  | [Explain RxJS combineLatestWith operator?](#explain-rxjs-combinelatestwith-operator)                                               |
-| 18  | [Explain RxJS fromEvent operator?](#explain-rxjs-fromevent-operator)                                                               |
+| No. | Questions                                                                                                                                                                                                                                                                                                        |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | [Explain RxJS Observable?](#explain-rxjs-observable)                                                                                                                                                                                                                                                             |
+| 2   | [What are RxJS operators?](#what-are-rxjs-operators)                                                                                                                                                                                                                                                             |
+| 3   | [What is Observable.pipe() and how to use it?](#what-is-observablepipe-and-how-to-use-it)                                                                                                                                                                                                                        |
+| 4   | [What is the difference between RxJS of and from?](#what-is-the-difference-between-rxjs-of-and-from)                                                                                                                                                                                                             |
+| 5   | [Explain RxJS map operator?](#explain-rxjs-map-operator)                                                                                                                                                                                                                                                         |
+| 6   | [Explain RxJS switchMap operator?](#explain-rxjs-switchmap-operator)                                                                                                                                                                                                                                             |
+| 7   | [Explain RxJS mergeMap operator?](#explain-rxjs-mergemap-operator)                                                                                                                                                                                                                                               |
+| 8   | [Explain RxJS concatMap operator?](#explain-rxjs-concatmap-operator)                                                                                                                                                                                                                                             |
+| 9   | [Explain RxJS exhaustMap operator?](#explain-rxjs-exhaustmap-operator)                                                                                                                                                                                                                                           |
+| 10  | [How will you handle errors on observable using RxJS throwError?](#how-will-you-handle-errors-on-observable-using-rxjs-throwerror)                                                                                                                                                                               |
+| 11  | [How will you handle errors on observable using RxJS catchError?](#how-will-you-handle-errors-on-observable-using-rxjs-catcherror)                                                                                                                                                                               |
+| 12  | [Explain RxJS retry operator?](#explain-rxjs-retry-operator)                                                                                                                                                                                                                                                     |
+| 13  | [Explain RxJS filter operator?](#explain-rxjs-filter-operator)                                                                                                                                                                                                                                                   |
+| 14  | [Explain RxJS tap operator?](#explain-rxjs-tap-operator)                                                                                                                                                                                                                                                         |
+| 15  | [Explain RxJS takeUntil operator?](#explain-rxjs-takeUntil-operator)                                                                                                                                                                                                                                             |
+| 16  | [Explain RxJS debounceTime operator?](#explain-rxjs-debouncetime-operator)                                                                                                                                                                                                                                       |
+| 17  | [Explain RxJS combineLatestWith operator?](#explain-rxjs-combinelatestwith-operator)                                                                                                                                                                                                                             |
+| 18  | [Explain RxJS fromEvent operator?](#explain-rxjs-fromevent-operator)                                                                                                                                                                                                                                             |
+| 19  | [What is the difference between Subject, BehaviorSubject, ReplaySubject, and AsyncSubject in RxJS? How do they differ in terms of behavior and use cases?](#what-is-the-difference-between-subject-behaviorsubject-replaysubject-and-asyncsubject-in-rxjs-how-do-they-differ-in-terms-of-behavior-and-use-cases) |
+| 20  | [What are the best practices for managing Observable subscriptions in Angular and ensuring there are no memory leaks?](#what-is-the-difference-between-subject-behaviorsubject-replaysubject-and-asyncsubject-in-rxjs-how-do-they-differ-in-terms-of-behavior-and-use-cases)                                     |
 
 ## Explain RxJS Observable
 
@@ -911,5 +913,165 @@ clicks$.subscribe((event) => {
 ```
 
 </div>
+
+</div>
+
+## What is the difference between Subject, BehaviorSubject, ReplaySubject, and AsyncSubject in RxJS? How do they differ in terms of behavior and use cases?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+الفرق بين Subject و BehaviorSubject و ReplaySubject و AsyncSubject في RxJS
+كل واحد من هذه الأنواع له سلوك خاص في التعامل مع observables والبيانات اللي يتم بثها للمشتركين (subscribers). خلينا نشرح كل واحد بالتفصيل، مع ذكر الفروق بينهم في السلوك والاستخدامات.
+
+### 1. Subject
+
+Subject هو observable عادي، لكن مع ميزات إضافية. يمكنه أن يستقبل بيانات ويصدرها، ويستطيع أكثر من subscriber الاشتراك فيه.
+لا يحتفظ بأي بيانات سابقة: لو اشتركت في الـSubject بعد ما أرسل بيانات بالفعل، لن تتلقى البيانات السابقة، وستبدأ في تلقي القيم الجديدة فقط.
+
+### السلوك:
+
+أي مشترك جديد يبدأ في استقبال البيانات من اللحظة اللي اشترك فيها فقط، ولا يتلقى أي قيم سابقة.
+
+### الاستخدامات:
+
+مناسب للبث المباشر (real-time broadcasting) حيث لا نحتاج للاحتفاظ بالبيانات السابقة.
+
+<div dir="auto" align="left">
+
+```typescript
+import { Subject } from "rxjs";
+
+const subject = new Subject();
+
+subject.subscribe((value) => console.log("Subscriber 1:", value));
+
+subject.next(1); // Subscriber 1: 1
+subject.next(2); // Subscriber 1: 2
+
+subject.subscribe((value) => console.log("Subscriber 2:", value));
+
+subject.next(3); // Subscriber 1: 3, Subscriber 2: 3
+```
+
+</div>
+
+💡**Hint**: المشترك الأول يتلقى جميع القيم، لكن المشترك الثاني يتلقى فقط القيم الجديدة التي تم إرسالها بعد الاشتراك.
+
+### 2. BehaviorSubject
+
+BehaviorSubject هو نوع خاص من الـSubject يحتفظ دائمًا بآخر قيمة تم إصدارها.
+عندما يشترك أي subscriber جديد، يستلم فورًا آخر قيمة تم بثها حتى لو تم الاشتراك بعد إرسال هذه القيمة.
+
+### السلوك:
+
+كل مشترك جديد يستلم آخر قيمة تم إصدارها، ثم يتلقى التحديثات الجديدة.
+
+### الاستخدامات:
+
+مفيد عندما تحتاج أن يحصل المشترك الجديد على آخر حالة أو آخر قيمة تم إصدارها بالفعل (مثل تحديث حالة المستخدم، أو تحميل بيانات التطبيق).
+
+<div dir="auto" align="left">
+
+```typescript
+import { BehaviorSubject } from "rxjs";
+
+const behaviorSubject = new BehaviorSubject(0); // القيمة الافتراضية هي 0
+
+behaviorSubject.subscribe((value) => console.log("Subscriber 1:", value));
+
+behaviorSubject.next(1); // Subscriber 1: 1
+behaviorSubject.next(2); // Subscriber 1: 2
+
+behaviorSubject.subscribe((value) => console.log("Subscriber 2:", value)); // Subscriber 2: 2
+
+behaviorSubject.next(3); // Subscriber 1: 3, Subscriber 2: 3
+```
+
+</div>
+
+💡**Hint** المشترك الثاني استلم القيمة الأخيرة (2) فور اشتراكه، ثم استلم القيمة الجديدة التي أرسلت بعد ذلك (3).
+
+### 3. ReplaySubject
+
+ReplaySubject هو نوع آخر من Subjects يمكنه أن يحتفظ بعدد معين من القيم السابقة (أو حتى كل القيم) ويعيد بثها لأي مشترك جديد عند الاشتراك.
+يمكن تحديد عدد القيم التي يتم إعادة بثها للمشتركين الجدد، مثل آخر قيمة أو آخر قيمتين أو أكثر.
+
+### السلوك:
+
+أي مشترك جديد يتلقى عددًا معينًا من القيم السابقة (يمكن تحديد العدد)، ثم يبدأ في تلقي التحديثات الجديدة.
+
+### الاستخدامات:
+
+مفيد في التطبيقات التي تحتاج إلى إعادة تشغيل التاريخ (history replay) لمشتركين جدد، مثل تسجيل النشاطات أو الأحداث السابقة.
+
+<div dir="auto" align="left">
+
+```typescript
+import { ReplaySubject } from "rxjs";
+
+const replaySubject = new ReplaySubject(2); // يحتفظ بآخر قيمتين
+
+replaySubject.next(1);
+replaySubject.next(2);
+replaySubject.next(3);
+
+replaySubject.subscribe((value) => console.log("Subscriber 1:", value)); // Subscriber 1: 2, 3
+
+replaySubject.next(4); // Subscriber 1: 4
+
+replaySubject.subscribe((value) => console.log("Subscriber 2:", value)); // Subscriber 2: 3, 4
+3;
+```
+
+</div>
+
+💡 **Hint**: المشترك الأول استلم القيمتين الأخيرتين (2 و 3)، بينما المشترك الثاني استلم (3 و 4) لأنه اشترك بعد إرسال القيم.
+
+### 4. AsyncSubject
+
+AsyncSubject هو نوع من الـSubject لا يصدر أي قيم للمشتركين إلا بعد اكتمال الـobservable، وعندها يقوم بإرسال آخر قيمة فقط تم بثها قبل الاكتمال لجميع المشتركين.
+لا يصدر أي شيء حتى يتم استدعاء complete
+
+### السلوك:
+
+المشتركين يستلمون آخر قيمة فقط عندما يتم استدعاء complete
+
+### الاستخدامات:
+
+يستخدم عندما تحتاج إلى إصدار آخر قيمة فقط عند انتهاء العمل، مثل استرجاع بيانات بعد إتمام عملية معقدة أو عند اكتمال عملية حسابية.
+
+<div dir="auto" align="left">
+
+```typescript
+import { AsyncSubject } from "rxjs";
+
+const asyncSubject = new AsyncSubject();
+
+asyncSubject.subscribe((value) => console.log("Subscriber 1:", value));
+
+asyncSubject.next(1);
+asyncSubject.next(2);
+asyncSubject.next(3);
+
+asyncSubject.subscribe((value) => console.log("Subscriber 2:", value));
+
+asyncSubject.next(4);
+asyncSubject.complete(); // عند الاكتمال، يتم إرسال آخر قيمة
+
+// Subscriber 1: 4
+// Subscriber 2: 4
+```
+
+</div>
+
+💡 **Hint** : هنا، المشتركين الاثنين استلموا فقط القيمة الأخيرة (4) بعد اكتمال الـobservable.
+
+### متى تستخدم كل نوع؟
+
+Subject: لما تكون مش محتاج تحتفظ بأي بيانات سابقة، وعايز تبث القيم الجديدة فقط للمشتركين الحاليين.
+BehaviorSubject: لما تحتاج أن يحصل المشترك الجديد على آخر قيمة تم إصدارها، حتى لو اشترك بعد إرسالها (مثل حالة المستخدم أو حالة التطبيق).
+ReplaySubject: لما تحتاج أن يحصل المشترك الجديد على عدد من القيم السابقة أو كل القيم التي تم إصدارها (مثل تسجيل الأحداث السابقة).
+AsyncSubject: لما تحتاج أن يحصل المشترك على آخر قيمة فقط بعد اكتمال العمل (مثل نتائج عملية معقدة أو حسابية).
 
 </div>
