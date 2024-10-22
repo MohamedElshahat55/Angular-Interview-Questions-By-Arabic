@@ -134,3 +134,29 @@ from(["a", "b", "c"]).subscribe((e) => console.log(e));
 هنا، نفس القيم اللي كانت في الـ array (يعني "a", "b", "c") هتتعامل معاها كأن كل عنصر بيتطلع لوحده في الـ observable.
 
 </div>
+
+## Explain RxJS map operator?
+
+[⬆️ Back to Top](#top)
+
+![ map ](https://rxjs.dev/assets/images/marble-diagrams/map.png)
+
+<div dir="auto" align="right">
+الـ map operator في RxJS ببساطة بيطبق function معينة على كل عنصر بيتم إصداره من الـ Observable. يعني كل عنصر بيعدي من المصدر، بيتم تطبيق الـ function عليه والنتيجة هي اللي بتطلع.
+
+```typescript
+of(1, 2, 3, 4)
+  .pipe(map((e) => e * e))
+  .subscribe((output) => console.log(output));
+```
+
+في المثال ده:
+
+عندنا observable بيرسل القيم (1, 2, 3, 4).
+كل قيمة من القيم دي بتدخل في map، اللي بتضرب القيمة في نفسها (يعني بتربع القيمة).
+بعد كده الـ observable الجديد اللي طالع بيرجع القيم: 1, 4, 9, 16.
+يعني لما بنعمل subscribe على الـ observable الناتج، بنشوف القيم الجديدة اللي هي 1، 4، 9، و 16 في الـ console.
+
+بكده تقدر تستخدم map علشان تعدل أو تعمل عمليات على البيانات اللي بتيجي من الـ observable الأصلي بطريقة بسيطة.
+
+</div>
