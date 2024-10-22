@@ -2,8 +2,6 @@
 
 # Angular RxJS Interview Questions
 
-<hr/>
-
 ### Table of Contents
 
 | No. | Questions                                                                                                                                                                                                                                                                                                        |
@@ -29,6 +27,7 @@
 | 19  | [What is the difference between Subject, BehaviorSubject, ReplaySubject, and AsyncSubject in RxJS? How do they differ in terms of behavior and use cases?](#what-is-the-difference-between-subject-behaviorsubject-replaysubject-and-asyncsubject-in-rxjs-how-do-they-differ-in-terms-of-behavior-and-use-cases) |
 | 20  | [What are the best practices for managing Observable subscriptions in Angular and ensuring there are no memory leaks?](#what-is-the-difference-between-subject-behaviorsubject-replaysubject-and-asyncsubject-in-rxjs-how-do-they-differ-in-terms-of-behavior-and-use-cases)                                     |
 | 20  | [what are the differences between cold observable and hot observable?](#what-are-the-differences-between-cold-observable-and-hot-observable)                                                                                                                                                                     |
+| 18  | [What are the differences between Observables and Promises?](#what-are-the-differences-between-observables-and-promises)                                                                                                                                                                                         |
 
 ## Explain RxJS Observable
 
@@ -1264,4 +1263,59 @@ hotObservable.next(Math.random());
 ```
 
 </div>
+</div>
+
+</hr>
+
+## What are the differences between Observables and Promises?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+الفرق بين الـ Observables والـ Promises يعتبر مهم جدًا لما تيجي تتعامل مع الكود الـ Asynchronous في JavaScript أو Angular.
+
+### التشابهات بين Promise و Observable
+
+الاتنين بيشتغلوا مع العمليات Asynchronous (غير المتزامنة).
+الاتنين بيتحكموا في إمتى الكود اللي حاطه المستخدم هياخد القيمة.
+
+### الفرق بينهم
+
+#### 🏃‍♀️ التنفيذ (Execution)
+
+Promise بيتنفذ فورًا بمجرد ما يتكتب. يعني بمجرد ما تكتب الكود اللي بيعمل promise، هيتنفذ على طول حتى لو لسه ماعملتش then عليه. يعني الكود اللي جواه هيشتغل مباشرة.
+
+Observable بيشتغل بس لما تعمل subscribe، يعني مش هيبدأ يشتغل غير لما تطلبه. ده معناه إنك ممكن "تحضر" الـobservable لعملية async لكن ما تنفذوش غير لما تحتاجه.
+
+#### 📦 القيم (Values)
+
+Promise بيطلع قيمة واحدة بس أو خطأ. يعني هو يا إما يرجعلك النتيجة أو يرمي خطأ لو حصل مشكلة.
+
+Observable ممكن يطلعلك أكتر من قيمة أو قيمة واحدة أو مفيش قيمة خالص. ده معناه إنه مناسب لحاجات زي الأحداث المتكررة (زي الضغط على زرار أكتر من مرة) أو التعامل مع event emitters في Angular.
+
+مثال: لو عندك حاجة بتعمل استجابة للأحداث زي حركة الماوس أو كتابة المستخدم، الـobservable هو الحل الأمثل.
+
+#### 🚧 الإلغاء (Cancellation)
+
+Promise مينفعش يتلغي. بمجرد ما يبدأ، بيكمل شغله حتى لو مش محتاجه. فيه بعض الطرق أو المكتبات اللي بتحاول تحايل على الموضوع، بس الـPromise في الأساس مش معمول للإلغاء.
+
+Observable معمول إنه يكون قابل للإلغاء، وده بيساعدك في إدارة الموارد بتاعتك بشكل أحسن. تقدر تلغي الاشتراك باستخدام unsubscribe أو من خلال الـoperators.
+
+في Angular، ده بيساعدك تعمل حاجات زي الـ typeahead (بحث مباشر) وتمنع تسرب الذاكرة باستخدام takeUntil اللي بيوقف الـobservable لما الـcomponent يتشال.
+
+#### ⚙️ (Operators)
+
+Promise مفيهوش operators، يعني مفيش طرق جاهزة للتعامل مع البيانات اللي بترجع من promise غير بإنك تستعمل then أو catch.
+
+Observable عنده أنواع كتير من الـ operators، زي التحويل، الفلترة، التعامل مع الأخطاء، والـoperators دي بتخليك تعمل حاجات معقدة بطرق بسيطة جدًا.
+
+مثال: تقدر تعمل حاجات زي map() لتحويل البيانات، أو debounceTime() عشان تأخر تنفيذ الـobservable، أو catchError() للتعامل مع الأخطاء.
+
+#### الخلاصة
+
+Promise بيبدأ الشغل فورًا وبيطلعلك قيمة واحدة بس.
+Observable بيبدأ بس لما تعمل اشتراك وممكن يطلعلك قيم متعددة.
+Promise مش قابل للإلغاء، لكن Observable قابل للإلغاء.
+Observables عندها operators قوية جدًا بتخليك تتعامل مع البيانات بسهولة، وده بيفرق كتير في المشاريع الكبيرة.
+
 </div>
