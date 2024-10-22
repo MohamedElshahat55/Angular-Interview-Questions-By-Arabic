@@ -31,6 +31,7 @@
 | 21  | [What are the differences between cold observable and hot observable?](#what-are-the-differences-between-cold-observable-and-hot-observable)                                                                                                                                                                     |
 | 22  | [What are the differences between Observables and Promises?](#what-are-the-differences-between-observables-and-promises)                                                                                                                                                                                         |
 | 23  | [What is a higher-order Observable?](#what-is-a-higher-order-observable)                                                                                                                                                                                                                                         |
+| 24  | [How can you share a single Observable among multiple subscribers?](#how-can-you-share-a-single-observable-among-multiple-subscribers)                                                                                                                                                                           |
 
 ## Explain RxJS Observable
 
@@ -1454,4 +1455,77 @@ export class UserSearchComponent implements OnInit {
 
 </div>
 
+</div>
+
+<hr/>
+
+## How can you share a single Observable among multiple subscribers?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+لما تيجي تشارك Observable واحد بين أكتر من مشترك (subscriber)، ممكن تستخدم share أو shareReplay. دول operators في RxJS بيساعدوك إنك تخلي الـObservable يتشارك بين المشتركين بدل ما كل واحد يعمل اشتراك منفصل ويبدأ العملية من الأول.
+
+### إزاي الكلام ده بيفيدك؟
+
+لما يكون عندك Observable بيعمل عملية معينة زي طلب HTTP، الطبيعي إن كل مشترك هيعمل طلب جديد، وده ممكن يكون مشكلة لو عندك مشتركين كتير، لأن كل واحد هيبدأ الطلب من الأول.
+
+لكن لما تستخدم share، المشتركين كلهم هيشتركوا في نفس الـObservable اللي شغال بالفعل، فمش هيعملوا طلبات متكررة، هيستفيدوا من نفس النتيجة.
+
+### طيب إيه الفرق بين share و shareReplay؟
+
+### ()share
+
+ده بيشترك في الـObservable الأصلي ويشترك فيه كل المشتركين، بس المشكلة إنه ما بيحتفظش بالقيم اللي طلعت. يعني لو واحد اشترك متأخر، مش هيشوف القيم اللي طلعت قبل ما يشترك.
+
+### ()shareReplay
+
+هنا بقى، ده بيشتغل زي share بس بميزة إضافية، إنه بيحتفظ بعدد معين من القيم اللي طلعت، عشان لو مشترك جديد اشترك متأخر، يقدر يشوف القيم اللي طلعت قبل كده. يعني بيعيد إرسال القيم للمشتركين الجدد.
+
+#### 💡 مثال
+
+ <div dir="auto" align="left">
+
+```typescript
+import { HttpClient } from "@angular/common/http";
+import { Component, OnInit } from "@angular/core";
+import { shareReplay } from "rxjs/operators";
+
+@Component({
+  selector: "app-user",
+  template: `
+    <h2>User Information</h2>
+    <div *ngIf="userData">
+      <p>Name: {{ userData.name }}</p>
+      <p>Email: {{ userData.email }}</p>
+    </div>
+  `,
+})
+export class UserComponent implements OnInit {
+  userData: any;
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    const userObservable = this.http
+      .get("https://jsonplaceholder.typicode.com/users/1")
+      .pipe(
+        shareReplay(1) // Replay the last emitted value for any new subscribers
+      );
+
+    // First subscriber
+    userObservable.subscribe((data) => {
+      console.log("Subscriber 1 received data:", data);
+      this.userData = data;
+    });
+
+    // Second subscriber
+    userObservable.subscribe((data) => {
+      console.log("Subscriber 2 received data:", data);
+    });
+  }
+}
+```
+
+</div>
 </div>
