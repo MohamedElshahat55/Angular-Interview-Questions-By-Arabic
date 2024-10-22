@@ -1075,3 +1075,94 @@ ReplaySubject: لما تحتاج أن يحصل المشترك الجديد عل�
 AsyncSubject: لما تحتاج أن يحصل المشترك على آخر قيمة فقط بعد اكتمال العمل (مثل نتائج عملية معقدة أو حسابية).
 
 </div>
+
+## What are the best practices for managing Observable subscriptions in Angular and ensuring there are no memory leaks?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+
+### ليه manage subscriptions مهمة؟
+
+في Angular، لما بتشتغل مع Observables زي HTTP requests أو حتى events زي كليك أو تغيير بيانات، لازم تتأكد إنك بتفصل (unsubscribe) عنهم لما ما تكونش محتاجهم، زي لما الـcomponent يتشال من الصفحة أو يتدمر. لو ما عملتش كده، ممكن يحصل تسرب في الذاكرة (memory leaks)، وده بيأثر على أداء التطبيق بتاعك مع الوقت.
+
+## أفضل الطرق manage subscriptions
+
+1. استخدام async pipe
+   دي أسهل طريقة ومريحة جدًا، وبتستخدمها لما يكون عندك observable في (template) بتاعك، وعايز تشتغل معاه. async pipe بيعمل كل الشغل الصعب عنك. يعني بيشترك في الـobservable، ولما الـcomponent يتدمر أو يخرج من الشاشة، بيعمل unsubscribe تلقائيًا.
+
+<div dir="auto" align="left">
+
+```typescript
+<div *ngIf="data$ | async as data">
+  {{ data }}
+</div>
+```
+
+</div>
+هنا لما البيانات (data$) تتغير، الـasync pipe بيجيبها لك ويعرضها.
+ولو الـcomponent اتشال أو المستخدم راح لشاشة تانية، الـasync pipe بيعمل unsubscribe تلقائي.
+<hr/>
+
+2. استخدام takeUntil مع Subject
+الفكرة إنك تعمل Subject كإشارة (notifier) عشان تدي أمر لجميع الـobservables إنهم يوقفوا لما الـcomponent يتم تدميره. بتستخدم takeUntil كـ operator في الـ pipe عشان يتحقق من الـ Subject، وأول ما تبعتله إشعار (signal)، هو هيوقف كل الاشتراكات.
+<div dir="auto" align="left">
+
+```typescript
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+
+export class MyComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
+
+  ngOnInit() {
+    this.myObservable$
+      .pipe(takeUntil(this.destroy$)) // هنا بنوقف الاشتراك لما الـdestroy$ تعمل emit
+      .subscribe((data) => {
+        console.log(data);
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(); // بنعمل إشعار إن الـcomponent اتدمر
+    this.destroy$.complete(); // بننهي الـSubject تمامًا
+  }
+}
+```
+
+</div>
+
+في المثال ده، بنستخدم destroy$ كإشارة لوقف الاشتراكات لما ngOnDestroy يتنفذ (الـcomponent يتشال).
+كل الاشتراكات بتقف لما الـcomponent يتدمر، وده بيمنع تسرب الذاكرة.
+
+<hr/>
+
+3. التحديث الجديد في Angular 16: takeUntilDestroyed
+   في Angular 16، ظهر شيء جديد اسمه takeUntilDestroyed وده بيسهل الموضوع أكتر. بدل ما تكتب كود كتير عشان تعمل takeUntil مع Subject، دلوقتي Angular وفرت لك حل جاهز.
+
+### إزاي بنستخدمه؟
+
+دلوقتي، مفيش داعي لإنك تعمل Subject بنفسك وتتحكم فيه. Angular هتتعامل مع الموضوع بشكل أوتوماتيكي.
+
+<div dir="auto" align="left">
+
+```typescript
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+
+export class MyComponent {
+  ngOnInit() {
+    this.myObservable$
+      .pipe(takeUntilDestroyed(this)) // هنا بنمرر الـcomponent كـcontext
+      .subscribe((data) => {
+        console.log(data);
+      });
+  }
+}
+```
+
+</div>
+
+takeUntilDestroyed بيخليك تعمل نفس اللي كنا بنعمله مع takeUntil و Subject، بس بشكل أبسط وأسرع.
+مش محتاج تعمل أي Subject، ومجرد ما الـcomponent يتدمر، Angular هتعمل unsubscribe تلقائي.
+
+</div>
