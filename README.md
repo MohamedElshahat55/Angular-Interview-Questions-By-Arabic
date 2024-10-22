@@ -83,6 +83,8 @@ import { of, from, interval, fromEvent } from "rxjs";
 
 ## What is Observable.pipe() and how to use it?
 
+[⬆️ Back to Top](#top)
+
 <div dir="auto" align="right">
 الـ pipe في RxJS هو اللي بنستخدمه عشان نمرر مجموعة من الـ pipeable operators، اللي بنقدر نستخدمها مع observables. يعني ببساطة، تقدر تحط أي عدد من العمليات (operators) جوه الـ pipe، وهيشتغلوا بالتسلسل. الفكرة إن الـ observable الأساسي بيتبعت لأول operator، والنتيجة بتاعت أول واحد بتتبعت للتاني، وهكذا.
 
@@ -100,6 +102,33 @@ of(101, 102)
 النتيجة هتكون: 202، 204 (يعني الأرقام اتضربت في 2 بعد التأخير).
 
 الخلاصة:
-الـ pipe() بيسهل عليك تنفيذ عمليات متتابعة على البيانات اللي جاية من observable، وده بيديك تحكم أكبر في تعديل الداتا أو توقيتها أو التعامل مع الأخطاء.
+الـ pipe بيسهل عليك تنفيذ عمليات متتابعة على البيانات اللي جاية من observable، وده بيديك تحكم أكبر في تعديل الداتا أو توقيتها أو التعامل مع الأخطاء.
+
+</div>
+
+## What is the difference between RxJS of and from?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+الفرق بين RxJS of و RxJS from ببساطة هو في نوع المدخلات اللي كل واحد فيهم بيتعامل معاها وطريقة تحويلهم لـ Observable
+
+of - 1
+بتاخد مجموعة من القيم (زي "a" و "b" و "c") وتحولهم لـ observable sequence، يعني كل قيمة بتطلع لوحدها.
+
+```typescript
+of("a", "b", "c").subscribe((e) => console.log(e));
+```
+
+في الحالة دي، كل حرف هيظهر في السطر على حدة.
+
+from - 2
+بتاخد array أو حاجة شبهه (زي promise) وتحوّله لـ observable، يعني كل عنصر جوه الـ array بيتعامل معاه كجزء من الـ observable.
+
+```typescript
+from(["a", "b", "c"]).subscribe((e) => console.log(e));
+```
+
+هنا، نفس القيم اللي كانت في الـ array (يعني "a", "b", "c") هتتعامل معاها كأن كل عنصر بيتطلع لوحده في الـ observable.
 
 </div>
