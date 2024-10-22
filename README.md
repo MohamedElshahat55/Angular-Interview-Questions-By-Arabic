@@ -51,11 +51,10 @@ RxJS operators ببساطة هما  (functions) بتساعدك في التعام
 
 دي العمليات اللي بتشتغل مع `Observable.pipe()`. زي مثلاً:
 
-- **map**: بتاخد **observable** وتعدل على الداتا اللي فيه.
-- **switchMap**: بتبدل بين **observables** بطريقة ذكية لما فيه طلبات جديدة.
-- **mergeMap** و**concatMap**: لدمج أو تسلسل **observables**.
-- **takeUntil**: بتوقف **observable** لما يحصل حاجة معينة.
-- **retry** و**catchError** و**throwError**: للتعامل مع الأخطاء وإعادة المحاولة لو في مشكلة.
+**map**: بتاخد **observable** وتعدل على الداتا اللي فيه.
+**switchMap**: بتبدل بين **observables** بطريقة ذكية لما فيه طلبات جديدة.**mergeMap** و**concatMap**: لدمج أو تسلسل **observables**.
+**takeUntil**: بتوقف **observable** لما يحصل حاجة معينة.
+**retry** و**catchError** و**throwError**: للتعامل مع الأخطاء وإعادة المحاولة لو في مشكلة.
 
 دي كل العمليات اللي ممكن تستخدمها في `pipe()`، يعني بتاخد **observable** وتعمل عليه شغل وتطلعلك **observable** جديد.
 
@@ -69,10 +68,10 @@ import { map, switchMap, debounceTime, catchError } from "rxjs/operators";
 
 دي العمليات اللي بتقدر تستخدمها كدوال مستقلة لإنشاء **observables**. زي مثلاً:
 
-- **of**: لإنشاء **observable** من قيمة أو مجموعة قيم.
-- **from**: بيعمل **observable** من **array** أو **promise**.
-- **interval**: بينشئ **observable** بيرجع أرقام على فترات زمنية محددة.
-- **fromEvent**: لإنشاء **observable** من الأحداث اللي بتحصل على DOM زي الـ `click`.
+**of**: لإنشاء **observable** من قيمة أو مجموعة قيم.
+**from**: بيعمل **observable** من **array** أو **promise**.
+**interval**: بينشئ **observable** بيرجع أرقام على فترات زمنية محددة.
+**fromEvent**: لإنشاء **observable** من الأحداث اللي بتحصل على DOM زي الـ `click`.
 
 مثال على استيراد **creation operators**:
 
