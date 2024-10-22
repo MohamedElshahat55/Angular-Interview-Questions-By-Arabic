@@ -2,6 +2,10 @@
 
 # Angular RxJS Interview Questions
 
+<hr/>
+
+### Table of Contents
+
 | No. | Questions                                                                                                                                                                                                                                                                                                        |
 | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | [Explain RxJS Observable?](#explain-rxjs-observable)                                                                                                                                                                                                                                                             |
@@ -24,6 +28,7 @@
 | 18  | [Explain RxJS fromEvent operator?](#explain-rxjs-fromevent-operator)                                                                                                                                                                                                                                             |
 | 19  | [What is the difference between Subject, BehaviorSubject, ReplaySubject, and AsyncSubject in RxJS? How do they differ in terms of behavior and use cases?](#what-is-the-difference-between-subject-behaviorsubject-replaysubject-and-asyncsubject-in-rxjs-how-do-they-differ-in-terms-of-behavior-and-use-cases) |
 | 20  | [What are the best practices for managing Observable subscriptions in Angular and ensuring there are no memory leaks?](#what-is-the-difference-between-subject-behaviorsubject-replaysubject-and-asyncsubject-in-rxjs-how-do-they-differ-in-terms-of-behavior-and-use-cases)                                     |
+| 20  | [what are the differences between cold observable and hot observable?](#what-are-the-differences-between-cold-observable-and-hot-observable)                                                                                                                                                                     |
 
 ## Explain RxJS Observable
 
@@ -1165,4 +1170,61 @@ export class MyComponent {
 takeUntilDestroyed بيخليك تعمل نفس اللي كنا بنعمله مع takeUntil و Subject، بس بشكل أبسط وأسرع.
 مش محتاج تعمل أي Subject، ومجرد ما الـcomponent يتدمر، Angular هتعمل unsubscribe تلقائي.
 
+</div>
+
+## what are the differences between cold observable and hot observable?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+الفرق بين Hot Observables و Cold Observables ممكن يتلخص في طريقة تصرفهم مع المشتركين (subscribers) والبيانات اللي بيبعتوها.
+
+### Cold Observables
+
+الـ Cold Observable هو النوع اللي بيبدأ يشتغل لما حد يشترك فيه. يعني إيه؟ يعني مش بيبدأ يبعث بيانات أو يعمل أي حاجة إلا بعد ما أول مشترك يظهر.
+
+💡 مثال بسيط:
+لو عندك طلب HTTP (زي لما تطلب بيانات من سيرفر)، الطلب ده بيكون Cold Observable. ليه؟ لأنه هيبدأ يجيب البيانات ويشتغل بس لما المشترك الأول يشترك فيه.
+
+كل مشترك جديد هيبدأ من الأول كأنه بيطلب نفس البيانات لأول مرة. يعني، لو فيه أكتر من مشترك، كل واحد هيعمل الطلب الخاص بيه.
+
+<div dir="auto" align="left">
+
+```typescript
+const coldObservable = new Observable((observer) => {
+  observer.next(Math.random());
+});
+
+coldObservable.subscribe((value) => console.log("Subscriber 1:", value));
+coldObservable.subscribe((value) => console.log("Subscriber 2:", value));
+```
+
+</div>
+
+في المثال ده، كل مشترك هيستقبل قيمة مختلفة لأن الـobservable هيشتغل من الأول مع كل اشتراك
+
+### Hot Observables
+
+الـ Hot Observable، على العكس، بيبدأ يبعث بيانات بمجرد ما يشتغل، حتى لو مفيش حد مشترك فيه. وده معناه إن أي مشترك جديد هيشترك في النص ويبدأ ياخد البيانات من اللحظة اللي هو اشترك فيها، مش من الأول.
+
+💡 مثال بسيط:
+لو عندك event زي حركة الماوس أو ضغطات زرار، ده يعتبر Hot Observable، لأنه بيبعت البيانات أول ما يحصل الحدث، بغض النظر لو كان فيه مشتركين ولا لأ.
+
+كل مشترك جديد بيشترك بياخد البيانات من اللحظة اللي اشترك فيها. لو حاجة حصلت قبل كده، المشترك الجديد مش هيشوفها.
+
+<div dir="auto" align="left">
+
+```typescript
+const hotObservable = new Subject();
+
+hotObservable.subscribe((value) => console.log("Subscriber 1:", value));
+
+hotObservable.next(Math.random());
+
+hotObservable.subscribe((value) => console.log("Subscriber 2:", value));
+
+hotObservable.next(Math.random());
+```
+
+</div>
 </div>
