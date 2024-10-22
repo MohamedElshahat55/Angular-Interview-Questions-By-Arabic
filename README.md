@@ -44,7 +44,7 @@
 
 [⬆️ Back to Top](#top)
 
-<div dir="rtl" align='right'>
+<div dir="auto" align='right'>
 RxJS operators ببساطة هما  (functions) بتساعدك في التعامل مع **Observables** بطريقة مرنة وسهلة، وبتنقسم لنوعين:
 
 ### **Pipeable Operators**
@@ -58,7 +58,7 @@ RxJS operators ببساطة هما  (functions) بتساعدك في التعام
 
 دي كل العمليات اللي ممكن تستخدمها في `pipe()`، يعني بتاخد **observable** وتعمل عليه شغل وتطلعلك **observable** جديد.
 
-مثال على استيراد **pipeable operators**:
+pipeable operators\*\*:
 
 ```typescript
 import { map, switchMap, debounceTime, catchError } from "rxjs/operators";
@@ -73,10 +73,33 @@ import { map, switchMap, debounceTime, catchError } from "rxjs/operators";
 **interval**: بينشئ **observable** بيرجع أرقام على فترات زمنية محددة.
 **fromEvent**: لإنشاء **observable** من الأحداث اللي بتحصل على DOM زي الـ `click`.
 
-مثال على استيراد **creation operators**:
+\*creation operators\*\*:
 
 ```typescript
 import { of, from, interval, fromEvent } from "rxjs";
 ```
+
+</div>
+
+## What is Observable.pipe() and how to use it?
+
+<div dir="auto" align="right">
+الـ pipe في RxJS هو اللي بنستخدمه عشان نمرر مجموعة من الـ pipeable operators، اللي بنقدر نستخدمها مع observables. يعني ببساطة، تقدر تحط أي عدد من العمليات (operators) جوه الـ pipe، وهيشتغلوا بالتسلسل. الفكرة إن الـ observable الأساسي بيتبعت لأول operator، والنتيجة بتاعت أول واحد بتتبعت للتاني، وهكذا.
+
+```typescript
+of(101, 102)
+  .pipe(
+    delay(1000),
+    map((num) => num * 2)
+  )
+  .subscribe((v) => console.log(v)); // 202, 204
+```
+
+في المثال ده، أول حاجة بنستخدم delay(1000) علشان نأخر التنفيذ ثانية (1000 ميلي ثانية).
+بعد كده، بنستخدم map اللي بيضرب كل رقم في 2.
+النتيجة هتكون: 202، 204 (يعني الأرقام اتضربت في 2 بعد التأخير).
+
+الخلاصة:
+الـ pipe() بيسهل عليك تنفيذ عمليات متتابعة على البيانات اللي جاية من observable، وده بيديك تحكم أكبر في تعديل الداتا أو توقيتها أو التعامل مع الأخطاء.
 
 </div>
