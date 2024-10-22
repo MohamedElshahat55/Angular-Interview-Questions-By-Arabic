@@ -18,14 +18,10 @@
 | 12  | [Explain RxJS retry operator?](#explain-rxjs-retry-operator)                                                                       |
 | 13  | [Explain RxJS filter operator?](#explain-rxjs-filter-operator)                                                                     |
 | 14  | [Explain RxJS tap operator?](#explain-rxjs-tap-operator)                                                                           |
-| 15  | [Explain RxJS takeUntil operator?](#explain-rxjs-takeuntil-operator)                                                               |
-| 16  | [Explain RxJS takeWhile operator?](#explain-rxjs-takewhile-operator)                                                               |
-| 17  | [Explain RxJS takeLast operator?](#explain-rxjs-takelast-operator)                                                                 |
-| 18  | [Explain RxJS take operator?](#explain-rxjs-take-operator)                                                                         |
-| 19  | [Explain RxJS debounce operator?](#explain-rxjs-debounce-operator)                                                                 |
-| 20  | [Explain RxJS debounceTime operator?](#explain-rxjs-debouncetime-operator)                                                         |
-| 21  | [Explain RxJS combineLatestWith operator?](#explain-rxjs-combinelatestwith-operator)                                               |
-| 22  | [Explain RxJS fromEvent operator?](#explain-rxjs-fromevent-operator)                                                               |
+| 15  | [Explain RxJS takeUntil operator?](#explain-rxjs-takeUntil-operator)                                                               |
+| 16  | [Explain RxJS debounceTime operator?](#explain-rxjs-debouncetime-operator)                                                         |
+| 17  | [Explain RxJS combineLatestWith operator?](#explain-rxjs-combinelatestwith-operator)                                               |
+| 18  | [Explain RxJS fromEvent operator?](#explain-rxjs-fromevent-operator)                                                               |
 
 ## Explain RxJS Observable
 
@@ -523,5 +519,313 @@ clicks$
 
 fromEvent: بنعمل observable للضغطات على زرار معين.
 filter: هنا بنفلتر الأحداث ونتعامل بس مع الضغطات اللي حصلت في النصف الأيسر من الشاشة (على أساس إن قيمة clientX أقل من نصف عرض الشاشة).
+
+</div>
+
+## Explain RxJS tap operator?
+
+[⬆️ Back to Top](#top)
+
+![ tap ](https://rxjs.dev/assets/images/marble-diagrams/tap.png)
+
+<div dir="auto" align="right">
+في RxJS، الـtap هو operator بيُستخدم عشان تنفذ side effects على الـobservable، من غير ما تغير أو تعدل على الـvalues اللي بتخرج منه. هو بيكون مفيد لما تحتاج تطبع القيم في الـconsole، أو تعمل logging، أو أي عمليات أخرى أثناء مرور البيانات في الـstream، بس من غير ما تتدخل في البيانات نفسها.
+
+### إزاي بيشتغل الـtap؟
+
+الـtap بياخد function بتتنفذ لكل قيمة بتعدي في الـobservable.
+القيم بتعدي بدون أي تعديل، فالـtap مش بيغير الـstream، لكنه بيسمح لك تعمل شيء إضافي أثناء مرور البيانات.
+
+```typescript
+import { of } from "rxjs";
+import { tap, map } from "rxjs/operators";
+
+const numbers$ = of(1, 2, 3, 4, 5).pipe(
+  tap((value) => console.log("Before map:", value)),
+  map((value) => value * 10),
+  tap((value) => console.log("After map:", value))
+);
+
+numbers$.subscribe(
+  (value) => console.log("Final value:", value),
+  (error) => console.log("Error:", error),
+  () => console.log("Complete")
+);
+```
+
+### فايدة الـtap
+
+Logging: لو عايز تتابع القيم اللي بتعدي في الـobservable لأي سبب، زي الـdebugging.
+Side effects: لو محتاج تعمل أي عملية أثناء مرور البيانات من غير ما تعدل على القيم. مثال على ده: تحديث UI، تسجيل أحداث، أو تعديل بيانات في مكان تاني بناءً على القيم اللي بتعدي.
+
+</div>
+
+## Explain RxJS takeUntil operator?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+في RxJS، الـtakeUntil هو operator بيستخدم عشان يوقف الـobservable عن إصدار القيم (emit) لما observable تاني يعمل emit. بمعنى تاني، الـtakeUntil بيمسك الـobservable الأصلي وبيخليه شغال لحد ما observable معين (اللي بنسميه notifier) يصدر قيمة، وبعدين يوقف الـobservable الأصلي عن العمل.
+
+### إزاي بيشتغل الـtakeUntil؟
+
+عندك observable رئيسي بيرسل قيم (مثلاً، تدفق للأرقام، أو استجابة لأحداث).
+وعندك observable تاني بنسميه notifier، وده مجرد observable بيتراقب لحد ما بيرسل أي قيمة.
+بمجرد ما الـnotifier بيرسل أول قيمة، الـobservable الرئيسي بيتوقف عن ارسال أي قيم جديدة.
+
+### من اكتر استخدماته اننا بنستخدمه في الdestroy
+
+```typescript
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+
+@Component({
+  selector: "app-my-component",
+  templateUrl: "./my-component.component.html",
+  styleUrls: ["./my-component.component.css"],
+})
+export class MyComponent implements OnInit, OnDestroy {
+  // الـnotifier اللي هيشغل takeUntil
+  private componentDestroyed: Subject<void> = new Subject<void>();
+
+  constructor() {}
+
+  ngOnInit() {
+    // Example: لو عندك Observable مثلاً بيسمع للأحداث أو بيطلب بيانات
+    this.someObservable()
+      .pipe(
+        takeUntil(this.componentDestroyed) // هيوقف الـObservable لما الـcomponent يتدمر
+      )
+      .subscribe((data) => {
+        console.log("Data received:", data);
+      });
+  }
+
+  someObservable() {
+    // ده الـObservable اللي هيشترك فيه الـcomponent (مجرد مثال)
+    return of("Some data");
+  }
+
+  ngOnDestroy() {
+    // هنا بنعمل emit للقيمة عشان نوقف الـObservables
+    this.componentDestroyed.next();
+    this.componentDestroyed.complete(); // عشان نضمن إن الـSubject مش هيستخدم تاني
+  }
+}
+```
+
+### ليه بنستخدم takeUntil بالطريقة دي؟
+
+إدارة الاشتراكات: الـtakeUntil بيضمن إن أي اشتراكات للـobservables بتتوقف تلقائيًا لما الـcomponent يتدمر، وده بيساعد على عدم تسرب الذاكرة (memory leaks).
+
+مرونة: الطريقة دي سهلة وبتشتغل مع أي observable في الـcomponent سواء كان HTTP request، أو WebSocket، أو أي نوع تاني من الـobservables.
+
+باستخدام takeUntil مع الـSubject<void>، بتقدر تضمن إن أي اشتراكات بتتوقف بطريقة منظمة وفعالة لما الـcomponent يخرج من الـDOM.
+
+</div>
+
+## Explain RxJS debounceTime operator?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+هو واحد من أقوى الـoperators في RxJS وبيفيد بشكل كبير لما بنحتاج نتعامل مع سلسلة من القيم اللي بتتبع بعضها بسرعة، زي في حالة البحث اللحظي أو الحفظ التلقائي. الـdebounceTime بيسمح لنا نفلتر القيم اللي بتتبع بشكل سريع من الـobservable، ونحافظ بس على القيمة الأخيرة بعد فترة معينة من الزمن، وده مفيد لما ما نكونش محتاجين نتعامل مع كل قيمة بتطلع.
+
+### إزاي بيشتغل الـdebounceTime
+
+تأخير القيم: أول ما تيجي قيمة من الـobservable، الـdebounceTime بيبدأ يعد الزمن المحدد (مثلاً 300 مللي ثانية).
+إعادة ضبط المؤقت: لو حصلت قيمة جديدة قبل ما الزمن المحدد ينتهي، المؤقت بيبدأ يعد من الأول تاني.
+القيمة الأخيرة فقط: لما الزمن المحدد ينتهي ومافيش قيم جديدة جات، القيمة الأخيرة هي اللي بتعدي.
+
+### Basic Usage
+
+```typescript
+const result = fromEvent(document, "click").pipe(
+  // Click event is delayed for 1000ms or 1s
+  // It emits the most recent click event, even after burst clicking
+  debounceTime(1000)
+);
+
+result.subscribe((value) => console.log(value));
+```
+
+### Real-time search with debounceTime
+
+لما المستخدم يكتب في خانة البحث، بنقدر نستخدم debounceTime عشان نمنع إرسال طلب للسيرفر مع كل ضغطة على الكيبورد. بدال ما نبعت طلب بعد كل حرف، بنستنى فترة قصيرة قبل ما نبعته فعليًا.
+
+```typescript
+@Component({
+  ...
+  template: `
+  <input [formControl]="searchBar" type="text">
+  `,
+})
+export class AppComponent {
+  public readonly searchBar = new FormControl();
+
+  public readonly searchResults$ = this.searchBar.valueChanges.pipe(
+    debounceTime(1000), // Waits for 1000ms or 1s before emitting
+    distinctUntilChanged() // doesn't emit if current value = previous value
+  );
+
+  constructor() {
+    this.searchResults$.subscribe((query) => {
+      console.log(query);
+    });
+  }
+}
+```
+
+### Autosave with debounceTime
+
+```typescript
+@Component({
+  ...
+  template: `
+    <form [formGroup]="form" (ngSubmit)="save()">
+        <input type="text" formControlName="firstName">
+        <input type="text" formControlName="lastName">
+        <button type="submit">Save</button>
+    </form>
+  `,
+})
+export class UserFormComponent implements OnInit {
+  ...
+
+  public readonly form = this.fb.group(...);
+
+  ngOnInit() {
+    this.form.valueChanges
+      // Wait for 500ms after each keystroke before saving the user
+      .pipe(debounceTime(500))
+      .subscribe((user: User) => {
+        this.userService.saveUser(user);
+      });
+  }
+
+  ...
+}
+```
+
+### Conclusion
+
+الـdebounceTime هو واحد من أفضل الـoperators في RxJS لما بتتعامل مع سلاسل متتابعة من القيم بسرعة، وبيساعد في تحسين الأداء وتجربة المستخدم عن طريق تقليل الطلبات أو الاستجابات اللي ممكن تكون غير ضرورية.
+
+</div>
+
+## Explain RxJS combineLatestWith operator?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+الـcombineLatest هو operator بيجمع أكتر من observable في واحد، وبيعمل emit للقيم بتاعته كل ما واحد منهم يغير القيم بتاعته. ده بيخليه operator قوي جدًا، لكن فيه شوية حاجات لازم ناخد بالنا منها لما نستخدمه.
+
+### إزاي الـcombineLatest بيشتغل:
+
+الـcombineLatest بياخد array من الـobservables كمصدر، وبيطلع observable جديد بيحسب بناءً على أحدث القيم من كل observable مصدر. الموضوع باين إنه بسيط، لكن فيه شوية حاجات لازم نكون عارفينها:
+
+كل الـobservables اللي في المصدر لازم يعملوا emit مرة على الأقل قبل ما الـcombineLatest يبدأ يطلع بيانات.
+كل مرة observable من المصادر يعمل emit لقيمة جديدة، الـcombineLatest بيحسب القيمة من الأول. وده ممكن يخلي الـobservable يطلع بيانات كتير بسرعة، ودي حاجة لازم نخلي بالنا منها.
+في أغلب الأوقات، هتحتاج تستخدم الـcombineLatest مع Observables طويلة المدى (long-lived observables).
+
+### Usage
+
+ممكن نعمل فلتر متعدد باستخدام combineLatest في Angular لما يكون عندنا أكتر من مصدر للفلترة، زي فلترة على اسم، تاريخ، وكاتيجوري مثلاً. باستخدام combineLatest، بنقدر ندمج الفلاتر دي كلها عشان نعمل الفلترة المطلوبة.
+
+خلينا نشوف مثال عملي على عمل فلتر متعدد باستخدام combineLatest.
+
+خطوات:
+هنفترض إن عندنا Array من العناصر اللي محتاجين نفلترها.
+هنستخدم أكتر من FormControl عشان نتحكم في الفلاتر.
+هنستخدم combineLatest عشان ندمج القيم من كل فلتر ونعرض النتيجة النهائية.
+
+```typescript
+import { Component, OnInit } from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { combineLatest, of } from "rxjs";
+import { map, startWith } from "rxjs/operators";
+
+@Component({
+  selector: "app-multi-filter",
+  template: `
+    <input [formControl]="nameFilter" placeholder="Filter by name" />
+    <input [formControl]="categoryFilter" placeholder="Filter by category" />
+    <input
+      type="date"
+      [formControl]="dateFilter"
+      placeholder="Filter by date"
+    />
+
+    <ul>
+      <li *ngFor="let item of filteredItems$ | async">
+        {{ item.name }} - {{ item.category }} - {{ item.date }}
+      </li>
+    </ul>
+  `,
+})
+export class MultiFilterComponent implements OnInit {
+  // الفلاتر
+  nameFilter = new FormControl("");
+  categoryFilter = new FormControl("");
+  dateFilter = new FormControl("");
+
+  // قائمة العناصر اللي هنفلترها
+  items = [
+    { name: "Item 1", category: "A", date: "2023-01-01" },
+    { name: "Item 2", category: "B", date: "2023-01-02" },
+    { name: "Item 3", category: "A", date: "2023-01-03" },
+    { name: "Item 4", category: "C", date: "2023-01-04" },
+  ];
+
+  // الـObservable اللي هيحتوي على العناصر المفلترة
+  filteredItems$ = combineLatest([
+    this.nameFilter.valueChanges.pipe(startWith("")),
+    this.categoryFilter.valueChanges.pipe(startWith("")),
+    this.dateFilter.valueChanges.pipe(startWith("")),
+  ]).pipe(
+    map(([name, category, date]) => {
+      return this.items.filter(
+        (item) =>
+          item.name.toLowerCase().includes(name.toLowerCase()) &&
+          item.category.toLowerCase().includes(category.toLowerCase()) &&
+          item.date.includes(date)
+      );
+    })
+  );
+
+  ngOnInit() {}
+}
+```
+
+</div>
+
+## Explain RxJS fromEvent operator?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+في RxJS، الـfromEvent هو operator بنستخدمه عشان نعمل "observable" من الأحداث اللي بتحصل في الـDOM (أو أي مصدر أحداث تاني). بعبارة تانية، بنقدر نسمع لأي أحداث زي الكليكات، ضغطات الكيبورد، تحريك الماوس، وغيرها، ونتعامل معاها زي أي observable.
+
+### إزاي بيشتغل الـfromEvent؟
+
+بنمرر له العنصر اللي عايزين نسمع منه الأحداث (زي زرار أو صفحة كاملة).
+بنحدد نوع الحدث اللي عايزين نسمعه (زي 'click'، 'keyup'، 'mousemove'، إلخ).
+بعد كده بنستخدم الـobservable الناتج عشان نعمل اشتراك (subscription) ونتعامل مع الحدث.
+
+```typescript
+import { fromEvent } from "rxjs";
+import { filter } from "rxjs/operators";
+
+const button = document.getElementById("myButton");
+
+const clicks$ = fromEvent(button, "click").pipe(
+  filter((event: MouseEvent) => event.clientX < window.innerWidth / 2) // نتعامل مع الكليكات في النصف الأيسر من الشاشة فقط
+);
+
+clicks$.subscribe((event) => {
+  console.log("Clicked on the left side!", event);
+});
+```
 
 </div>
