@@ -43,6 +43,8 @@
 
 </div>
 
+<hr/>
+
 ## What are RxJS operators?
 
 [⬆️ Back to Top](#top)
@@ -59,6 +61,8 @@
 دي اللي بنستخدمها كـ functions مستقلة عشان ننشئ observables. أمثلة عليها: of، from، interval، fromEvent، generate، و range.
 
 </div>
+
+<hr/>
 
 ## What is Observable.pipe() and how to use it?
 
@@ -88,6 +92,8 @@ of(101, 102)
 الـ pipe بيسهل عليك تنفيذ عمليات متتابعة على البيانات اللي جاية من observable، وده بيديك تحكم أكبر في تعديل الداتا أو توقيتها أو التعامل مع الأخطاء.
 
 </div>
+
+<hr/>
 
 ## What is the difference between RxJS of and from?
 
@@ -124,6 +130,8 @@ from(["a", "b", "c"]).subscribe((e) => console.log(e));
 
 </div>
 
+<hr/>
+
 ## Explain RxJS map operator?
 
 [⬆️ Back to Top](#top)
@@ -152,6 +160,8 @@ of(1, 2, 3, 4)
 بكده تقدر تستخدم map علشان تعدل أو تعمل عمليات على البيانات اللي بتيجي من الـ observable الأصلي بطريقة بسيطة.
 
 </div>
+
+<hr/>
 
 ## Explain RxJS switchMap operator?
 
@@ -288,6 +298,8 @@ export class AppComponent {
 
 </div>
 
+<hr/>
+
 ## Explain RxJS mergeMap operator?
 
 [⬆️ Back to Top](#top)
@@ -327,6 +339,8 @@ fromEvent(button, "click")
 
 </div>
 
+<hr/>
+
 ## Explain RxJS concatMap operator?
 
 [⬆️ Back to Top](#top)
@@ -364,6 +378,8 @@ Shree Nilesh
 ```
 
 </div>
+
+<hr/>
 
 ## Explain RxJS exhaustMap operator?
 
@@ -408,6 +424,8 @@ interval هنا مجرد مثال لعملية بتاخد شوية وقت (مم�
 
 </div>
 
+<hr/>
+
 ## How will you handle errors on observable using RxJS throwError?
 
 [⬆️ Back to Top](#top)
@@ -442,6 +460,8 @@ catchError: بنستخدمه عشان نعمل handle للخطأ. في المث�
 الـsubscribe: لو مفيش أخطاء، الـobserver هياخد الـdata اللي الـobservable بيعملها emit. ولو حصل خطأ هيتم الإمساك بيه في الـcatchError قبل ما يوصل للـsubscribe.
 
 </div>
+
+<hr/>
 
 ## Explain RxJS retry operator?
 
@@ -521,6 +541,8 @@ catchError: لو كل المحاولات فشلت، بنعمل catch للخطأ 
 
 </div>
 
+<hr/>
+
 ## Explain RxJS filter operator?
 
 [⬆️ Back to Top](#top)
@@ -586,6 +608,8 @@ filter: هنا بنفلتر الأحداث ونتعامل بس مع الضغطا
 
 </div>
 
+<hr/>
+
 ## Explain RxJS tap operator?
 
 [⬆️ Back to Top](#top)
@@ -627,6 +651,8 @@ Logging: لو عايز تتابع القيم اللي بتعدي في الـobse
 Side effects: لو محتاج تعمل أي عملية أثناء مرور البيانات من غير ما تعدل على القيم. مثال على ده: تحديث UI، تسجيل أحداث، أو تعديل بيانات في مكان تاني بناءً على القيم اللي بتعدي.
 
 </div>
+
+<hr/>
 
 ## Explain RxJS takeUntil operator?
 
@@ -696,6 +722,8 @@ export class MyComponent implements OnInit, OnDestroy {
 باستخدام takeUntil مع الـSubject<void>، بتقدر تضمن إن أي اشتراكات بتتوقف بطريقة منظمة وفعالة لما الـcomponent يخرج من الـDOM.
 
 </div>
+
+<hr/>
 
 ## Explain RxJS debounceTime operator?
 
@@ -798,6 +826,8 @@ export class UserFormComponent implements OnInit {
 
 </div>
 
+<hr/>
+
 ## Explain RxJS combineLatestWith operator?
 
 [⬆️ Back to Top](#top)
@@ -887,6 +917,8 @@ export class MultiFilterComponent implements OnInit {
 </div>
 </div>
 
+<hr/>
+
 ## Explain RxJS fromEvent operator?
 
 [⬆️ Back to Top](#top)
@@ -920,6 +952,8 @@ clicks$.subscribe((event) => {
 </div>
 
 </div>
+
+<hr/>
 
 ## What is the difference between Subject, BehaviorSubject, ReplaySubject, and AsyncSubject in RxJS? How do they differ in terms of behavior and use cases?
 
@@ -1080,6 +1114,7 @@ ReplaySubject: لما تحتاج أن يحصل المشترك الجديد عل�
 AsyncSubject: لما تحتاج أن يحصل المشترك على آخر قيمة فقط بعد اكتمال العمل (مثل نتائج عملية معقدة أو حسابية).
 
 </div>
+<hr/>
 
 ## What are the best practices for managing Observable subscriptions in Angular and ensuring there are no memory leaks?
 
@@ -1171,6 +1206,8 @@ takeUntilDestroyed بيخليك تعمل نفس اللي كنا بنعمله م�
 مش محتاج تعمل أي Subject، ومجرد ما الـcomponent يتدمر، Angular هتعمل unsubscribe تلقائي.
 
 </div>
+
+<hr/>
 
 ## what are the differences between cold observable and hot observable?
 
