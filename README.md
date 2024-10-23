@@ -33,6 +33,29 @@
 | 23  | [What is a higher-order Observable?](#what-is-a-higher-order-observable)                                                                                                                                                                                                                                         |
 | 24  | [How can you share a single Observable among multiple subscribers?](#how-can-you-share-a-single-observable-among-multiple-subscribers)                                                                                                                                                                           |
 
+# Angular Form Interview Questions
+
+### Table of Contents
+
+| No. | Questions                                                                                                                        |
+| --- | -------------------------------------------------------------------------------------------------------------------------------- | --- |
+| 1   | [Describe the types of forms created in Angular application?](#describe-the-types-of-forms-created-in-angular-application)       |
+| 2   | [How will you create reactive form in Angular?](#how-will-you-create-reactive-form-in-angular)                                   |
+| 3   | [How will you create template-driven form in Angular?](#how-will-you-create-template-driven-form-in-angular)                     |
+| 4   | [Explain FormControl?](#explain-formcontrol)                                                                                     |
+| 5   | [Explain FormGroup?](#explain-formgroup)                                                                                         |
+| 6   | [Explain FormArray?](#explain-formarray)                                                                                         |
+| 7   | [Explain FormBuilder?](#explain-formbuilder)                                                                                     |
+| 8   | [Explain FormRecord?](#explain-formrecord)                                                                                       |
+| 9   | [How will you use valueChanges?](#how-will-you-use-valuechanges)                                                                 |
+| 10  | [How will you use statusChanges?](#how-will-you-use-statuschanges)                                                               |
+| 11  | [What is difference between setValue() and patchValue()?](#what-is-difference-between-setvalue-and-patchvalue)                   |
+| 12  | [How will you add and remove controls on FormGroup dynamically?](#how-will-you-add-and-remove-controls-on-formgroup-dynamically) |
+| 13  | [What is difference between (ngModelChange) and (change)?](#what-is-difference-between-ngmodelchange-and-change)                 |     |
+| 14  | [How to add async validation in FormControl?](#how-to-add-async-validation-in-formcontrol)                                       |
+| 15  | [How will you validate template-driven form?](#how-will-you-validate-template-driven-form)                                       |
+| 16  | [How will you perform two-way binding using ngModel?](#how-will-you-perform-two-way-binding-using-ngmodel)                       |
+
 ## Explain RxJS Observable
 
 [⬆️ Back to Top](#top)
@@ -1528,4 +1551,763 @@ export class UserComponent implements OnInit {
 ```
 
 </div>
+</div>
+<hr/>
+## Describe the types of forms created in Angular application?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+الإجابة: فيه نوعين أساسيين من الفورم في Angular
+
+### Reactive Forms
+
+وده معناه إنك بتتحكم في الفورم من خلال كود الـ TypeScript بدل الـ HTML.
+الفورم دي مناسبة جدًا لو عايز تعمل فورم معقدة أو فيها عناصر كتير، وبتقدر تتحكم في التحقق من البيانات (validation) بشكل أدق.
+
+#### الأنواع الرئيسية اللي بتستخدمها في النوع ده هي:
+
+##### FormControl
+
+ده بيعمل عنصر تحكم واحد في الفورم (زي input واحد).
+
+##### FormGroup
+
+ده بيجمع مجموعة من عناصر التحكم (مثلاً inputs متعددة).
+
+##### FormArray
+
+ده بيعمل لك عناصر تحكم ديناميكية يعني ممكن تزود أو تقلل منهم زي ما تحب.
+
+##### FormBuilder
+
+بيسهل عليك عملية إنشاء الـ FormControl وFormGroup وFormArray بطريقة أسرع وبكود أقل.
+
+### Template-Driven Forms
+
+النوع ده بيستخدم أكتر مع الفورم البسيطة زي فورم تسجيل دخول  
+هنا التحكم في الفورم بيكون عن طريق الـ HTML باستخدام ديركتيفات (Directives)، وده أسهل لكن أقل تحكم مقارنة بالـ Reactive Forms.
+
+### الأدوات الرئيسية اللي بنستخدمها هنا:
+
+##### NgModel
+
+بتتابع تغييرات القيم في عناصر الفورم زي الـ input وبتتعامل مع التحقق من المدخلات.
+
+##### NgForm
+
+دي بتربط نفسها بالفورم كله وبتتابع القيم الكلية وحالة التحقق للفورم كله.
+
+##### NgModelGroup
+
+دي بتتعامل مع جزء معين من الفورم وتتحقق من البيانات فيه بشكل منفصل عن باقي الفورم.
+
+##### 💡 يعني ببساطة
+
+لو الفورم بتاعتك بسيطة وعايز تعملها بسرعة، استخدم Template-Driven Forms.
+لو الفورم معقدة وعايز تحكم أكتر في البيانات والتحقق منها، استخدم Reactive Forms.
+
+</div>
+<hr/>
+## How will you create reactive form in Angular?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+أول حاجة، لازم تعمل import لـ ReactiveFormsModule. في ملف الـ TypeScript (TS)، بتعمل FormGroup باستخدام الميثود FormBuilder.group وتبدأ تجمّع شوية form controls. وكمان هتعمل function اللي هتشتغل لما الفورم يتعمله submit.
+
+<div dir="auto" align="left">
+
+```typescript
+userForm = this.formBuilder.group({
+   name: ['', Validators.required ],
+   pwd: ['', Validators.required ],
+});
+
+onFormSubmit() {
+   console.log(this.userForm.value);
+}
+
+```
+
+</div>
+
+في ملف الـ HTML، هتعمل form فيه form controls. اربط الـ FormGroup في الـ <form> باستخدام الـ directive formGroup. وكمان اربط كل form control باستخدام الـ directive formControlName.
+
+<div dir="auto" align="left">
+
+```HTML
+<form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
+   <p>Username: <input formControlName="empId"></p>
+   <p>Password: <input type="password" formControlName="empId"></p>
+   <button>Submit</button>
+</form>
+
+```
+
+</div>
+لما تدوس على الزرار (Submit)، الفورم هيعمل submit والـ function onFormSubmit هتشتغل علشان تعرض القيم بتاعت الفورم في الـ console.
+
+</div>
+<hr/>
+
+## How will you create template-driven form in Angular?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+أول حاجة، لازم تعمل import لـ FormsModule. بتربط الـ ngForm في الـ <form> element. كل عناصر الفورم لازم تستخدم name و ngModel وأي validation attributes لو موجودة. في ملف الـ TypeScript (TS)، بتعمل method عشان تعمل submit للفورم وبتربط الميثود دي بالـ ngSubmit event.
+<div dir="auto" align="left">
+
+```HTML
+<form #userForm="ngForm" (ngSubmit)="onFormSubmit(userForm)">
+   <input name="username" ngModel required>
+   <input type="password" name="pwd" ngModel required>
+   <button>Submit</button>
+</form>
+
+
+```
+
+</div>
+<div dir="auto" align="left">
+
+```typescript
+onFormSubmit(form: NgForm) {
+   console.log(form.value);
+}
+```
+
+</div>
+</div>
+<hr/>
+
+## Explain FormControl?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+ال FormControl في Angular بيُستخدم عشان تتحكم في الـ input أو أي عنصر معين في الـ forms. يعني ببساطة، بيكون مسؤول عن القيمة اللي المستخدم بيدخلها، وحالة الـ validation (يعني هل الإدخال صحيح ولا لأ)، وأي errors ممكن تحصل.
+
+لما بتعمل form، بتحتاج تتابع البيانات اللي المستخدم بيدخلها وتتأكد إنها صح عن طريق الـ validation، زي مثلًا إنها تكون إيميل صحيح، أرقام معينة، أو حتى قيم مش فاضية. هنا بييجي دور الـ FormControl، اللي بيساعدك تتابع وتحكم في كل الحاجات دي.
+
+<div dir="auto" align="left">
+
+```typescript
+const control = new FormControl("initial value", Validators.required);
+```
+
+</div>
+في المثال ده، عملنا FormControl بالقيمة الافتراضية 'initial value'، وضفنا Validator بيقول إن الإدخال لازم يكون مطلوب (يعني ميكونش فاضي).
+
+#### أهم خصائص FormControl
+
+###### value
+
+دي القيمة اللي المستخدم دخلها حاليًا.
+
+###### valid
+
+ده بيحدد إذا كان الإدخال صحيح ولا لأ.
+
+###### invalid
+
+ده بيحدد إذا كان في أخطاء ولا لأ.
+
+###### pristine
+
+لو المستخدم ما عدلش في الإدخال، بتبقى true.
+
+###### dirty
+
+لو المستخدم غيّر في الإدخال، بتبقى true.
+
+</div>
+<hr/>
+
+## Explain FormGroup?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+
+ال FormGroup في Angular بيُستخدم عشان يجمع مجموعة من الـ FormControls في نموذج واحد. يعني لو عندك فورم فيه أكتر من input (زي اسم، إيميل، وكلمة مرور)، تقدر تجمعهم كلهم في FormGroup عشان تتحكم فيهم كلهم مع بعض.
+
+الفكرة ببساطة إنك بتتعامل مع الفورم ككل، بدل ما تتعامل مع كل (input) لوحده. بتقدر تتابع الـ validation والحالة بتاعة كل جوا المجموعة (group).
+
+<div dir="auto" align="left">
+
+```typescript
+const form = new FormGroup({
+  name: new FormControl(""),
+  email: new FormControl(""),
+  password: new FormControl(""),
+});
+```
+
+</div>
+
+### الخصائص المهمة بتاعة FormGroup
+
+###### controls
+
+دي بترجعلك كل الـ FormControls اللي جوه المجموعة.
+
+###### value
+
+بترجع القيم بتاعة كل الحقول في صورة object.
+
+###### valid
+
+لو كل الـ FormControls جوا المجموعة صالحة (valid)، بتكون true.
+
+###### invalid
+
+لو فيه أي input (input) في المجموعة مش صالح، بتكون true.
+
+###### pristine
+
+بتكون true لو مفيش أي تعديل حصل في أي input.
+
+###### dirty
+
+بتكون true لو حصل تعديل في أي input.
+
+</div>
+<hr/>
+
+## Explain FormArray?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+ال FormArray في Angular بيُستخدم عشان تدير مجموعة من الـ FormControls أو الـ FormGroups جوا (form). الفكرة إنك تقدر تعمل array  من inputs اللي ممكن تضيفها أو تشيلها بشكل ديناميكي على حسب احتياجاتك.
+
+يعني مثلًا لو عندك form فيه أكتر من input والـ input ده ممكن يتكرر زي مثلًا لما المستخدم يضيف أكتر من عنوان بريد إلكتروني أو أكتر من رقم تليفون، هنا بتستخدم FormArray عشان تقدر تضيف الـ inputs دي وتتحكم فيها.
+
+<div dir="auto" align="left">
+
+```typescript
+const formArray = new FormArray([new FormControl(""), new FormControl("")]);
+```
+
+</div>
+
+### التعامل مع FormArray
+
+ممكن تضيف FormControl جديد في الـ array باستخدام push
+
+<div dir="auto" align="left">
+
+```typescript
+formArray.push(new FormControl(""));
+```
+
+</div>
+وممكن تشيل FormControl باستخدام removeAt
+<div dir="auto" align="left">
+
+```typescript
+formArray.removeAt(0);
+```
+
+</div>
+تقدر كمان تتعامل مع الـ FormArray زي ما بتتعامل مع الـ FormGroup أو الـ FormControl من ناحية التحقق (validation) والحالة (status) والقيم (values).
+
+<div dir="auto" align="left">
+
+```typescript
+const formArray = new FormArray([
+  new FormControl("", Validators.required),
+  new FormControl("", Validators.email),
+]);
+```
+
+</div>
+</div>
+
+## Explain FormRecord?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+
+الـ FormRecord في Angular شبه الـ FormGroup، بس الفرق إنه بيتعامل مع مجموعة من الـ FormControl اللي كلهم من نفس نوع القيمة. يعني، الـ FormRecord بيتتبع القيمة وحالة الـ validity لمجموعة من الـ FormControl اللي ليهم نفس نوع البيانات.
+
+الـ FormRecord مفيد جدًا لما تحب تبني form بشكل ديناميكي. تقدر تضيف form controls باستخدام addControl، وتشيلهم بـ removeControl، وهكذا.
+
+<div dir="auto" align="left">
+
+```typescript
+@Component({
+  selector: "my-app",
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: "./my.component.html",
+})
+export class MyComponent implements OnInit {
+  userForm!: FormRecord;
+  formData = [
+    { title: "Name", key: "name" },
+    { title: "City", key: "city" },
+  ];
+  ngOnInit() {
+    this.userForm = new FormRecord<FormControl<string | null>>({});
+    this.formData.forEach((data) =>
+      this.userForm.addControl(data.key, new FormControl())
+    );
+  }
+  onFormSubmit() {
+    console.log(this.userForm.value);
+  }
+}
+```
+
+</div>
+
+<div dir="auto" align="left">
+
+```HTML
+<form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
+    <div *ngFor="let data of formData">
+        {{data.title}}: <input [formControlName]="data.key"><br />
+    </div>
+    <button>Submit</button>
+</form>
+
+```
+
+</div>
+في الكود ده، إحنا بنستخدم FormRecord عشان ننشئ form ديناميكي. عندنا formData فيها الحقول اللي عايزينها في الـ form. في ngOnInit، بنعمل instance من الـ FormRecord وبنضيف الـ form controls باستخدام addControl.
+
+لما المستخدم يضغط على زرار "Submit"، الـ onFormSubmit هتتنفذ وهتطبع قيم الـ form في الـ console.
+
+بكده، تقدر تستخدم FormRecord عشان تبني forms ديناميكية بسهولة في Angular، وتتحكم في القيم والـ validation بتاعتها.
+
+</div>
+<hr/>
+
+## How will you use valueChanges?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+الـ valueChanges ده Observable في Angular، بيعمل emit للقيمة بتاعة الـ form control أو الـ form group لما قيمتها بتتغير، سواء المستخدم غيرها أو برمجياً.
+
+يعني لو المستخدم عدل في الـ input، الـ valueChanges هيشتغل وهيعمل subscribe لأي function انت محددها. وكمان لو انت برمجياً غيرت القيمة أو عملت enable/disable للـ control، برضه الـ valueChanges هيعمل emit.
+
+تقدر تستخدمه مع FormControl، FormGroup، وFormArray.
+
+<div dir="auto" align="left">
+
+```typescript
+
+studentForm = this.formBuilder.group({
+  stdName: ['', [ Validators.required ]],
+});
+
+this.studentForm.get('stdName').valueChanges.subscribe(
+  stdName => console.log(stdName);
+);
+
+this.studentForm.valueChanges.subscribe(student => {
+  console.log(student.stdName);
+});
+
+
+```
+
+</div>
+في المثال ده، احنا عملنا subscribe للـ valueChanges بتاع الـ stdName control، فأي تغيير في القيمة هيطبع القيمة الجديدة في الـ console. وكمان عملنا subscribe للـ valueChanges بتاع الـ studentForm كله، فأي تغيير في أي control جوه الـ form هيطبع الـ student.stdName الجديدة.
+</div>
+<hr/>
+
+## How will you use statusChanges?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+الـ statusChanges ده بيكون observable، يعني بيراقب أي تغيير في حالة الـ validation الخاصة بأي FormControl أو FormGroup أو FormArray. يعني كل ما يحصل إعادة حساب للـ validation، الـ statusChanges بيعمل emit بالقيمة الجديدة للحالة سواء كانت valid أو invalid.
+<div dir="auto" align="left">
+
+```typescript
+studentForm = this.formBuilder.group({
+  stdName: ['', [ Validators.required ]],
+});
+this.studentForm.get('stdName').statusChanges.subscribe(
+  status => console.log(status);
+);
+this.studentForm.statusChanges.subscribe(status => {
+	console.log(status);
+});
+
+```
+
+</div>
+هنا إحنا عاملين FormGroup اسمه studentForm وجواه FormControl اسمه stdName والـ validation بتاعه إنه required (يعني لازم المستخدم يدخل القيمة).
+
+أول حاجة: بنستخدم statusChanges عشان نراقب حالة الـ stdName. لو حصل أي تغيير في الـ validation (يعني مثلاً المستخدم يدخل قيمة أو يسيبها فاضية)، هيتعمل emit للحالة سواء كانت valid أو invalid.
+
+تاني حاجة: بنراقب حالة الـ FormGroup كله عن طريق الـ statusChanges بتاع الـ studentForm. وده بيعرض لنا حالة النموذج بالكامل.
+
+يعني باختصار، الـ statusChanges ده بيساعدك تعرف إمتى الـ form أو الـ input بيغير حالته من صالح (valid) أو غير صالح (invalid) وتقدر تتصرف بناءً على الحالة دي.
+
+</div>
+<hr/>
+
+## What is difference between setValue() and patchValue()?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+في Angular، الفرق بين setValue و patchValue بيظهر لما تيجي تتعامل مع الفورم وتحدث القيم اللي فيه.
+
+setValue بيطلب منك تدي كل القيم لكل الـ controls اللي في الـ form أو الـ FormGroup. يعني لو الفورم بتاعك فيه 3 حقول، وانت استخدمت setValue، لازم تدي قيم للـ 3 حقول دول. لو نسيت أي حقل، هيطلعلك error.
+
+patchValue بيبقى مرن أكتر. مش شرط تدي قيم لكل الـ controls. يعني ممكن تحدث جزء من الفورم بس من غير ما يحصل أي مشكلة. فلو الفورم فيه 3 حقول، وانت استخدمت patchValue لحقلين بس، الحقل التالت هيفضل زي ما هو من غير مشاكل.
+
+<div dir="auto" align="left">
+
+```typescript
+form.setValue({
+  name: "Abdelrahman",
+  email: "abdelrahman@example.com",
+  age: 30,
+});
+
+form.patchValue({
+  name: "Abdelrahman",
+  email: "abdelrahman@example.com",
+});
+```
+
+</div>
+في المثال الأول، لازم تدّي قيم لكل الـ inputs (name، email، و age)، لكن في المثال التاني، استخدمنا patchValue عشان نحدث بس الـ name والـ email من غير ما نضطر نحط قيمة للـ age.
+
+باختصار:
+
+setValue لازم تدي كل القيم لكل الـ inputs.
+patchValue تقدر تدي قيم لجزء من الـ inputs بس.
+
+</div>
+<hr/>
+
+## How will you add and remove controls on FormGroup dynamically?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+علشان تضيف وتزيل controls في FormGroup بشكل ديناميكي، بتستخدم الميثودز addControl وremoveControl.
+<div dir="auto" align="left">
+
+```typescript
+addControl(name: string, control: AbstractControl)
+
+```
+
+</div>
+<div dir="auto" align="left">
+
+```typescript
+this.customerForm.addControl(
+  "city",
+  this.formBuilder.control("", [Validators.required])
+);
+```
+
+</div>
+في المثال ده، بنضيف control اسمه 'city' للـ FormGroup بتاعنا.
+
+<div dir="auto" align="left">
+
+```typescript
+removeControl(name: string)
+```
+
+</div>
+<div dir="auto" align="left">
+
+```typescript
+this.customerForm.removeControl("city");
+```
+
+</div>
+وده بيشيل الـ control اللي اسمه 'city' من الـ FormGroup.
+
+#### 💡 مثال
+
+هنفترض إن عندنا FormGroup اسمه customerForm، وعايزين نضيف حقل (control) اسمه "city" ونزيله بعد كده.
+
+#### الخطوات:
+
+أول حاجة هننشئ FormGroup.
+هنستخدم addControl عشان نضيف الـ control.
+بعد كده، لو عايزين نزيل الـ control، هنستخدم removeControl.
+
+<div dir="auto" align="left">
+
+```typescript
+import { Component } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+
+@Component({
+  selector: "app-customer-form",
+  templateUrl: "./customer-form.component.html",
+})
+export class CustomerFormComponent {
+  customerForm: FormGroup;
+
+  constructor(private formBuilder: FormBuilder) {
+    this.customerForm = this.formBuilder.group({
+      name: ["", Validators.required],
+    });
+  }
+
+  addCityControl() {
+    this.customerForm.addControl(
+      "city",
+      this.formBuilder.control("", [Validators.required])
+    );
+  }
+
+  removeCityControl() {
+    this.customerForm.removeControl("city");
+  }
+}
+```
+
+HTML
+
+<div dir="auto" align="left">
+
+```HTML
+<form [formGroup]="customerForm">
+  <label for="name">Name:</label>
+  <input id="name" formControlName="name" />
+
+  <div *ngIf="customerForm.get('city')">
+    <label for="city">City:</label>
+    <input id="city" formControlName="city" />
+  </div>
+
+  <button type="button" (click)="addCityControl()">Add City</button>
+  <button type="button" (click)="removeCityControl()">Remove City</button>
+</form>
+
+```
+
+</div>
+</div>
+عند الضغط على زرار "Add City"، بيتم إضافة حقل city.
+عند الضغط على زرار "Remove City"، بيتم إزالة حقل city.
+الطريقة دي بتخليك تتحكم في الحقول الديناميكية في النموذج بتاعك بكل سهولة.
+</div>
+<hr/>
+
+## What is difference between (ngModelChange) and (change)?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+ببساطة، الفرق بين (ngModelChange) و (change) هو إن كل واحد منهم بيشتغل في مكان مختلف ولغرض مختلف:
+
+الngModelChange ده بيشتغل مع حاجة اسمها ngModel، وده حاجة خاصة بـ Angular. يعني لو عندك input في النموذج بتاعك (form)، وعايز تتابع التغير اللي بيحصل في القيمة بتاعته بشكل مباشر، بتستخدم ngModelChange. كل ما القيمة تتغير جوه ngModel، الحدث ده بيشتغل وبيجيبلك القيمة الجديدة على طول باستخدام حاجة اسمها $event.
+
+<div dir="auto" align="left">
+
+```HTML
+<input [(ngModel)]="name" (ngModelChange)="onNameChange($event)">
+```
+
+</div>
+هنا كل ما المستخدم يغير الاسم في input ده، الحدث ngModelChange هيشتغل وهيجيبلك القيمة الجديدة اللي دخلها المستخدم.
+
+الchange ده عبارة عن DOM event عادي خاص بـ HTML، وبيشتغل لما يحصل تغيير في القيمة بتاعت العنصر (زي input أو select)، لكنه بيتفاعل بس لما المستخدم يخلص التغيير (زي لما يكتب حاجة ويضغط Enter أو يطلع من input).
+
+<div dir="auto" align="left">
+
+```HTML
+<input (change)="onInputChange($event)">
+```
+
+</div>
+هنا change بيشتغل بس لما المستخدم يغير القيمة ويطلع من الـ input، وبيجيبلك القيمة من خلال event.target.value.
+
+### الفرق الرئيسي
+
+#### ngModelChange
+
+بيراقب التغيير بشكل فوري جوه ngModel وبيجيبلك القيمة مباشرة من $event.
+
+#### change
+
+بيتفاعل مع التغيير في HTML elements العادية بعد ما المستخدم يخلص التغيير، وبتجيب القيمة باستخدام event.target.value.
+يعني لو عايز تعرف التغيير أول ما يحصل في الـ input وتتحكم فيه، استخدم ngModelChange. لكن لو عايز تعرف التغيير بعد ما المستخدم يخلص تعديل القيمة، استخدم change.
+
+</div>
+<hr/>
+
+## How to add async validation in FormControl?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+لو عايز تضيف async validation في FormControl، الموضوع بسيط
+
+تقدر تمرر array من async validators كـ argument تالت في FormControl. مثال:
+
+<div dir="auto" align="left">
+
+```typescript
+customerForm = this.formBuilder.group({
+  customerName: ["", [Validators.required], [myCustomAsyncValidator()]],
+});
+```
+
+</div>
+الطريقة التانية، ممكن تمرر object كـ argument تاني يحتوي على خصائص زي validators و asyncValidators. مثال:
+
+<div dir="auto" align="left">
+
+```typescript
+customerForm = this.formBuilder.group({
+  customerName: [
+    "",
+    {
+      validators: [Validators.required],
+      asyncValidators: [myCustomAsyncValidator()],
+    },
+  ],
+});
+```
+
+</div>
+
+#### 💡 مثال
+
+هديك مثال واقعي لموقف ممكن تستخدم فيه async validation في FormControl. خلينا نفترض إنك بتعمل form للمستخدم عشان يسجل بياناته، ومن ضمن البيانات دي اسم المستخدم (username)، ولازم تتأكد إن الاسم ده مش متسجل قبل كده في قاعدة البيانات (دي عملية بتحتاج تحقق من قاعدة البيانات، وبالتالي هتكون async).
+
+#### create a service
+
+<div dir="auto" align="left">
+
+```typescript
+@Injectable({ providedIn: "root" })
+export class UserService {
+  constructor(private http: HttpClient) {}
+
+  checkUsername(username: string): Observable<boolean> {
+    return this.http.get<boolean>(
+      `/api/users/check-username?username=${username}`
+    );
+  }
+}
+```
+
+</div>
+
+#### UserFormComponent
+
+<div dir="auto" align="left">
+
+```typescript
+export class UserFormComponent {
+  constructor(
+    private formBuilder: FormBuilder,
+    private userService: UserService
+  ) {}
+
+  customerForm = this.formBuilder.group({
+    username: ["", [Validators.required], [this.checkUsernameAvailability()]],
+  });
+
+  checkUsernameAvailability(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      return this.userService.checkUsername(control.value).pipe(
+        map((isAvailable) => {
+          return isAvailable ? null : { usernameTaken: true };
+        })
+      );
+    };
+  }
+}
+```
+
+</div>
+
+#### template
+
+<div dir="auto" align="left">
+
+```HTML
+<form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+  <label for="username">Username</label>
+  <input id="username" formControlName="username">
+
+  <div *ngIf="customerForm.get('username').hasError('usernameTaken')">
+    This username is already taken.
+  </div>
+
+  <button type="submit" [disabled]="customerForm.invalid">Submit</button>
+</form>
+
+```
+
+</div>
+دي ببساطة الطريقتين اللي تقدر تضيف بيهم async validation في FormControl في Angular.
+</div>
+
+<hr/>
+
+## How will you validate template-driven form?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+عشان تعمل validation في الفورم اللي معمول بـ template-driven، بتحدد (validation attributes) في الـ form control، وبتستخدم   بـ # عشان تعرض رسائل الخطأ بناءً عليه.
+
+<div dir="auto" align="left">
+
+```HTML
+<input name="uname" ngModel required maxlength="20" #usrname="ngModel">
+<div *ngIf="usrname.errors?.['required']">
+		Enter user name.
+</div>
+<div *ngIf="usrname.errors?.['maxlength']">
+		Maxlength is 20.
+</div>
+{{usrname.status}}
+
+```
+
+</div>
+</div>
+<hr/>
+
+## How will you perform two-way binding using ngModel?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align='right'>
+عشان تعمل two-way binding باستخدام ngModel، بتستخدم الأقواس المربعة والعادية مع بعض [()] حوالين الـ ngModel كده: [(ngModel)]. الطريقة دي بتسمح بإرسال البيانات من الـ component للـ view target، وفي نفس الوقت من الـ view target للـ component.
+<div dir="auto" align="left">
+
+```typescript
+message = "Hello World!";
+```
+
+</div>
+
+<div dir="auto" align="left">
+
+```HTML
+<input [(ngModel)]="message">
+
+{{message}}
+
+```
+
+</div>
+في المثال ده، أي تعديل على الإدخال اللي في الـ input هيتم تحديثه فورًا في المتغير message اللي في الـ component، والعكس صحيح. يعني أي تغيير في المتغير هيظهر برضه في الـ input.
+
 </div>
