@@ -1553,6 +1553,7 @@ export class UserComponent implements OnInit {
 </div>
 </div>
 <hr/>
+
 ## Describe the types of forms created in Angular application?
 
 [⬆️ Back to Top](#top)
@@ -1609,6 +1610,7 @@ export class UserComponent implements OnInit {
 
 </div>
 <hr/>
+
 ## How will you create reactive form in Angular?
 
 [⬆️ Back to Top](#top)
