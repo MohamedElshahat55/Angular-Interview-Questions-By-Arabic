@@ -38,7 +38,7 @@
 ### Table of Contents
 
 | No. | Questions                                                                                                                        |
-| --- | -------------------------------------------------------------------------------------------------------------------------------- | --- |
+| --- | -------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | [Describe the types of forms created in Angular application?](#describe-the-types-of-forms-created-in-angular-application)       |
 | 2   | [How will you create reactive form in Angular?](#how-will-you-create-reactive-form-in-angular)                                   |
 | 3   | [How will you create template-driven form in Angular?](#how-will-you-create-template-driven-form-in-angular)                     |
@@ -51,7 +51,7 @@
 | 10  | [How will you use statusChanges?](#how-will-you-use-statuschanges)                                                               |
 | 11  | [What is difference between setValue() and patchValue()?](#what-is-difference-between-setvalue-and-patchvalue)                   |
 | 12  | [How will you add and remove controls on FormGroup dynamically?](#how-will-you-add-and-remove-controls-on-formgroup-dynamically) |
-| 13  | [What is difference between (ngModelChange) and (change)?](#what-is-difference-between-ngmodelchange-and-change)                 |     |
+| 13  | [What is difference between (ngModelChange) and (change)?](#what-is-difference-between-ngmodelchange-and-change)                 |
 | 14  | [How to add async validation in FormControl?](#how-to-add-async-validation-in-formcontrol)                                       |
 | 15  | [How will you validate template-driven form?](#how-will-you-validate-template-driven-form)                                       |
 | 16  | [How will you perform two-way binding using ngModel?](#how-will-you-perform-two-way-binding-using-ngmodel)                       |
