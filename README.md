@@ -34,8 +34,7 @@
 | 28  | [What is activated route?](#what-is-activated-route)                                                                 |
 | 29  | [How do you define routes?](#how-do-you-define-routes)                                                               |
 | 30  | [What is the purpose of Wildcard route?](#what-is-the-purpose-of-wildcard-route)                                     |
-| 31  | [Do I need a Routing Module always?](#do-i-need-a-routing-module-always)                                             |
-| 32  | [What is Angular Universal?](#what-is-angular-universal)                                                             |
+| 31  | [What is Angular Universal?](#what-is-angular-universal)                                                             |
 
 # Angular Service Interview Questions
 
