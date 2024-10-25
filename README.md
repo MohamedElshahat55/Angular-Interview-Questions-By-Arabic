@@ -58,9 +58,9 @@
 | 12  | [How Dependency Injection and Resolution Work in Angular?](#how-dependency-injection-and-resolution-work-in-angular)                         |
 | 13  | [Element Injector Tree in Angular?](#element-injector-tree-in-angular)                                                                       |
 | 14  | [ProvidedIn root, any, and platform in Angular?](#providedin-root-any-and-platform-in-angular)                                               |
-| 15  | [@Self, @SkipSelf, and @Optional Decorators in Angular?](#self-skipself-and-optional-decorators-in-angular)                                  |
+| 15  | [@Self, @SkipSelf, and @Optional Decorators in Angular?](#@self-@skipself-@and-optional-decorators-in-angular)                               |
 
-<a name="top"></a>
+<a name="top3"></a>
 
 # Angular RxJS Interview Questions
 
@@ -1190,7 +1190,7 @@ import { HttpClientModule } from "@angular/common/http";
 
 ## What is an Angular Service
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 <div dir="auto" align="right">
 ببساطة كده، الـ Services في Angular هي طريقة بنستخدمها علشان نكتب كود نقدر نستخدمه أكتر من مرة في كذا Component. يعني بدل ما نكرر نفس الكود في كل Component، بنكتب الكود ده مرة واحدة في Service ونستدعيه في أي Component يحتاجه.
@@ -1208,7 +1208,7 @@ import { HttpClientModule } from "@angular/common/http";
 
 ## What Angular Services are used for
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 ##### 1- Features that are independent of components such a logging services
 
@@ -1220,7 +1220,7 @@ import { HttpClientModule } from "@angular/common/http";
 
 ## Advantageous of Angular Service
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 ##### 1- Services are easier to test.
 
@@ -1232,7 +1232,7 @@ import { HttpClientModule } from "@angular/common/http";
 
 ## Benefits of Dependency Injection
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 <div dir="auto" align="right">
 بص، Dependency Injection هو أسلوب بنستخدمه عشان نخلي مكونات الـ Angular تشتغل مع بعضها بشكل مرن من غير ما تكون مرتبطة ببعضها بشكل مباشر. يعني إيه؟ يعني مثلاً عندنا مكون اسمه AppComponent وده محتاج يشتغل مع ProductService. في العادي، عشان الـ AppComponent يشتغل مع الـ ProductService، كان المفروض يبقى فاهم إزاي الـ ProductService بيتعمله إنشاء وبيشتغل، لكن هنا الفكرة في Dependency Injection إنه بيخلينا نمرر الـ ProductService للـ AppComponent من غير ما يبقى عارف تفاصيل إنشاؤه.
@@ -1257,7 +1257,7 @@ import { HttpClientModule } from "@angular/common/http";
 
 ## There are five main players in the Angular Dependency injection Framework.
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 <div dir="auto" align="right">
 ال Consumer
@@ -1282,7 +1282,7 @@ Dependency
 
 ## Service Scope
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 <div dir="auto" align="right">
 1- لما تيجي تعمل Service في الـAngular، لو وفرتها على مستوى الـ root module، ده معناه إن الـ service دي هتبقى متاحة في كل حتة في التطبيق. يعني أي component أو service تانية في التطبيق تقدر تستخدمها من غير مشاكل.
@@ -1307,7 +1307,7 @@ UserModule
 
 ## What is Angular Injector
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 <div dir="auto" align="right">
 
@@ -1324,7 +1324,7 @@ UserModule
 
 ## When is Angular Injector is created
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 <div dir="auto" align="right">
 ببساطة كده، لما بنقول إن Angular بيشتغل، بيبدأ بإنه يخلق حاجتين أساسيتين زي الشجر:
@@ -1354,7 +1354,7 @@ UserModule
 
 ## Registering the service with injector
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 <div dir="auto" align="right">
 ببساطة كده، في Angular لما بتيجي تضيف Service في التطبيق، بيكون في حاجة اسمها Injector هو اللي بيقوم بعملية إدارة وإضافة الـ Service في المكان الصح في التطبيق. ده بيتم عن طريق حاجة اسمها Providers، ودي بتسجل الخدمات اللي انت عاوز تستخدمها.
@@ -1400,7 +1400,7 @@ export class ProductService {}
 
 ## What are Angular Providers?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 <div dir="auto" align="right">
 الـ Angular Provider هو زي تعليمات أو وصفة بنقول فيها للـ Angular إزاي ينشئ  (Object) معين بناءً على حاجة اسمها Token. الفكرة كلها إن كل خدمة (Service) أو Dependency عايز تستدعيها في التطبيق بتحتاج تكون متسجلة في الـ Providers Array عشان الـ Angular يعرف يجيبها ويستخدمها لما تحتاجها في الكود.
@@ -1421,7 +1421,7 @@ export class ProductService {}
 
 ## The Types of Provider ?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 ### The Angular Dependency Injection provides several types of providers.
 
@@ -1527,7 +1527,7 @@ constructor(@Inject('ExistingService') private productService: ProductService) {
 
 ## How Dependency Injection & Resolution Works in Angular
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 <div dir="auto" align="right">
 بص، في Angular بيشتغل بنظام حاجة اسمها Dependency Injection (DI)، واللي معناها باختصار إنك بدل ما تبني كل حاجة من الصفر في كل Component أو Service، Angular هو اللي بيوفر الحاجات اللي محتاجها (Dependencies) بشكل أوتوماتيكي عن طريق Injector.
@@ -1568,7 +1568,7 @@ constructor(@Inject('ExistingService') private productService: ProductService) {
 
 ## Element Injector Tree?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 <div dir="auto" align="right">
 
@@ -1592,7 +1592,7 @@ constructor(@Inject('ExistingService') private productService: ProductService) {
 
 ## ProvidedIn root, any & platform in Angular
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 <div dir="auto" align="right">
 
@@ -1626,7 +1626,7 @@ constructor(@Inject('ExistingService') private productService: ProductService) {
 
 ## @Self, @SkipSelf & @Optional Decorators Angular
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top2)
 
 <div dir="auto" align="right">
 في Angular، فيه ديكوراتورز معينة زي Self@، SkipSelf@، و Optional@ بتتحكم في إزاي Angular بيدور على الdependencies اللي بيحتاجها عشان يعمل Dependency Injection.
@@ -1694,7 +1694,7 @@ constructor(
 
 ## Explain RxJS Observable
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align="right">
   الـ Observable في RxJS هو طريقة لتبادل البيانات بين اللي بينتجها (الـ producer) واللي بيستخدمها (الـ consumer). تخيل إن فيه حد بيبعث لك بيانات، بس مش هتبعت لك غير لما تطلبها (ده نظام الـ pull)، أو ممكن البيانات تتبعت لك من غير ما تطلبها (ده نظام الـ push).
@@ -1709,7 +1709,7 @@ constructor(
 
 ## What are RxJS operators?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align='right'>
 ببساطة RxJS operators هما functions بتساعدك في التعامل مع Observables وبتنقسم لنوعين:
@@ -1728,7 +1728,7 @@ constructor(
 
 ## What is Observable.pipe() and how to use it?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align="right">
 الـ pipe في RxJS هو اللي بنستخدمه عشان نمرر مجموعة من الـ pipeable operators، اللي بنقدر نستخدمها مع observables. يعني ببساطة، تقدر تحط أي عدد من العمليات (operators) جوه الـ pipe، وهيشتغلوا بالتسلسل. الفكرة إن الـ observable الأساسي بيتبعت لأول operator، والنتيجة بتاعت أول واحد بتتبعت للتاني، وهكذا.
@@ -1759,7 +1759,7 @@ of(101, 102)
 
 ## What is the difference between RxJS of and from?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align="right">
 الفرق بين RxJS of و RxJS from ببساطة هو في نوع المدخلات اللي كل واحد فيهم بيتعامل معاها وطريقة تحويلهم لـ Observable
@@ -1796,7 +1796,7 @@ from(["a", "b", "c"]).subscribe((e) => console.log(e));
 
 ## Explain RxJS map operator?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 ![ map ](https://rxjs.dev/assets/images/marble-diagrams/map.png)
 
@@ -1827,7 +1827,7 @@ of(1, 2, 3, 4)
 
 ## Explain RxJS switchMap operator?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 ![ switchMap ](https://rxjs.dev/assets/images/marble-diagrams/switchMap.png)
 
@@ -1964,7 +1964,7 @@ export class AppComponent {
 
 ## Explain RxJS mergeMap operator?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 ![ mergeMap ](https://rxjs.dev/assets/images/marble-diagrams/mergeMap.png)
 
@@ -2005,7 +2005,7 @@ fromEvent(button, "click")
 
 ## Explain RxJS concatMap operator?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 ![ concatMap ](https://rxjs.dev/assets/images/marble-diagrams/concatMap.png)
 
@@ -2045,7 +2045,7 @@ Shree Nilesh
 
 ## Explain RxJS exhaustMap operator?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 ![ exhaustMap ](https://rxjs.dev/assets/images/marble-diagrams/exhaustMap.png)
 
@@ -2090,7 +2090,7 @@ interval هنا مجرد مثال لعملية بتاخد شوية وقت (مم�
 
 ## How will you handle errors on observable using RxJS throwError?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align="right">
 في RxJS، لو حصل خطأ أثناء تشغيل الـobservable، ممكن نستخدم throwError عشان نبعت الخطأ ده في الـstream ونتعامل معاه باستخدام الـcatchError أو الـretry operators.
@@ -2127,7 +2127,7 @@ catchError: بنستخدمه عشان نعمل handle للخطأ. في المث�
 
 ## Explain RxJS retry operator?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 ![ retry ](https://rxjs.dev/assets/images/marble-diagrams/retry.png)
 
@@ -2207,7 +2207,7 @@ catchError: لو كل المحاولات فشلت، بنعمل catch للخطأ 
 
 ## Explain RxJS filter operator?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 ![ filter ](https://rxjs.dev/assets/images/marble-diagrams/filter.png)
 
@@ -2274,7 +2274,7 @@ filter: هنا بنفلتر الأحداث ونتعامل بس مع الضغطا
 
 ## Explain RxJS tap operator?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 ![ tap ](https://rxjs.dev/assets/images/marble-diagrams/tap.png)
 
@@ -2318,7 +2318,7 @@ Side effects: لو محتاج تعمل أي عملية أثناء مرور ال�
 
 ## Explain RxJS takeUntil operator?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align="right">
 في RxJS، الـtakeUntil هو operator بيستخدم عشان يوقف الـobservable عن إصدار القيم (emit) لما observable تاني يعمل emit. بمعنى تاني، الـtakeUntil بيمسك الـobservable الأصلي وبيخليه شغال لحد ما observable معين (اللي بنسميه notifier) يصدر قيمة، وبعدين يوقف الـobservable الأصلي عن العمل.
@@ -2389,7 +2389,7 @@ export class MyComponent implements OnInit, OnDestroy {
 
 ## Explain RxJS debounceTime operator?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align="right">
 هو واحد من أقوى الـoperators في RxJS وبيفيد بشكل كبير لما بنحتاج نتعامل مع سلسلة من القيم اللي بتتبع بعضها بسرعة، زي في حالة البحث اللحظي أو الحفظ التلقائي. الـdebounceTime بيسمح لنا نفلتر القيم اللي بتتبع بشكل سريع من الـobservable، ونحافظ بس على القيمة الأخيرة بعد فترة معينة من الزمن، وده مفيد لما ما نكونش محتاجين نتعامل مع كل قيمة بتطلع.
@@ -2492,7 +2492,7 @@ export class UserFormComponent implements OnInit {
 
 ## Explain RxJS combineLatestWith operator?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align="right">
 الـcombineLatest هو operator بيجمع أكتر من observable في واحد، وبيعمل emit للقيم بتاعته كل ما واحد منهم يغير القيم بتاعته. ده بيخليه operator قوي جدًا، لكن فيه شوية حاجات لازم ناخد بالنا منها لما نستخدمه.
@@ -2583,7 +2583,7 @@ export class MultiFilterComponent implements OnInit {
 
 ## Explain RxJS fromEvent operator?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align="right">
 في RxJS، الـfromEvent هو operator بنستخدمه عشان نعمل "observable" من الأحداث اللي بتحصل في الـDOM (أو أي مصدر أحداث تاني). بعبارة تانية، بنقدر نسمع لأي أحداث زي الكليكات، ضغطات الكيبورد، تحريك الماوس، وغيرها، ونتعامل معاها زي أي observable.
@@ -2619,7 +2619,7 @@ clicks$.subscribe((event) => {
 
 ## What is the difference between Subject, BehaviorSubject, ReplaySubject, and AsyncSubject in RxJS? How do they differ in terms of behavior and use cases?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align="right">
 الفرق بين Subject و BehaviorSubject و ReplaySubject و AsyncSubject في RxJS
@@ -2780,7 +2780,7 @@ AsyncSubject: لما تحتاج أن يحصل المشترك على آخر قي�
 
 ## What are the best practices for managing Observable subscriptions in Angular and ensuring there are no memory leaks?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align="right">
 
@@ -2873,7 +2873,7 @@ takeUntilDestroyed بيخليك تعمل نفس اللي كنا بنعمله م�
 
 ## what are the differences between cold observable and hot observable?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align="right">
 الفرق بين Hot Observables و Cold Observables ممكن يتلخص في طريقة تصرفهم مع المشتركين (subscribers) والبيانات اللي بيبعتوها.
@@ -2932,7 +2932,7 @@ hotObservable.next(Math.random());
 
 ## What are the differences between Observables and Promises?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align='right'>
 الفرق بين الـ Observables والـ Promises يعتبر مهم جدًا لما تيجي تتعامل مع الكود الـ Asynchronous في JavaScript أو Angular.
@@ -3007,7 +3007,7 @@ hotObservable.next(Math.random());
 
 ## What is a higher-order Observable?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align='right'>
 الـ Higher-order Observable ببساطة هو Observable اللي بيطلع Observables تانية، بدل ما يطلع قيم عادية زي أرقام أو نصوص. يعني تقدر تقول إنه بيطلع Observable داخل Observable
@@ -3120,7 +3120,7 @@ export class UserSearchComponent implements OnInit {
 
 ## How can you share a single Observable among multiple subscribers?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top3)
 
 <div dir="auto" align='right'>
 لما تيجي تشارك Observable واحد بين أكتر من مشترك (subscriber)، ممكن تستخدم share أو shareReplay. دول operators في RxJS بيساعدوك إنك تخلي الـObservable يتشارك بين المشتركين بدل ما كل واحد يعمل اشتراك منفصل ويبدأ العملية من الأول.
@@ -4034,7 +4034,7 @@ export class GlobalErrorHandlerService implements ErrorHandler {
 </div>
 <hr/>
 
-## What is a HttpErrorResponse?
+## What is HttpErrorResponse?
 
 [⬆️ Back to Top](#top4)
 
