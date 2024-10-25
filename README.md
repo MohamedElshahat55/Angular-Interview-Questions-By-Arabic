@@ -95,6 +95,8 @@
 | 23  | [What is a higher-order Observable?](#what-is-a-higher-order-observable)                                                                                                                                                                                                                                         |
 | 24  | [How can you share a single Observable among multiple subscribers?](#how-can-you-share-a-single-observable-among-multiple-subscribers)                                                                                                                                                                           |
 
+<a name="top5"></a>
+
 # Angular Form Interview Questions
 
 > connect with me on [LinkedIn](https://www.linkedin.com/in/mohamed-elshahat-4017a1303) for more technical updates and content.
@@ -3192,7 +3194,7 @@ export class UserComponent implements OnInit {
 
 ## Describe the types of forms created in Angular application?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 الإجابة: فيه نوعين أساسيين من الفورم في Angular
@@ -3249,7 +3251,7 @@ export class UserComponent implements OnInit {
 
 ## How will you create reactive form in Angular?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 أول حاجة، لازم تعمل import لـ ReactiveFormsModule. في ملف الـ TypeScript (TS)، بتعمل FormGroup باستخدام الميثود FormBuilder.group وتبدأ تجمّع شوية form controls. وكمان هتعمل function اللي هتشتغل لما الفورم يتعمله submit.
@@ -3291,7 +3293,7 @@ onFormSubmit() {
 
 ## How will you create template-driven form in Angular?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 أول حاجة، لازم تعمل import لـ FormsModule. بتربط الـ ngForm في الـ <form> element. كل عناصر الفورم لازم تستخدم name و ngModel وأي validation attributes لو موجودة. في ملف الـ TypeScript (TS)، بتعمل method عشان تعمل submit للفورم وبتربط الميثود دي بالـ ngSubmit event.
@@ -3322,7 +3324,7 @@ onFormSubmit(form: NgForm) {
 
 ## Explain FormControl?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 ال FormControl في Angular بيُستخدم عشان تتحكم في الـ input أو أي عنصر معين في الـ forms. يعني ببساطة، بيكون مسؤول عن القيمة اللي المستخدم بيدخلها، وحالة الـ validation (يعني هل الإدخال صحيح ولا لأ)، وأي errors ممكن تحصل.
@@ -3365,7 +3367,7 @@ const control = new FormControl("initial value", Validators.required);
 
 ## Explain FormGroup?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 
@@ -3416,7 +3418,7 @@ const form = new FormGroup({
 
 ## Explain FormArray?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 ال FormArray في Angular بيُستخدم عشان تدير مجموعة من الـ FormControls أو الـ FormGroups جوا (form). الفكرة إنك تقدر تعمل array  من inputs اللي ممكن تضيفها أو تشيلها بشكل ديناميكي على حسب احتياجاتك.
@@ -3466,7 +3468,7 @@ const formArray = new FormArray([
 
 ## Explain FormRecord?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 
@@ -3527,7 +3529,7 @@ export class MyComponent implements OnInit {
 
 ## How will you use valueChanges?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 الـ valueChanges ده Observable في Angular، بيعمل emit للقيمة بتاعة الـ form control أو الـ form group لما قيمتها بتتغير، سواء المستخدم غيرها أو برمجياً.
@@ -3562,7 +3564,7 @@ this.studentForm.valueChanges.subscribe(student => {
 
 ## How will you use statusChanges?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 الـ statusChanges ده بيكون observable، يعني بيراقب أي تغيير في حالة الـ validation الخاصة بأي FormControl أو FormGroup أو FormArray. يعني كل ما يحصل إعادة حساب للـ validation، الـ statusChanges بيعمل emit بالقيمة الجديدة للحالة سواء كانت valid أو invalid.
@@ -3595,7 +3597,7 @@ this.studentForm.statusChanges.subscribe(status => {
 
 ## What is difference between setValue() and patchValue()?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 في Angular، الفرق بين setValue و patchValue بيظهر لما تيجي تتعامل مع الفورم وتحدث القيم اللي فيه.
@@ -3632,7 +3634,7 @@ patchValue تقدر تدي قيم لجزء من الـ inputs بس.
 
 ## How will you add and remove controls on FormGroup dynamically?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 علشان تضيف وتزيل controls في FormGroup بشكل ديناميكي، بتستخدم الميثودز addControl وremoveControl.
@@ -3744,7 +3746,7 @@ HTML
 
 ## What is difference between (ngModelChange) and (change)?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 ببساطة، الفرق بين (ngModelChange) و (change) هو إن كل واحد منهم بيشتغل في مكان مختلف ولغرض مختلف:
@@ -3787,7 +3789,7 @@ HTML
 
 ## How to add async validation in FormControl?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 لو عايز تضيف async validation في FormControl، الموضوع بسيط
@@ -3899,7 +3901,7 @@ export class UserFormComponent {
 
 ## How will you validate template-driven form?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 عشان تعمل validation في الفورم اللي معمول بـ template-driven، بتحدد (validation attributes) في الـ form control، وبتستخدم   بـ # عشان تعرض رسائل الخطأ بناءً عليه.
@@ -3924,7 +3926,7 @@ export class UserFormComponent {
 
 ## How will you perform two-way binding using ngModel?
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top5)
 
 <div dir="auto" align='right'>
 عشان تعمل two-way binding باستخدام ngModel، بتستخدم الأقواس المربعة والعادية مع بعض [()] حوالين الـ ngModel كده: [(ngModel)]. الطريقة دي بتسمح بإرسال البيانات من الـ component للـ view target، وفي نفس الوقت من الـ view target للـ component.
