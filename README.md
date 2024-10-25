@@ -4,6 +4,14 @@
 
 > connect with me on [LinkedIn](https://www.linkedin.com/in/mohamed-elshahat-4017a1303) for more technical updates and content.
 
+## Sources
+
+This Repo is inspired by the following sources:
+
+1. [TekTutorialsHub-Logo](https://www.tektutorialshub.com/angular-tutorial/)
+2. [Logo ConcretePage.com](https://www.concretepage.com/angular/)
+3. [List of 300 Angular Interview Questions and answers](https://github.com/sudheerj/angular-interview-questions)
+
 | No. | Questions                                                                                                            |
 | --- | -------------------------------------------------------------------------------------------------------------------- |
 | 1   | [What is Angular Framework?](#what-is-angular-framework)                                                             |
