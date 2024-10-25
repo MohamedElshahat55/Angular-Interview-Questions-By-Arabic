@@ -1220,7 +1220,7 @@ import { HttpClientModule } from "@angular/common/http";
 
 <hr/>
 
-## Advantageous of Angular Service
+## Advantages of Angular Service
 
 [⬆️ Back to Top](#top2)
 
@@ -1257,7 +1257,7 @@ import { HttpClientModule } from "@angular/common/http";
 
 <hr/>
 
-## There are five main players in the Angular Dependency injection Framework.
+## The five main players in the Angular Dependency Injection Framework?
 
 [⬆️ Back to Top](#top2)
 
@@ -1282,7 +1282,7 @@ Dependency
 
 </div>
 
-## Service Scope
+## Service Scope in Angular
 
 [⬆️ Back to Top](#top2)
 
@@ -1324,7 +1324,7 @@ UserModule
 </div>
 <hr/>
 
-## When is Angular Injector is created?
+## When is Angular Injector created?
 
 [⬆️ Back to Top](#top2)
 
@@ -1354,7 +1354,7 @@ UserModule
 </div>
 <hr/>
 
-## Registering the service with injector
+## Registering the service with an injector
 
 [⬆️ Back to Top](#top2)
 
@@ -1421,7 +1421,7 @@ export class ProductService {}
 
 </div>
 
-## The Types of Provider
+## Types of Providers in Angular?
 
 [⬆️ Back to Top](#top2)
 
@@ -1527,7 +1527,7 @@ constructor(@Inject('ExistingService') private productService: ProductService) {
 </div>
 </div>
 
-## How Dependency Injection & Resolution Works in Angular?
+## How Dependency Injection and Resolution Work in Angular?
 
 [⬆️ Back to Top](#top2)
 
@@ -1568,7 +1568,7 @@ constructor(@Inject('ExistingService') private productService: ProductService) {
 
 </div>
 
-## Element Injector Tree
+## Element Injector Tree in Angular
 
 [⬆️ Back to Top](#top2)
 
@@ -1592,7 +1592,7 @@ constructor(@Inject('ExistingService') private productService: ProductService) {
 
 </div>
 
-## ProvidedIn root, any & platform in Angular
+## ProvidedIn root, any, and platform in Angular
 
 [⬆️ Back to Top](#top2)
 
@@ -1626,7 +1626,7 @@ constructor(@Inject('ExistingService') private productService: ProductService) {
 
 </div>
 
-## @Self, @SkipSelf & @Optional Decorators Angular
+## @Self, @SkipSelf, and @Optional Decorators in Angular?
 
 [⬆️ Back to Top](#top2)
 
