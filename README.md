@@ -46,18 +46,18 @@
 | --- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | [What is an Angular Service?](#what-is-an-angular-service)                                                                                   |
 | 2   | [What Angular Services are used for?](#what-angular-services-are-used-for)                                                                   |
-| 3   | [Advantages of Angular Service?](#advantages-of-angular-service)                                                                             |
-| 4   | [Benefits of Dependency Injection?](#benefits-of-dependency-injection)                                                                       |
+| 3   | [Advantages of Angular Service](#advantages-of-angular-service)                                                                              |
+| 4   | [Benefits of Dependency Injection](#benefits-of-dependency-injection)                                                                        |
 | 5   | [The five main players in the Angular Dependency Injection Framework?](#the-five-main-players-in-the-angular-dependency-injection-framework) |
-| 6   | [Service Scope in Angular?](#service-scope-in-angular)                                                                                       |
+| 6   | [Service Scope in Angular](#service-scope-in-angular)                                                                                        |
 | 7   | [What is Angular Injector?](#what-is-angular-injector)                                                                                       |
 | 8   | [When is Angular Injector created?](#when-is-angular-injector-created)                                                                       |
-| 9   | [Registering the service with an injector?](#registering-the-service-with-an-injector)                                                       |
+| 9   | [Registering the service with an injector](#registering-the-service-with-an-injector)                                                        |
 | 10  | [What are Angular Providers?](#what-are-angular-providers)                                                                                   |
 | 11  | [Types of Providers in Angular?](#types-of-providers-in-angular)                                                                             |
 | 12  | [How Dependency Injection and Resolution Work in Angular?](#how-dependency-injection-and-resolution-work-in-angular)                         |
-| 13  | [Element Injector Tree in Angular?](#element-injector-tree-in-angular)                                                                       |
-| 14  | [ProvidedIn root, any, and platform in Angular?](#providedin-root-any-and-platform-in-angular)                                               |
+| 13  | [Element Injector Tree in Angular](#element-injector-tree-in-angular)                                                                        |
+| 14  | [ProvidedIn root, any, and platform in Angular](#providedin-root-any-and-platform-in-angular)                                                |
 | 15  | [@Self, @SkipSelf, and @Optional Decorators in Angular?](#@self-@skipself-@and-optional-decorators-in-angular)                               |
 
 <a name="top3"></a>
@@ -1307,7 +1307,7 @@ UserModule
 </div>
 <hr/>
 
-## What is Angular Injector
+## What is Angular Injector?
 
 [⬆️ Back to Top](#top2)
 
@@ -1324,7 +1324,7 @@ UserModule
 </div>
 <hr/>
 
-## When is Angular Injector is created
+## When is Angular Injector is created?
 
 [⬆️ Back to Top](#top2)
 
@@ -1421,7 +1421,7 @@ export class ProductService {}
 
 </div>
 
-## The Types of Provider ?
+## The Types of Provider
 
 [⬆️ Back to Top](#top2)
 
@@ -1527,7 +1527,7 @@ constructor(@Inject('ExistingService') private productService: ProductService) {
 </div>
 </div>
 
-## How Dependency Injection & Resolution Works in Angular
+## How Dependency Injection & Resolution Works in Angular?
 
 [⬆️ Back to Top](#top2)
 
@@ -1568,7 +1568,7 @@ constructor(@Inject('ExistingService') private productService: ProductService) {
 
 </div>
 
-## Element Injector Tree?
+## Element Injector Tree
 
 [⬆️ Back to Top](#top2)
 
