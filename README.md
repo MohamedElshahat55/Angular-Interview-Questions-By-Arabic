@@ -1775,8 +1775,8 @@ const numberSignal = signal(10); // هنا بنخزن قيمة 10 كعدد
 <div dir="auto" align="left">
 
 ```typescript
-//❌  ده غلط
-numberSignal = 20; // هنا بنحاول نغير المتغير نفسه مباشرة وده بيعمل مشكلة
+❌
+numberSignal = 20;
 ```
 
 </div>
@@ -1812,7 +1812,6 @@ const userSignal = signal({ name: "Ali", age: 25 });
 <div dir="auto" align="left">
 
 ```typescript
-//❌ ده غلط
 userSignal().name = "Ahmed";
 ```
 
@@ -1846,8 +1845,7 @@ const numbersArraySignal = signal([1, 2, 3]);
 <div dir="auto" align="left">
 
 ```typescript
-//❌ ده غلط
-numbersArraySignal().push(4); // هنا بنغير الأراي مباشرة وده غلط
+numbersArraySignal().push(4);
 ```
 
 </div>
