@@ -8,9 +8,10 @@
 
 This Repo is inspired by the following sources:
 
-1. [TekTutorialsHub-Logo](https://www.tektutorialshub.com/angular-tutorial/)
-2. [Logo ConcretePage.com](https://www.concretepage.com/angular/)
-3. [List of 300 Angular Interview Questions and answers](https://github.com/sudheerj/angular-interview-questions)
+1. [angular.dev](https://angular.dev/)
+2. [TekTutorialsHub-Logo](https://www.tektutorialshub.com/angular-tutorial/)
+3. [Logo ConcretePage.com](https://www.concretepage.com/angular/)
+4. [List of 300 Angular Interview Questions and answers](https://github.com/sudheerj/angular-interview-questions)
 
 | No. | Questions                                                                                                              |
 | --- | ---------------------------------------------------------------------------------------------------------------------- |
