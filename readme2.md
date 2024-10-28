@@ -1,307 +1,265 @@
-## What is angular Http interceptor
+ <!-- ## ElementRef in Angular
 
-[⬆️ Back to Top](#top8)
+ [⬆️ Back to Top](#top)
 
 <div dir="auto" align="right">
 
-### يعني إيه Angular HTTP Interceptor؟
+### ما هو ElementRef؟
+ الElementRef هو Object بيتيح لنا الوصول المباشر للعنصر في الـDOM من داخل الكومبوننت أو الديركتيف.
+ 
+  غالبًا، في أغلب حالات الـAngular، بنعتمد على  (Bindings) , (Directives) لتغيير الـDOM بشكل غير مباشر، لكن في حالات معينة، بنحتاج نوصل للعنصر نفسه عشان نعمل عمليات خاصة عليه، زي التفاعل مع مكتبات JavaScript خارجية أو إجراء تعديلات معينة على العنصر مباشرة.
 
-الHTTP Interceptor في Angular ده بيشتغل كوسيط ما بين التطبيق بتاعنا والسيرفر.
+  ### ليه نحتاج ElementRef؟
+أحيانًا نحتاج نعدل حاجة محددة في العنصر مباشرة، مش كل حاجة بتكون ممكنة بالـAngular bindings. على سبيل المثال:
 
-لما التطبيق يبعت طلب للسيرفر (زي GET أو POST)، الـ Interceptor بيقدر يمسك الطلب ده قبل ما يتبعت ويقدر يعدل عليه.
+إضافة أو تعديل بعض الخصائص  (CSS Styles) بشكل ديناميكي.
 
-كمان لما السيرفر يرد علينا، الـ Interceptor يقدر يمسك الرد ويعدّل فيه لو محتاج.
+التعامل مع مكتبات JavaScript خارجية محتاجة الـDOM Element مباشرة.
 
-### فوايد HTTP Interceptor
+تنفيذ تعديلات أو تنقلات مباشرة على العنصر مش ممكنة بسهولة بالـAngular.
 
-واحدة من أهم الفوايد هي إنك تقدر تضيف Authorization Header (زي توكن بتاع تسجيل الدخول) على كل طلب.
+###  إزاي نستخدم ElementRef؟
+##### أول خطوة: إنشاء Template Reference Variable
+أول حاجة، عشان تقدر تستخدم ElementRef، لازم تنشئ حاجة اسمها Template Reference Variable في التيمبلت.
 
-يعني بدل ما تحط التوكن بشكل يدوي في كل مكان، الـ Interceptor بيضيفه تلقائي لكل طلب، وده بيوفر مجهود ويقلل الأخطاء.
-
-كمان تقدر تستخدمه عشان تمسك الأخطاء اللي بترجع من السيرفر، زي لو في مشكلة في الاتصال أو السيرفر رد بحاجة غلط. ممكن تخليه يسجل الأخطاء دي في اللوج أو يعرض للمستخدم رسالة.
-
-### مثال على الاستخدامات
-
-إضافة Headers: تقدر تضيف Headers مخصصة (زي Authorization) لكل طلب خارج.
-
-التعامل مع الأخطاء: تقدر تمسك الأخطاء اللي بترجع من السيرفر وتتعامل معاها قبل ما توصل للتطبيق.
-
-### إزاي نعمل Http Interceptor؟
-
-إنشاء Service جديدة: الأول بنعمل Service جديدة، ودي لازم تطبّق HttpInterceptor Interface من Angular.
+ ده بيكون متغير بيشير للعنصر اللي عاوز توصله، وبتكتبه بالشكل ده في الـHTML بتاعك:
 
 <div dir="auto" align="left">
 
-```typescript
-import { Injectable } from "@angular/core";
-import {
-  HttpInterceptor,
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-} from "@angular/common/http";
-import { Observable } from "rxjs";
-
-@Injectable()
-export class AppHttpInterceptor implements HttpInterceptor {
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    // هنا تقدر تعمل أي تعديل على الطلب
-    console.log("Interceptor شغال!");
-
-    // بترجع الطلب عشان يكمل ويعمله send
-    return next.handle(req);
-  }
-}
+```HTML
+<div #hello>Hello Angular</div>
 ```
 
-</div>
+</div> 
+هنا، hello# ده هو Template Reference Variable للعنصر div
 
-الintercept هي الطريقة الأساسية اللي بتشتغل على كل طلب. بتاخد req اللي هو الطلب
-الحالي وnext اللي هو المسؤول عن تمرير الطلب للخطوة اللي بعدها.
+. بيدينا زي اسم داخلي نقدر نوصل بيه للعنصر ده من كود الكومبوننت.
 
-الnext.handle(req) بيكمل إرسال الطلب بعد التعديلات اللي انت عملتها.
-تسجيل الـ Interceptor في الـ Root Module: عشان Angular تستخدم الـ Interceptor، لازم تضيفه في providers في AppModule وتستخدم الـ HTTP_INTERCEPTORS عشان تسجله كـ Multi Provider.
+#### الخطوة الثانية: الوصول لـ ElementRef باستخدام ViewChild
+عشان نستخدم hello جوه كود الكومبوننت، بنستعمل ViewChild@، وده بيسمح لـAngular إنه يححقن لنا refrence للعنصر في الكومبوننت بشكل مباشر.
 
 <div dir="auto" align="left">
 
 ```typescript
-import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
-@NgModule({
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AppHttpInterceptor,
-      multi: true,
-    },
-  ],
+@Component({
+  selector: 'app-root',
+  template: `<div #hello>Hello Angular</div>`
 })
-export class AppModule {}
-```
-
-</div>
-
-هنا بنضيف AppHttpInterceptor كـ provider في التطبيق، وmulti: true معناها إنه يقدر يستخدم أكتر من Interceptor في نفس الوقت لو عندك أكتر من واحد.
-
-### Setting the new headers
-
-#### ايه هي الفكرة الأساسية؟
-
-لما بنبعت طلب HTTP من Angular للسيرفر (زي لما نجيب بيانات أو نبعت بيانات)، الطلب ده بيتبعت ومعاه Headers (زي بطاقة تعريف بتحط شوية معلومات عن الطلب، زي نوع البيانات اللي بنبعتها أو إن كان المستخدم مسجّل دخول).
-
-فيه حالات بنحتاج نضيف أو نعدل أو حتى نحذف Headers قبل ما الطلب يتبعت للسيرفر.
-
-هنا بنستخدم حاجة اسمها HTTP Interceptor، ودي بتخلينا "نعترض" الطلب ونعدل عليه قبل ما يتبعت.
-
- <div dir="auto" align="left">
-
-```typescript
-req = req.clone({
-  headers: req.headers.set("Content-Type", "application/json"),
-});
-```
-
-</div>
-
-### ليه بنستخدم clone؟
-
-في Angular، الطلبات (requests) والأجزاء بتاعتها زي الـ Headers بتكون ثابتة (Immutable)، يعني ماينفعش نعدل عليها مباشرةً. علشان كده، لما نحتاج نغير حاجة في الطلب، لازم نعمل نسخة (Clone) منه.
-
-### ليه بنضيف Content-Type؟
-
-لما نبعت بيانات للسيرفر، بنحط نوع البيانات اللي بنبعتها في الهيدر Content-Type. مثلاً لو البيانات بصيغة JSON، بنضيف الهيدر بالشكل ده
-
-هنا set بتعمل نسخة جديدة من الهيدر وبتضيف Content-Type لو مش موجود أو بتعدله لو كان موجود.
-
-### طيب لو عايز تضيف الهيدر بدون ما تغير الموجود؟
-
-ممكن تستخدم append بدل set، ودي بتضيف Header جديد حتى لو كان نفس الهيدر موجود قبل كده:
-
-<div dir="auto" align="left">
-
-```typescript
-req = req.clone({
-  headers: req.headers.append("Content-Type", "application/json"),
-});
-```
-
-</div>
-
-### تأكد لو Header موجود قبل ما تضيفه
-
-لو مش عايز تضيف نفس Header مرتين، ممكن تتأكد قبل بإستخدام:
-
-<div dir="auto" align="left">
-
-```typescript
-if (!req.headers.has("Content-Type")) {
-  req = req.clone({
-    headers: req.headers.set("Content-Type", "application/json"),
-  });
-}
-```
-
-</div>
-
-### إضافة Authorization Token
-
-#### 🔴 ايه هو الـ Token؟
-
-الـ Token هو زي كود سري بيستخدمه المستخدم لما يكون عامل تسجيل دخول.
-
-بنضيفه في الهيدر Authorization عشان نقول للسيرفر "المستخدم ده معاه صلاحيات".
-
-### إزاي تضيف التوكن للطلب؟
-
-بنستخدم طريقة زي دي، نفترض إن التوكن متخزن في Service بتاعتك:
-
-<div dir="auto" align="left">
-
-```typescript
-const token: string = authService.Token; // بنجيب التوكن من الـ Service
-if (token) {
-  req = req.clone({
-    headers: req.headers.set("Authorization", "Bearer " + token),
-  });
-}
-```
-
-</div>
-
-في الكود ده بنضيف "Bearer" قبل التوكن، وده أسلوب متعارف عليه في الـ Authorization Headers.
-
-### Intercepting the Response
-
-لما نبعت طلب للسيرفر، بنستنى رد (Response) يوصلنا.
-
-الـ Interceptor بيخلينا "نعترض" الرد ده، نعدله أو نسجل أي حاجة محتاجينها قبل ما يوصل للتطبيق نفسه.
-
-في الحالة دي، بنستخدم RxJS Operators زي map, tap catchError, و retry عشان نتحكم أكتر في الرد.
-
-### تسجيل requests باستخدام tap
-
-#### ليه بنستخدم tap؟
-
-الtap بيخلينا نقدر نسجل أحداث معينة، زي الوقت اللي أخده الطلب عشان يخلص.
-
-دي طريقة كويسة لو عايز تعرف الوقت اللي الطلب استغرقه، أو تسجل أي معلومات إضافية عن الطلب أو الرد.
-
-### مثال عملي
-
-في الكود ده، tap بيتنفذ مرتين: مرة لما الطلب يبعت، ومرة تانية لما الرد يوصل.
-
-<div dir="auto" align="left">
-
-```typescript
-intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-  req = req.clone({ headers: req.headers.append('Content-Type', 'application/json') });
-  const started = Date.now();
-
-  return next.handle(req).pipe(
-    tap(event => {
-      const elapsed = Date.now() - started;
-      console.log(`Request for ${req.urlWithParams} took ${elapsed} ms.`);
-      if (event instanceof HttpResponse) {
-        console.log('Response Received');
-      }
-    })
-  );
-}
-```
-
-</div>
-
-✨الكود ده بيحسب الزمن اللي أخده الطلب عشان يوصل الرد، وبيسجل رسالة لما الاستجابة توصل.
-
-### تعديل الرد باستخدام map
-
-#### ليه بنستخدم map؟
-
-الmap بنستخدمه عشان نعدل محتوى الرد قبل ما يوصل للتطبيق. لو فيه بيانات محتاجين نغيرها أو نبدّلها، بنقدر نستخدم map عشان نعمل ده.
-
-#### مثال عملي
-
-في المثال ده، بنستخدم map عشان نغير محتوى الرد بالكامل، ونحط بيانات جديدة في (body) بتاع الرد:
-
-<div dir="auto" align="left">
-
-```typescript
-intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-  return next.handle(req).pipe(
-    map(resp => {
-      const myBody = [{ 'id': '1', 'name': 'TekTutorialsHub', 'html_url': 'www.tektutorialshub.com', 'description': 'description' }];
-      if (resp instanceof HttpResponse) {
-        resp = resp.clone<any>({ body: myBody });
-        return resp;
-      }
-      return resp;
-    })
-  );
-}
-```
-
-</div>
-
-### التعامل مع الأخطاء باستخدام catchError
-
-#### ليه بنستخدم catchError؟
-
-الcatchError بنستخدمه عشان نمسك أي خطأ حصل أثناء الطلب ونتعامل معاه، زي مثلاً لو الطلب رجّع 401 Unauthorized، نعرف نوجّه المستخدم لصفحة تسجيل الدخول.
-
-#### مثال عملي
-
-في الكود ده، catchError بيمسك الأخطاء ويعرض التفاصيل الخاصة بيها، ولو كان الخطأ 401، ممكن نوجه المستخدم للصفحة المناسبة:
-
-<div dir="auto" align="left">
-
-```typescript
-intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-  const token: string = 'invalid token';
-  req = req.clone({ headers: req.headers.set('Authorization', 'Bearer ' + token) });
-
-  return next.handle(req).pipe(
-    catchError(err => {
-      console.error(err);
-      if (err instanceof HttpErrorResponse) {
-        console.log(err.status, err.statusText);
-        if (err.status === 401) {
-          // توجيه المستخدم لصفحة تسجيل الدخول
-        }
-      }
-      return of(err); // بترجع الخطأ كـ Observable
-    })
-  );
-}
-```
-
-</div>
-
-### إلغاء الطلب باستخدام EMPTY
-
-#### ليه ممكن نحتاج نلغي الrequest
-
-لو المستخدم مش مسجّل دخول مثلاً، ممكن نلغي الطلب عشان ما يتبعتش للسيرفر، وده بنعمله بإرجاع EMPTY (اللي هو Observable فاضي).
-
-<div dir="auto" align="left">
-
-```typescript
-import { EMPTY } from 'rxjs';
-
-intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-  if (NotLoggedIn) {
-    return EMPTY; // الطلب مش هيتبعت
+export class AppComponent {
+  @ViewChild('hello', { static: false }) divHello: ElementRef;
+
+  ngAfterViewInit() {
+    console.log(this.divHello.nativeElement.innerText); // هيطبع 'Hello Angular'
   }
-
-  return next.handle(req);
 }
 ```
 
 </div>
 
+
+
+هنا، ViewChild@ بيعمل ربط بين المتغير divHello والـElementRef للعنصر اللي عليه الـTemplate Reference Variable hello.
+
+##### nativeElement
+بداخل ElementRef، عندنا خاصية nativeElement اللي بترجع العنصر نفسه من الـDOM، وبالتالي تقدر تتعامل مع العنصر مباشرة زي ما بتعمل في JavaScript العادي.
+
+#### استخدام الـRead Token لما يكون في ديركتيف تاني على العنصر
+أحيانًا بيكون في ديركتيفات على نفس العنصر زي ngModel. لو عاوز توصل للعنصر نفسه كـElementRef بدل ما توصل للديركتيف ngModel، هنا بييجي دور الـread token. ده بيساعدنا نحدد نوع المرجع اللي محتاجينه (سواء ElementRef أو ديركتيف زي NgModel).
+
+#### مثال مع ngModel
+مثلاً عندنا input عليه ngModel كالتالي:
+<div dir="auto" align="left">
+
+```HTML
+<input #nameInput [(ngModel)]="name">
+```
+
+</div> 
+في المثال ده، عاوزين نوصل للعنصر نفسه كـElementRef أو نوصل للـngModel لو محتاجين نشتغل بيه. نقدر نحدد ده باستخدام read بالشكل التالي:
+
+<div dir="auto" align="left">
+
+```typescript
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
+
+@Component({
+  selector: 'app-root',
+  template: `<input #nameInput [(ngModel)]="name">`
+})
+export class AppComponent {
+  name: string;
+
+  // هنا بنطلب الـ ElementRef للعنصر input
+  @ViewChild('nameInput', { static: false, read: ElementRef }) elRef: ElementRef;
+
+  // هنا بنطلب ngModel المرتبط بالعنصر
+  @ViewChild('nameInput', { static: false, read: NgModel }) inRef: NgModel;
+
+  ngAfterViewInit() {
+    console.log(this.elRef.nativeElement); // بيرجع العنصر `<input>`
+    console.log(this.inRef.model);         // بيرجع القيمة المرتبطة بـ ngModel
+  }
+}
+```
+
 </div>
+
+### ElementRef in Custom Directive
+استخدام ElementRef في ديركتيف مخصص بيتيح لك تتعامل مع host element للديركتيف بشكل مباشر، زي ما بيظهر في مثال ttClass اللي عملنا فيه ديركتيف بيضيف كلاس معين للعنصر.
+
+#### مثال: ديركتيف ttClass
+في الكود اللي كتبناه، ttClass هو ديركتيف مخصص بيستخدم ElementRef للوصول للعنصر host element وإضافة كلاس معين عليه، زي كالتالي:
+<div dir="auto" align="left">
+
+```typescript
+import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+
+@Directive({
+  selector: '[ttClass]',  
+})
+export class ttClassDirective implements OnInit {
+  @Input() ttClass: string;  
+
+  constructor(private el: ElementRef) { }
+
+  ngOnInit() {
+    this.el.nativeElement.classList.add(this.ttClass);
+  }
+}
+```
+
+</div>
+
+### استخدامه في HTML:
+لما تستخدم الديركتيف ttClass، هتكتب زي كده في الـHTML:
+<div dir="auto" align="left">
+
+```HTML
+<div ttClass="highlight">Hello World!</div>
+```
+
+</div>
+الكود ده هيضيف الكلاس highlight للعنصر div.
+
+### 🔴 ملاحظات مهمة عند استخدام ElementRef
+
+
+الElementRef بيسمح لك تتعامل مع العناصر مباشرةً، لكن Angular بتحذر من الاعتماد عليه كتير لأنه بيخلي التطبيق مرتبط جدًا بطريقة عرض العناصر، وده ممكن يسبب مشاكل في بعض الحالات، زي لما تتعامل مع Web Workers أو Server-side rendering. Renderer2 يعتبر بديل آمن لأنه بيسمح لك تتعامل مع العناصر بطريقة بتشتغل في بيئات مختلفة بدون الاعتماد المباشر على DOM.
+
+### حماية ضد XSS Injection Attacks
+استخدام ElementRef بطريقة غير صحيحة ممكن يعرض التطبيق لمشاكل أمنية زي هجمات XSS (Cross-Site Scripting). 
+
+### بديل آمن: Renderer2
+الRenderer2 هو API من Angular بيتيح لك التعامل مع الـDOM بشكل آمن ويتوافق مع بيئات مختلفة.
+
+### ✨ الخلاصة
+الElementRef مفيد في بعض الحالات لكنه يحتاج حذر لأنه مرتبط مباشرةً بالـDOM.
+
+الRenderer2 هو الخيار الأفضل لو محتاج تضمن أمان أكتر في التعامل مع العناصر.
+</div>
+
+
+ ## What is Renderer2 ?
+
+ [⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+
+الRenderer2 في Angular هو API بيتيح لك تتعامل مع عناصر الـ DOM بطريقة آمنة ومتوافقة مع بيئات مختلفة، وده بيكون أفضل من التعامل المباشر مع الـ DOM باستخدام ElementRef. 
+
+الRenderer2 بيستخدم في حالات زي إضافة أو إزالة كلاس، تغيير ستايلات CSS، التعامل مع الأحداث، وإضافة أو حذف عناصر في الـ DOM.
+
+### ليه نستخدم Renderer2 بدل ElementRef؟
+
+لو استخدمت ElementRef للتعامل مع الـ DOM مباشرة، هيشتغل في المتصفح (Browser) بس. لكن لو عاوز تشغل التطبيق بتاعك في بيئات تانية زي:
+
+الWeb Workers (لتشغيل الكود بعيدًا عن الواجهة الأساسية).
+
+الServer-Side Rendering (لتحميل التطبيق من السيرفر زي Angular Universal).
+
+تطبيقات الموبايل وسطح المكتب.
+
+✅ الـ Renderer2 بيخلي الكود متوافق ويشتغل في كل البيئات دي، لأنه بيعمل كـ "طبقة وسطية" بين كودك وعناصر الـ DOM.
+
+### استخدامات Renderer2
+1. تغيير الخصائص (Properties) والستايلات (Styles)
+بدل ما تستخدم ElementRef.nativeElement.style، تقدر تستخدم Renderer2 لإضافة أو إزالة ستايلات على العنصر. زي كده:
+
+<div dir="auto" align="left">
+
+```typescript
+@ViewChild('myDiv') myDiv: ElementRef;
+
+constructor(private renderer: Renderer2) {}
+
+addStyle() {
+  this.renderer.setStyle(this.myDiv.nativeElement, 'color', 'blue'); // يغير اللون للأزرق
+}
+
+removeStyle() {
+  this.renderer.removeStyle(this.myDiv.nativeElement, 'color'); // يشيل اللون
+}
+```
+
+</div>
+
+### 2. إضافة أو إزالة كلاس
+ممكن تضيف أو تشيل كلاس للعنصر زي addClass وremoveClass
+
+<div dir="auto" align="left">
+
+```typescript
+addClass() {
+  this.renderer.addClass(this.myDiv.nativeElement, 'highlight');
+}
+
+removeClass() {
+  this.renderer.removeClass(this.myDiv.nativeElement, 'highlight');
+}
+```
+
+</div>
+
+### 3. التعامل مع events
+ممكن كمان تستخدم Renderer2.listen عشان تتعامل مع الأحداث بطريقة آمنة ومتوافقة مع Angular
+
+<div dir="auto" align="left">
+
+```typescript
+ngAfterViewInit() {
+  this.clickListener = this.renderer.listen(this.myDiv.nativeElement, 'click', () => {
+    console.log('Div clicked!');
+  });
+}
+
+ngOnDestroy() {
+  this.clickListener(); // تلغي الاشتراك في الحدث عشان ما يبقاش فيه تسريب للذاكرة
+}
+```
+
+</div>
+
+### 4. إنشاء عناصر جديدة وإضافتها
+تقدر تنشئ عناصر جديدة وتضيفها للـ DOM باستخدام Renderer2
+
+<div dir="auto" align="left">
+
+```typescript
+createElement() {
+  const newDiv = this.renderer.createElement('div');
+  const text = this.renderer.createText('Hello Angular');
+  
+  this.renderer.appendChild(newDiv, text); // تضيف النص للعنصر
+  this.renderer.appendChild(this.myDiv.nativeElement, newDiv); // تضيف العنصر للـ DOM
+}
+```
+
+</div>
+
+</div> -->
 
  <!-- <hr/>
  ## How to Use Resolve Guard
