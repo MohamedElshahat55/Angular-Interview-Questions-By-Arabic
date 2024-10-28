@@ -5066,7 +5066,7 @@ message = "Hello World!";
 
 #### Allow access to certain parts of the application to specific users.
 
-و عايز تتحكم مين يدخل على أجزاء معينة في التطبيق (زي صفحات الأدمن مثلاً)
+عايز تتحكم مين يدخل على أجزاء معينة في التطبيق (زي صفحات الأدمن مثلاً)
 
 #### Validating the route parameters before navigating to the route
 
@@ -5084,15 +5084,19 @@ message = "Hello World!";
 
 ### The Angular Router supports fifth different guards, which you can use to protect the route.
 
-1- CanActivate
-2- CanDeactivate
-3- Resolve
-4- CanLoad
-5- CanActivateChild
+#### 1- CanActivate
+
+#### 2- CanDeactivate
+
+#### 3- Resolve
+
+#### 4- CanLoad
+
+#### 5- CanActivateChild
 
 ## What is CanActivate Guard
 
-[⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top7)
 
 <div dir="auto" align="right">
 الCanActivate Guard ده زي حارس بيمنع أو بيسمح للـ Route إنها تتفتح أو تتعرض للمستخدم بناءً على شرط معين. بنستخدمه لما نكون عايزين نتاكد من حاجة معينة قبل ما نخلي المستخدم يشوف الصفحة. يعني ممكن نقول للـ Guard ده “لو الشرط الفلاني موجود، اسمح للمستخدم يدخل”، ولو الشرط مش موجود، “امنع المستخدم”.
@@ -5220,6 +5224,7 @@ export class AdminGuardService implements CanActivateChild {
 ```
 
 </div>
+
 <div dir="auto" align="left">
 
 ```typescript
