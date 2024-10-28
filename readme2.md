@@ -1,497 +1,307 @@
-<!-- ## Uses of Angular Route Guards
-[⬆️ Back to Top](#top7)
+## What is angular Http interceptor
+
+[⬆️ Back to Top](#top8)
 
 <div dir="auto" align="right">
 
-#### To Confirm the navigational operation
+### يعني إيه Angular HTTP Interceptor؟
 
-لو عايز تسأل المستخدم "عايز تحفظ التعديلات قبل ما تسيب الصفحة؟
+الHTTP Interceptor في Angular ده بيشتغل كوسيط ما بين التطبيق بتاعنا والسيرفر.
 
-#### Allow access to certain parts of the application to specific users.
+لما التطبيق يبعت طلب للسيرفر (زي GET أو POST)، الـ Interceptor بيقدر يمسك الطلب ده قبل ما يتبعت ويقدر يعدل عليه.
 
-و عايز تتحكم مين يدخل على أجزاء معينة في التطبيق (زي صفحات الأدمن مثلاً)
+كمان لما السيرفر يرد علينا، الـ Interceptor يقدر يمسك الرد ويعدّل فيه لو محتاج.
 
-#### Validating the route parameters before navigating to the route
+### فوايد HTTP Interceptor
 
-لو محتاج تتأكد من باراميتر معين (زي ID بتاع المستخدم مثلاً) قبل ما تروح لصفحة معينة
+واحدة من أهم الفوايد هي إنك تقدر تضيف Authorization Header (زي توكن بتاع تسجيل الدخول) على كل طلب.
 
-#### Fetching some data before you display the component.
+يعني بدل ما تحط التوكن بشكل يدوي في كل مكان، الـ Interceptor بيضيفه تلقائي لكل طلب، وده بيوفر مجهود ويقلل الأخطاء.
 
-لو عندك بيانات محتاج تجيبها من السيرفر قبل ما تعرض الكومبوننت،
+كمان تقدر تستخدمه عشان تمسك الأخطاء اللي بترجع من السيرفر، زي لو في مشكلة في الاتصال أو السيرفر رد بحاجة غلط. ممكن تخليه يسجل الأخطاء دي في اللوج أو يعرض للمستخدم رسالة.
 
-</div>
+### مثال على الاستخدامات
 
-## Types of Route Guards
+إضافة Headers: تقدر تضيف Headers مخصصة (زي Authorization) لكل طلب خارج.
 
-[⬆️ Back to Top](#top7)
+التعامل مع الأخطاء: تقدر تمسك الأخطاء اللي بترجع من السيرفر وتتعامل معاها قبل ما توصل للتطبيق.
 
-### The Angular Router supports fifth different guards, which you can use to protect the route.
+### إزاي نعمل Http Interceptor؟
 
-1- CanActivate
-2- CanDeactivate
-3- Resolve
-4- CanLoad
-5- CanActivateChild
-
-## What is CanActivate Guard
-
-[⬆️ Back to Top](#top)
-
-<div dir="auto" align="right">
-الCanActivate Guard ده زي حارس بيمنع أو بيسمح للـ Route إنها تتفتح أو تتعرض للمستخدم بناءً على شرط معين. بنستخدمه لما نكون عايزين نتاكد من حاجة معينة قبل ما نخلي المستخدم يشوف الصفحة. يعني ممكن نقول للـ Guard ده “لو الشرط الفلاني موجود، اسمح للمستخدم يدخل”، ولو الشرط مش موجود، “امنع المستخدم”.
-
-### أمتى بنستخدم CanActivate Guard؟
-
-فيه أكتر من حالة ممكن تحتاج فيها CanActivate Guard
-
-لو المستخدم مسجّل دخول: بنستخدمه عشان نتأكد إن المستخدم عامل تسجيل دخول في النظام. لو مش عامل تسجيل، نرجعه لصفحة تسجيل الدخول.
-
-لو المستخدم ليه الصلاحية: بنشوف لو المستخدم عنده الصلاحية يدخل على صفحة معينة (زي صفحة الأدمن).
-
-### إزاي نستخدم CanActivate Guard؟
-
-عشان نستخدم CanActivate Guard، بنعمل Service في Angular.
-
-### خطوات تنفيذه
-
-إنشاء Service: بنعمل Service جديد في التطبيق يكون مسؤول عن الحماية دي.
-
-ب Import CanActivate Interface: في الـ Service، بنستورد CanActivate Interface من @angular/router، ودي بتخلينا نحدد طريقة اسمها canActivate.
-
-تنفيذ canActivate Method: الطريقة دي بتتأكد لو الشرط اتحقق وترجع true لو ممكن نكمل وندخل، أو false لو مش هينفع نكمل. كمان ممكن ترجع UrlTree (دي زي لينك) عشان تحول المستخدم على صفحة تانية لو الشرط مش موجود.
+إنشاء Service جديدة: الأول بنعمل Service جديدة، ودي لازم تطبّق HttpInterceptor Interface من Angular.
 
 <div dir="auto" align="left">
 
 ```typescript
 import { Injectable } from "@angular/core";
 import {
-  Router,
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-} from "@angular/router";
-
-@Injectable()
-export class AuthGuardService implements CanActivate {
-  constructor(private _router: Router) {}
-
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): boolean {
-    //check some condition
-    if (someCondition) {
-      alert("You are not allowed to view this page");
-      //redirect to login/home page etc
-      //return false to cancel the navigation
-      return false;
-    }
-    return true;
-  }
-}
-```
-
-Update the route definition with the canActivate guard as shown below. You can apply more than one guard to a route and a route can have more than one guard
-
-</div>
-
-<div dir="auto" align="left">
-
-```typescript
-{ path: 'product', component: ProductComponent, canActivate : [AuthGuardService] },
-```
-
-</div>
-
-</div>
-
-## What is CanActivateChild Guard
-
-[⬆️ Back to Top](#top7)
-
-<div dir="auto" align="right">
-
-### يعني إيه CanActivateChild Guard؟
-
-الCanActivateChild Guard ده زي CanActivate Guard، بس الفرق إنه بيتطبق على الأب اللي جواه Routes الفكرة هنا إنك لما تحط CanActivateChild Guard على أي Route أب، كل ما المستخدم يحاول يدخل على واحدة من الصفحات الفرعية (الـ Children)، الـ Guard ده بيشتغل ويتأكد لو مسموح له يدخل ولا لأ.
-
-### الفرق بين CanActivate و CanActivateChild
-
-الCanActivate: بتحطه على أي Route (سواء Route عادي أو Parent) وبيتحكم في دخول المستخدم للـ Route دي كلها.
-
-الCanActivateChild: بتحطه على الـ Parent Route وبيشتغل على كل الـ Child Routes اللي جواه. يعني بدل ما تحط Guard على كل Route فرعية، ممكن تحط CanActivateChild مرة واحدة على الـ Parent وهو هيعمل الحماية المطلوبة لكل اللي جواه.
-
-### مثال لتوضيح الفرق
-
-لو عندك مثلاً صفحة Products (اللي هي الـ Parent)، وعندك جواها كذا Route فرعي (زي عرض منتج معين، تعديل منتج، إضافة منتج)
-
-باستخدام CanActivate، لو حطيت Guard على Products، ده هيمنع الدخول على الـ Parent والـ Children كلها في حالة إن المستخدم مش عامل تسجيل دخول.
-
-باستخدام CanActivateChild، ممكن تسمح لكل الناس تشوف صفحة Products، بس تمنع الدخول للـ Routes الفرعية (زي التعديل والإضافة) وتخليها بس للأدمن.
-
-### إزاي نستخدم CanActivateChild Guard؟
-
-<div dir="auto" align="left">
-
-```typescript
-import { Injectable } from "@angular/core";
-import {
-  Router,
-  CanActivateChild,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-} from "@angular/router";
-
-@Injectable()
-export class AdminGuardService implements CanActivateChild {
-  constructor(private _router: Router) {}
-
-  canActivateChild(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): boolean {
-    // بنفترض إن في شرط معين زي إن المستخدم يكون أدمن
-    const isAdmin = false; // حط الشرط المناسب هنا
-    if (!isAdmin) {
-      alert("مش مسموح ليك تدخل هنا!");
-      this._router.navigate(["/login"]); // يرجع المستخدم لصفحة تانية لو مش أدمن
-      return false;
-    }
-    return true;
-  }
-}
-```
-
-</div>
-<div dir="auto" align="left">
-
-```typescript
-{ path: 'product', component: ProductComponent, canActivate : [AuthGuardService] ,
-      canActivateChild : [AuthGuardService],
-      children: [
-      {  path: 'view/:id', component: ProductViewComponent  },
-      {  path: 'edit/:id', component: ProductEditComponent  },
-      {  path: 'add', component: ProductAddComponent }
-      ]
-  }
-```
-
-</div>
-
-### 🔴 ملخص سريع
-
-CanActivate: يمنع أو يسمح بالوصول للـ Route ككل (الـ Parent والـ Children).
-
-CanActivateChild: بيتحط على الـ Parent وبيشتغل على كل Child جواه، وبيمنع الوصول للـ Routes الفرعية بناءً على الشرط.
-
-</div>
-
-## What is CanDeactivate Guard
-
-[⬆️ Back to Top](#top7)
-
-<div dir="auto" align="right">
-
-### يعني إيه CanDeactivate Guard؟
-
-الCanDeactivate Guard ده بيشتغل لما المستخدم يحاول يسيب الصفحة أو الـ Component الحالية وعايز يروح لصفحة تانية.
-
-الهدف الأساسي منه إنه يمنع المستخدم من الخروج لو عنده بيانات لسه متسجلتش، زي لما يكون كاتب بيانات في فورم بس لسه ما حفظهاش.
-
-### أفضل حالة نستخدم فيها CanDeactivate Guard
-
-مثلاً في حالات زي ملء بيانات في فورم: لو المستخدم كتب بيانات بس لسه ما ضغطش على "حفظ" وحاول يسيب الصفحة، CanDeactivate Guard يقدر يوقفه ويسأله "هل انت متأكد إنك عايز تخرج من غير ما تحفظ؟". لو وافق، ينقله للصفحة الجديدة، ولو رفض، يخليه يكمل في نفس الصفحة.
-
-### إزاي نستخدم CanDeactivate Guard؟
-
-عشان تفعّل CanDeactivate Guard، محتاج تعمل Service خاصة بيه.
-
-خطوات التنفيذ:
-إنشاء Service: بنعمل Service جديد، والـ Service ده بيستورد CanDeactivate Interface من angular/router@
-
-تنفيذ canDeactivate Method: الطريقة canDeactivate بتاخد الكومبوننت الحالي كـ argument، وبتاخد كمان معلومات عن الـ Route الحالي والـ Route اللي المستخدم رايحله. بناءً على الشرط اللي تحدده، بتحدد لو ممكن نسيب الصفحة أو لأ.
-
-### مثال عملي
-
-أول حاجة، بنعمل الكومبوننت اللي عايزين نحميه، وليكن اسمه RegisterComponent. جواه بنعمل طريقة اسمها canExit، والطريقة دي بتتحقق لو فيه بيانات غير محفوظة وتسأل المستخدم لو عايز يخرج أو يكمل.
-
-<div dir="auto" align="left">
-
-```typescript
-import { Component } from "@angular/core";
-
-@Component({
-  templateUrl: "register.component.html",
-})
-export class RegisterComponent {
-  // الطريقة دي بتتحقق لو فيه بيانات غير محفوظة وتسأل المستخدم
-  canExit(): boolean {
-    if (confirm("هل تريد فعلاً الخروج بدون حفظ التعديلات؟")) {
-      return true; // يسمح بالخروج
-    } else {
-      return false; // يخلّي المستخدم في الصفحة
-    }
-  }
-}
-```
-
-</div>
-تفعيل الـ CanDeactivate Guard في Service
-بنعمل Service عشان يتحقق من canExit لما المستخدم يحاول يسيب الصفحة.
-<div dir="auto" align="left">
-
-```typescript
-import { Injectable } from "@angular/core";
-import { CanDeactivate } from "@angular/router";
-import { RegisterComponent } from "./register.component";
-
-@Injectable({
-  providedIn: "root",
-})
-export class CanDeactivateGuardService
-  implements CanDeactivate<RegisterComponent>
-{
-  canDeactivate(component: RegisterComponent): boolean {
-    return component.canExit(); // بيشغل canExit وبيتأكد لو المستخدم عايز يسيب الصفحة فعلاً
-  }
-}
-```
-
-</div>
-
-### استخدام الـ Guard في الـ Routing
-
-في ملف الـ Routing، بنضيف الـ Guard ده على الصفحة اللي عايزين نحميها، مثلاً على RegisterComponent
-
-<div dir="auto" align="left">
-
-```typescript
-{ path: 'register', component: RegisterComponent, canDeactivate: [CanDeactivateGuardService] }
-```
-
-</div>
-
-### 🔴 ملخص سريع
-
-الCanDeactivate Guard بيمنع الخروج من الصفحة لو فيه بيانات غير محفوظة.
-
-بيسأل المستخدم لو عايز يخرج بدون حفظ، ولو وافق، يكمل، ولو رفض، يفضل في نفس الصفحة.
-
-بيساعدك تحمي بيانات المستخدم لو كان لسه ما حفظهاش قبل ما يخرج.
-
-</div>
-
-## How to Use Resolve Guard
-
-[⬆️ Back to Top](#top7)
-
-<div dir="auto" align="right">
-
-### يعني إيه Resolve Guard؟
-
-الResolve Guard في Angular بيعمل حاجة مهمة جداً وهي إنه يحمل البيانات من السيرفر قبل ما الصفحة تفتح أصلاً. بدل ما الكومبوننت يظهر فاضي وبعدين يستنى لحد ما البيانات توصله، Resolve Guard بيحمل البيانات الأول وبعدين يفتح الكومبوننت على طول والبيانات جاهزة.
-
-### المشكلة اللي بيحلها Resolve Guard
-
-عادةً في الكومبوننت العادية، لما بنستخدم ngOnInit لجلب البيانات، المستخدم ممكن يشوف صفحة فاضية لحد ما البيانات توصله. في الحالة دي، ممكن نستخدم loading spinner عشان نبين إن فيه حاجة بتحصل. لكن Resolve Guard بيخلّي البيانات موجودة من قبل ما الصفحة تفتح، فبيحسن التجربة ويخلي الصفحة تظهر كاملة للمستخدم.
-
-### إزاي نستخدم Resolve Guard؟
-
-إنشاء Service: بنعمل Service جديدة بتحمل البيانات المطلوبة. الـ Service دي هتطبق Resolve Interface
-
-تنفيذ resolve method: جوه الـ Service، هنضيف method اسمها resolve بتجيب البيانات المطلوبة وترجعها. لازم ترجع Observable أو Promise عشان Angular تستنى البيانات دي قبل ما تفتح الكومبوننت.
-
-### مثال عملي على الكود
-
-<div dir="auto" align="left">
-
-```typescript
-import { Injectable } from "@angular/core";
-import {
-  Resolve,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-} from "@angular/router";
-import { ProductService } from "./product.service";
+  HttpInterceptor,
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+} from "@angular/common/http";
 import { Observable } from "rxjs";
 
-@Injectable({
-  providedIn: "root",
-})
-export class ProductListResolveService implements Resolve<any> {
-  constructor(private productService: ProductService) {}
-
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<any> {
-    return this.productService.getProducts();
-  }
-}
-```
-
-</div>
-
-### إضافة الـ Resolve للـ Routing
-
-عشان تفعّل الـ Resolve Guard ده، لازم تضيفه على Route بتاع الصفحة اللي عايز تفتحها بالبيانات الجاهزة.
-
-<div dir="auto" align="left">
-
-```typescript
-{ path: 'product', component: ProductComponent, resolve: { products: ProductListResolveService } },
-```
-
-</div>
-في الكود ده
-
-الproducts هو اسم المتغير اللي هنستخدمه في الكومبوننت عشان نجيب البيانات.
-ProductListResolveService هو الـ Service اللي جبنا منه البيانات.
-
-### استخدام البيانات في الكومبوننت
-
-جوه الكومبوننت، هنجيب البيانات الجاهزة من ActivatedRoute بدل ما نعمل طلب جديد.
-
-<div dir="auto" align="left">
-
-```typescript
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-
-@Component({
-  selector: "app-product",
-  templateUrl: "./product.component.html",
-})
-export class ProductComponent implements OnInit {
-  products: any;
-
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit() {
-    this.products = this.route.snapshot.data["products"]; // هنا بنجيب البيانات
-  }
-}
-```
-
-</div>
-
-### ملاحظات إضافية
-
-🔴 أولوية التنفيذ: Resolve Guard بيتنفذ بعد كل الـ Guards التانية.
-
-🔴 إلغاء التنقل: لو الـ Resolver رجّع null أو حصل خطأ، Angular بتلغي التنقل ومش هتروح للـ Route.
-
-🔴 استخدام أكتر من Resolver: تقدر تحط أكتر من Resolve على نفس الـ Route، يعني تقدر تجيب بيانات من مصادر مختلفة في نفس الوقت.
-
-<div dir="auto" align="left">
-
-```typescript
-{ path: 'product', component: ProductComponent,
-    resolve: {products: ProductListResolveService, , data:SomeOtherResolverService}  }
-```
-
-</div>
-</div>
-
-## How to use CanLoad Guard
-
-[⬆️ Back to Top](#top7)
-
-<div dir="auto" align="right">
-
-### يعني إيه CanLoad Guard؟
-
-الCanLoad Guard ده بيمنع تحميل الـ Lazy Loaded Modules لو المستخدم مالوش صلاحية.
-
-بمعنى تاني، لو عندك Module مش عايز مستخدم معين يشوفه (زي صفحة الـ Admin)، الـ CanLoad بيمنع تحميل الـ Module ده بالكامل عشان المستخدم لا يقدر يشوف الصفحة ولا حتى يشوف كود الصفحة من المتصفح.
-
-### الفرق بين CanActivate و CanLoad
-
-الCanActivate: بيمنع المستخدم من الدخول للصفحة، لكن ما بيمنعش تحميل كود الصفحة، يعني ممكن المستخدم يشوف الكود من الـ Developer Tools.
-
-الCanLoad: بيمنع تحميل كود الصفحة بالكامل. المستخدم مش هيشوف الكود ولا هيقدر يدخل على الصفحة.
-
-### إزاي نستخدم CanLoad Guard؟
-
-إنشاء Service جديدة: بنعمل Service بتطبق CanLoad Interface عشان نحدد الشروط اللي تمنع أو تسمح بالتحميل.
-
-تنفيذ canLoad method: الطريقة دي بتتحقق من الـ Route اللي المستخدم عايز يدخل عليها، ولو الشروط متحققة بترجع true عشان يتم التحميل، أو false عشان تمنع التحميل.
-
-#### مثال عملي
-
-نبدأ بإنشاء Service جديدة، وليكن اسمها AuthGuardService، ونضيف فيها الشروط.
-
-<div dir="auto" align="left">
-
-```typescript
-import { Injectable } from "@angular/core";
-import { CanLoad, Route, Router } from "@angular/router";
-
 @Injectable()
-export class AuthGuardService implements CanLoad {
-  constructor(private router: Router) {}
+export class AppHttpInterceptor implements HttpInterceptor {
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    // هنا تقدر تعمل أي تعديل على الطلب
+    console.log("Interceptor شغال!");
 
-  canLoad(route: Route): boolean {
-    let url: string = route.path;
-    console.log("Url:" + url);
-
-    if (url === "admin") {
-      // لو المستخدم حاول يدخل صفحة الأدمن
-      alert("غير مسموح ليك تدخل الصفحة دي");
-      return false; // تمنع تحميل الـ Module
-    }
-    return true; // تسمح بالتحميل للصفحات التانية
+    // بترجع الطلب عشان يكمل ويعمله send
+    return next.handle(req);
   }
 }
 ```
 
 </div>
 
-### إضافة الـ CanLoad للـ Route
+الintercept هي الطريقة الأساسية اللي بتشتغل على كل طلب. بتاخد req اللي هو الطلب
+الحالي وnext اللي هو المسؤول عن تمرير الطلب للخطوة اللي بعدها.
 
-عشان تربط الـ Guard ده بالـ Routes، بتحط AuthGuardService في خاصية canLoad للـ Route اللي عايز تحميها.
-
-<div dir="auto" align="left">
-
-```typescript
-const routes: Routes = [
-  {
-    path: "admin",
-    loadChildren: "./admin/admin.module#AdminModule",
-    canLoad: [AuthGuardService],
-  },
-  {
-    path: "test",
-    loadChildren: "./test/test.module#TestModule",
-    canLoad: [AuthGuardService],
-  },
-];
-```
-
-</div>
-تسجيل الـ Service في الـ AppModule
-في الآخر، بنضيف الـ AuthGuardService في ملف AppModule كـ provider عشان Angular يقدر يستخدمه.
+الnext.handle(req) بيكمل إرسال الطلب بعد التعديلات اللي انت عملتها.
+تسجيل الـ Interceptor في الـ Root Module: عشان Angular تستخدم الـ Interceptor، لازم تضيفه في providers في AppModule وتستخدم الـ HTTP_INTERCEPTORS عشان تسجله كـ Multi Provider.
 
 <div dir="auto" align="left">
 
 ```typescript
-import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
-import { AppRoutingModule } from "./app-routing.module";
-import { AppComponent } from "./app.component";
-import { AuthGuardService } from "./auth-gaurd.service";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule],
-  providers: [AuthGuardService],
-  bootstrap: [AppComponent],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AppHttpInterceptor,
+      multi: true,
+    },
+  ],
 })
 export class AppModule {}
 ```
 
 </div>
-</div> -->
+
+هنا بنضيف AppHttpInterceptor كـ provider في التطبيق، وmulti: true معناها إنه يقدر يستخدم أكتر من Interceptor في نفس الوقت لو عندك أكتر من واحد.
+
+### Setting the new headers
+
+#### ايه هي الفكرة الأساسية؟
+
+لما بنبعت طلب HTTP من Angular للسيرفر (زي لما نجيب بيانات أو نبعت بيانات)، الطلب ده بيتبعت ومعاه Headers (زي بطاقة تعريف بتحط شوية معلومات عن الطلب، زي نوع البيانات اللي بنبعتها أو إن كان المستخدم مسجّل دخول).
+
+فيه حالات بنحتاج نضيف أو نعدل أو حتى نحذف Headers قبل ما الطلب يتبعت للسيرفر.
+
+هنا بنستخدم حاجة اسمها HTTP Interceptor، ودي بتخلينا "نعترض" الطلب ونعدل عليه قبل ما يتبعت.
+
+ <div dir="auto" align="left">
+
+```typescript
+req = req.clone({
+  headers: req.headers.set("Content-Type", "application/json"),
+});
+```
+
+</div>
+
+### ليه بنستخدم clone؟
+
+في Angular، الطلبات (requests) والأجزاء بتاعتها زي الـ Headers بتكون ثابتة (Immutable)، يعني ماينفعش نعدل عليها مباشرةً. علشان كده، لما نحتاج نغير حاجة في الطلب، لازم نعمل نسخة (Clone) منه.
+
+### ليه بنضيف Content-Type؟
+
+لما نبعت بيانات للسيرفر، بنحط نوع البيانات اللي بنبعتها في الهيدر Content-Type. مثلاً لو البيانات بصيغة JSON، بنضيف الهيدر بالشكل ده
+
+هنا set بتعمل نسخة جديدة من الهيدر وبتضيف Content-Type لو مش موجود أو بتعدله لو كان موجود.
+
+### طيب لو عايز تضيف الهيدر بدون ما تغير الموجود؟
+
+ممكن تستخدم append بدل set، ودي بتضيف Header جديد حتى لو كان نفس الهيدر موجود قبل كده:
+
+<div dir="auto" align="left">
+
+```typescript
+req = req.clone({
+  headers: req.headers.append("Content-Type", "application/json"),
+});
+```
+
+</div>
+
+### تأكد لو Header موجود قبل ما تضيفه
+
+لو مش عايز تضيف نفس Header مرتين، ممكن تتأكد قبل بإستخدام:
+
+<div dir="auto" align="left">
+
+```typescript
+if (!req.headers.has("Content-Type")) {
+  req = req.clone({
+    headers: req.headers.set("Content-Type", "application/json"),
+  });
+}
+```
+
+</div>
+
+### إضافة Authorization Token
+
+#### 🔴 ايه هو الـ Token؟
+
+الـ Token هو زي كود سري بيستخدمه المستخدم لما يكون عامل تسجيل دخول.
+
+بنضيفه في الهيدر Authorization عشان نقول للسيرفر "المستخدم ده معاه صلاحيات".
+
+### إزاي تضيف التوكن للطلب؟
+
+بنستخدم طريقة زي دي، نفترض إن التوكن متخزن في Service بتاعتك:
+
+<div dir="auto" align="left">
+
+```typescript
+const token: string = authService.Token; // بنجيب التوكن من الـ Service
+if (token) {
+  req = req.clone({
+    headers: req.headers.set("Authorization", "Bearer " + token),
+  });
+}
+```
+
+</div>
+
+في الكود ده بنضيف "Bearer" قبل التوكن، وده أسلوب متعارف عليه في الـ Authorization Headers.
+
+### Intercepting the Response
+
+لما نبعت طلب للسيرفر، بنستنى رد (Response) يوصلنا.
+
+الـ Interceptor بيخلينا "نعترض" الرد ده، نعدله أو نسجل أي حاجة محتاجينها قبل ما يوصل للتطبيق نفسه.
+
+في الحالة دي، بنستخدم RxJS Operators زي map, tap catchError, و retry عشان نتحكم أكتر في الرد.
+
+### تسجيل requests باستخدام tap
+
+#### ليه بنستخدم tap؟
+
+الtap بيخلينا نقدر نسجل أحداث معينة، زي الوقت اللي أخده الطلب عشان يخلص.
+
+دي طريقة كويسة لو عايز تعرف الوقت اللي الطلب استغرقه، أو تسجل أي معلومات إضافية عن الطلب أو الرد.
+
+### مثال عملي
+
+في الكود ده، tap بيتنفذ مرتين: مرة لما الطلب يبعت، ومرة تانية لما الرد يوصل.
+
+<div dir="auto" align="left">
+
+```typescript
+intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  req = req.clone({ headers: req.headers.append('Content-Type', 'application/json') });
+  const started = Date.now();
+
+  return next.handle(req).pipe(
+    tap(event => {
+      const elapsed = Date.now() - started;
+      console.log(`Request for ${req.urlWithParams} took ${elapsed} ms.`);
+      if (event instanceof HttpResponse) {
+        console.log('Response Received');
+      }
+    })
+  );
+}
+```
+
+</div>
+
+✨الكود ده بيحسب الزمن اللي أخده الطلب عشان يوصل الرد، وبيسجل رسالة لما الاستجابة توصل.
+
+### تعديل الرد باستخدام map
+
+#### ليه بنستخدم map؟
+
+الmap بنستخدمه عشان نعدل محتوى الرد قبل ما يوصل للتطبيق. لو فيه بيانات محتاجين نغيرها أو نبدّلها، بنقدر نستخدم map عشان نعمل ده.
+
+#### مثال عملي
+
+في المثال ده، بنستخدم map عشان نغير محتوى الرد بالكامل، ونحط بيانات جديدة في (body) بتاع الرد:
+
+<div dir="auto" align="left">
+
+```typescript
+intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  return next.handle(req).pipe(
+    map(resp => {
+      const myBody = [{ 'id': '1', 'name': 'TekTutorialsHub', 'html_url': 'www.tektutorialshub.com', 'description': 'description' }];
+      if (resp instanceof HttpResponse) {
+        resp = resp.clone<any>({ body: myBody });
+        return resp;
+      }
+      return resp;
+    })
+  );
+}
+```
+
+</div>
+
+### التعامل مع الأخطاء باستخدام catchError
+
+#### ليه بنستخدم catchError؟
+
+الcatchError بنستخدمه عشان نمسك أي خطأ حصل أثناء الطلب ونتعامل معاه، زي مثلاً لو الطلب رجّع 401 Unauthorized، نعرف نوجّه المستخدم لصفحة تسجيل الدخول.
+
+#### مثال عملي
+
+في الكود ده، catchError بيمسك الأخطاء ويعرض التفاصيل الخاصة بيها، ولو كان الخطأ 401، ممكن نوجه المستخدم للصفحة المناسبة:
+
+<div dir="auto" align="left">
+
+```typescript
+intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  const token: string = 'invalid token';
+  req = req.clone({ headers: req.headers.set('Authorization', 'Bearer ' + token) });
+
+  return next.handle(req).pipe(
+    catchError(err => {
+      console.error(err);
+      if (err instanceof HttpErrorResponse) {
+        console.log(err.status, err.statusText);
+        if (err.status === 401) {
+          // توجيه المستخدم لصفحة تسجيل الدخول
+        }
+      }
+      return of(err); // بترجع الخطأ كـ Observable
+    })
+  );
+}
+```
+
+</div>
+
+### إلغاء الطلب باستخدام EMPTY
+
+#### ليه ممكن نحتاج نلغي الrequest
+
+لو المستخدم مش مسجّل دخول مثلاً، ممكن نلغي الطلب عشان ما يتبعتش للسيرفر، وده بنعمله بإرجاع EMPTY (اللي هو Observable فاضي).
+
+<div dir="auto" align="left">
+
+```typescript
+import { EMPTY } from 'rxjs';
+
+intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  if (NotLoggedIn) {
+    return EMPTY; // الطلب مش هيتبعت
+  }
+
+  return next.handle(req);
+}
+```
+
+</div>
+
+</div>
 
  <!-- <hr/>
  ## How to Use Resolve Guard
