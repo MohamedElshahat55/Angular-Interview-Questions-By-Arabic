@@ -2998,15 +2998,15 @@ export class CardComponent implements AfterContentInit {
 
 ### Class Decorators
 
-#### 1- NgModule@
+#### 1- @NgModule
 
-#### 2 -Component@
+#### 2- @Component
 
-#### 3- Injectable@
+#### 3- @Injectable
 
-#### 4- Directive@
+#### 4- @Directive
 
-#### 5- Pipe@
+#### 5- @Pipe
 
 ديكوريتورز بتشتغل على الكلاسات، زي Component@ وDirective@ وInjectable@، ودي بتخلي Angular تتعامل مع الكلاس ده بطريقة معينة.
 
@@ -3043,19 +3043,19 @@ export class MyService {}
 
 ### Property decorators
 
-#### 1- Input@
+#### 1- @Input
 
-#### 2- Output@
+#### 2- @Output
 
-#### 3- HostBinding@
+#### 3- @HostBinding
 
-#### 4- ContentChild@
+#### 4- @ContentChild
 
-#### 5- ContentChildren@
+#### 5- @ContentChildren
 
-#### 6- ViewChild@
+#### 6- @ViewChild
 
-#### 7- ViewChildren@
+#### 7- @ViewChildren
 
 <div dir="auto" align="left">
 
@@ -3069,7 +3069,7 @@ export class ChildComponent {
 
 ### Method decorators
 
-#### 1- HostListener@
+#### 1- @HostListener
 
 <div dir="auto" align="left">
 
@@ -3083,15 +3083,15 @@ export class ChildComponent {
 
 ### Parameter decorators
 
-#### 1- Inject@
+#### 1- @Inject
 
-#### 2- Self@
+#### 2- @Self
 
-#### 3- SkipSelf@
+#### 3- @SkipSelf
 
-#### 4- Optional@
+#### 4- @Optional
 
-#### 5- Host@
+#### 5- @Host
 
 <div dir="auto" align="left">
 
@@ -3114,9 +3114,9 @@ constructor(@Inject(SomeToken) private myValue) {
 
 قبل ما نشرح الـ Hooks اللي بنستخدمهم، محتاجين نفهم حاجة مهمة، وهي الفرق بين Content و View:
 
-Content: ده المحتوى اللي بيوصل للكومبوننت كـ Projected Content، يعني محتوى بيجيله من الكومبوننت الأب عن طريق `<ng-content>`.
+الContent: ده المحتوى اللي بيوصل للكومبوننت كـ Projected Content، يعني محتوى بيجيله من الكومبوننت الأب عن طريق `<ng-content>`.
 
-View: دي التيمبلت (Template) أو UI بتاع الكومبوننت نفسه، اللي بنكتبه جواه.
+الView: دي التيمبلت (Template) أو UI بتاع الكومبوننت نفسه، اللي بنكتبه جواه.
 
 ### الAngular بيستخدم 4 Lifecycle Hooks للتعامل مع الـ Content والـ View:
 
