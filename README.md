@@ -2988,25 +2988,25 @@ export class CardComponent implements AfterContentInit {
 
 الAngular عندها كذا نوع من الـ Decorators، وهنقسمهم لأربع أنواع رئيسية:
 
-#### Class Decorators: بتستخدم على الكلاسات (classes).
+#### الClass Decorators: بتستخدم على الكلاسات (classes).
 
-#### Property Decorators: بتستخدم على (properties).
+#### الProperty Decorators: بتستخدم على (properties).
 
-#### Method Decorators: بتستخدم على (methods).
+#### الMethod Decorators: بتستخدم على (methods).
 
-#### Parameter Decorators: بتستخدم على الباراميترز (parameters) بتاعة الـ Constructor.
+#### الParameter Decorators: بتستخدم على الباراميترز (parameters) بتاعة الـ Constructor.
 
 ### Class Decorators
 
-#### 1- @NgModule
+#### @NgModule
 
-#### 2- @Component
+#### @Component
 
-#### 3- @Injectable
+#### @Injectable
 
-#### 4- @Directive
+#### @Directive
 
-#### 5- @Pipe
+#### @Pipe
 
 ديكوريتورز بتشتغل على الكلاسات، زي Component@ وDirective@ وInjectable@، ودي بتخلي Angular تتعامل مع الكلاس ده بطريقة معينة.
 
@@ -3043,19 +3043,19 @@ export class MyService {}
 
 ### Property decorators
 
-#### 1- @Input
+#### @Input
 
-#### 2- @Output
+#### @Output
 
-#### 3- @HostBinding
+#### @HostBinding
 
-#### 4- @ContentChild
+#### @ContentChild
 
-#### 5- @ContentChildren
+#### @ContentChildren
 
-#### 6- @ViewChild
+#### @ViewChild
 
-#### 7- @ViewChildren
+#### @ViewChildren
 
 <div dir="auto" align="left">
 
@@ -3069,7 +3069,7 @@ export class ChildComponent {
 
 ### Method decorators
 
-#### 1- @HostListener
+#### @HostListener
 
 <div dir="auto" align="left">
 
@@ -3083,15 +3083,15 @@ export class ChildComponent {
 
 ### Parameter decorators
 
-#### 1- @Inject
+#### @Inject
 
-#### 2- @Self
+#### @Self
 
-#### 3- @SkipSelf
+#### @SkipSelf
 
-#### 4- @Optional
+#### @Optional
 
-#### 5- @Host
+#### @Host
 
 <div dir="auto" align="left">
 
