@@ -13,54 +13,53 @@ This Repo is inspired by the following sources:
 3. [Logo ConcretePage.com](https://www.concretepage.com/angular/)
 4. [List of 300 Angular Interview Questions and answers](https://github.com/sudheerj/angular-interview-questions)
 
-| No. | Questions                                                                                                              |
-| --- | ---------------------------------------------------------------------------------------------------------------------- |
-| 1   | [What is Angular Framework?](#what-is-angular-framework)                                                               |
-| 3   | [What is TypeScript?](#what-is-typescript)                                                                             |
-| 4   | [Write a pictorial diagram of Angular architecture?](#write-a-pictorial-diagram-of-angular-architecture)               |
-| 5   | [What are the key components of Angular?](#what-are-the-key-components-of-angular)                                     |
-| 6   | [What are directives?](#what-are-directives)                                                                           |
-| 7   | [What are components?](#what-are-components)                                                                           |
-| 9   | [What is a template?](#what-is-a-template)                                                                             |
-| 10  | [What is a module?](#what-is-a-module)                                                                                 |
-| 11  | [What are lifecycle hooks available?](#what-are-lifecycle-hooks-available)                                             |
-| 12  | [What is a data binding?](#what-is-a-data-binding)                                                                     |
-| 13  | [What is metadata?](#what-is-metadata)                                                                                 |
-| 14  | [What is Angular CLI?](#what-is-angular-cli)                                                                           |
-| 15  | [What is the difference between constructor and ngOnInit?](#what-is-the-difference-between-constructor-and-ngoninit)   |
-| 16  | [What is a service?](#what-is-a-service)                                                                               |
-| 17  | [What is dependency injection in Angular?](#what-is-dependency-injection-in-angular)                                   |
-| 18  | [What is the purpose of async pipe?](#what-is-the-purpose-of-async-pipe)                                               |
-| 19  | [What is the purpose of \*ngFor directive?](#what-is-the-purpose-of-ngfor-directive)                                   |
-| 20  | [What are pipes?](#what-are-pipes)                                                                                     |
-| 21  | [What is a parameterized pipe?](#what-is-a-parameterized-pipe)                                                         |
-| 22  | [How do you chain pipes?](#how-do-you-chain-pipes)                                                                     |
-| 23  | [What is a custom pipe?](#what-is-a-custom-pipe)                                                                       |
-| 24  | [What is the difference between pure and impure pipe?](#what-is-the-difference-between-pure-and-impure-pipe)           |
-| 25  | [What is HttpClient and its benefits?](#what-is-httpclient-and-its-benefits)                                           |
-| 26  | [What are dynamic components?](#what-are-dynamic-components)                                                           |
-| 27  | [What are router events?](#what-are-router-events)                                                                     |
-| 28  | [What is activated route?](#what-is-activated-route)                                                                   |
-| 29  | [How do you define routes?](#how-do-you-define-routes)                                                                 |
-| 30  | [What is the purpose of Wildcard route?](#what-is-the-purpose-of-wildcard-route)                                       |
-| 31  | [What is Angular Universal?](#what-is-angular-universal)                                                               |
-| 32  | [What is ng-content?](#what-is-ng-content)                                                                             |
-| 33  | [What is Angular Input and Output and EventEmitter?](#what-is-angular-input-and-output-and-eventemitter)               |
-| 34  | [Template Reference Variable in Angular](#template-reference-variable-in-angular)                                      |
-| 35  | [What is ng-container in Angular?](#what-is-ng-container-in-angular)                                                   |
-| 36  | [How to use ng-template and TemplateRef in Angular?](#how-to-use-ng-template-and-templateref-in-angular)               |
-| 37  | [How to Use ngTemplateOutlet in Angular?](#how-to-use-ngtemplateoutlet-in-angular)                                     |
-| 38  | [What are Signals?](#what-are-signals)                                                                                 |
-| 39  | [Why Signal?](#why-signal)                                                                                             |
-| 40  | [Angular Signals and Observables: How and When to Use Each](#angular-signals-and-observables-how-and-when-to-use-each) |
-| 41  | [What is Effect in Signal?](#what-is-effect-in-signal)                                                                 |
-| 42  | [ElementRef in Angular](#elementref-in-angular)                                                                        |
-| 43  | [What is Renderer2?](#what-is-renderer2)                                                                               |
-| 44  | [How to Use @ViewChild and @ViewChildren](#how-to-use-viewchild-and-viewchildren)                             |
-| 45  | [ContentChild and ContentChildren in Angular](#contentchild-and-contentchildren-in-angular)                   |
-| 46  | [What are decorators in angular?](#what-are-decorators-in-angular)                                           |
+| No. | Questions                                                                                                                                                                   |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | [What is Angular Framework?](#what-is-angular-framework)                                                                                                                    |
+| 3   | [What is TypeScript?](#what-is-typescript)                                                                                                                                  |
+| 4   | [Write a pictorial diagram of Angular architecture?](#write-a-pictorial-diagram-of-angular-architecture)                                                                    |
+| 5   | [What are the key components of Angular?](#what-are-the-key-components-of-angular)                                                                                          |
+| 6   | [What are directives?](#what-are-directives)                                                                                                                                |
+| 7   | [What are components?](#what-are-components)                                                                                                                                |
+| 9   | [What is a template?](#what-is-a-template)                                                                                                                                  |
+| 10  | [What is a module?](#what-is-a-module)                                                                                                                                      |
+| 11  | [What are lifecycle hooks available?](#what-are-lifecycle-hooks-available)                                                                                                  |
+| 12  | [What is a data binding?](#what-is-a-data-binding)                                                                                                                          |
+| 13  | [What is metadata?](#what-is-metadata)                                                                                                                                      |
+| 14  | [What is Angular CLI?](#what-is-angular-cli)                                                                                                                                |
+| 15  | [What is the difference between constructor and ngOnInit?](#what-is-the-difference-between-constructor-and-ngoninit)                                                        |
+| 16  | [What is a service?](#what-is-a-service)                                                                                                                                    |
+| 17  | [What is dependency injection in Angular?](#what-is-dependency-injection-in-angular)                                                                                        |
+| 18  | [What is the purpose of async pipe?](#what-is-the-purpose-of-async-pipe)                                                                                                    |
+| 19  | [What is the purpose of \*ngFor directive?](#what-is-the-purpose-of-ngfor-directive)                                                                                        |
+| 20  | [What are pipes?](#what-are-pipes)                                                                                                                                          |
+| 21  | [What is a parameterized pipe?](#what-is-a-parameterized-pipe)                                                                                                              |
+| 22  | [How do you chain pipes?](#how-do-you-chain-pipes)                                                                                                                          |
+| 23  | [What is a custom pipe?](#what-is-a-custom-pipe)                                                                                                                            |
+| 24  | [What is the difference between pure and impure pipe?](#what-is-the-difference-between-pure-and-impure-pipe)                                                                |
+| 25  | [What is HttpClient and its benefits?](#what-is-httpclient-and-its-benefits)                                                                                                |
+| 26  | [What are dynamic components?](#what-are-dynamic-components)                                                                                                                |
+| 27  | [What are router events?](#what-are-router-events)                                                                                                                          |
+| 28  | [What is activated route?](#what-is-activated-route)                                                                                                                        |
+| 29  | [How do you define routes?](#how-do-you-define-routes)                                                                                                                      |
+| 30  | [What is the purpose of Wildcard route?](#what-is-the-purpose-of-wildcard-route)                                                                                            |
+| 31  | [What is Angular Universal?](#what-is-angular-universal)                                                                                                                    |
+| 32  | [What is ng-content?](#what-is-ng-content)                                                                                                                                  |
+| 33  | [What is Angular Input and Output and EventEmitter?](#what-is-angular-input-and-output-and-eventemitter)                                                                    |
+| 34  | [Template Reference Variable in Angular](#template-reference-variable-in-angular)                                                                                           |
+| 35  | [What is ng-container in Angular?](#what-is-ng-container-in-angular)                                                                                                        |
+| 36  | [How to use ng-template and TemplateRef in Angular?](#how-to-use-ng-template-and-templateref-in-angular)                                                                    |
+| 37  | [How to Use ngTemplateOutlet in Angular?](#how-to-use-ngtemplateoutlet-in-angular)                                                                                          |
+| 38  | [What are Signals?](#what-are-signals)                                                                                                                                      |
+| 39  | [Why Signal?](#why-signal)                                                                                                                                                  |
+| 40  | [Angular Signals and Observables: How and When to Use Each](#angular-signals-and-observables-how-and-when-to-use-each)                                                      |
+| 41  | [What is Effect in Signal?](#what-is-effect-in-signal)                                                                                                                      |
+| 42  | [ElementRef in Angular](#elementref-in-angular)                                                                                                                             |
+| 43  | [What is Renderer2?](#what-is-renderer2)                                                                                                                                    |
+| 44  | [How to Use @ViewChild and @ViewChildren](#how-to-use-viewchild-and-viewchildren)                                                                                           |
+| 45  | [ContentChild and ContentChildren in Angular](#contentchild-and-contentchildren-in-angular)                                                                                 |
+| 46  | [What are decorators in angular?](#what-are-decorators-in-angular)                                                                                                          |
 | 47  | [AfterViewInit, AfterViewChecked, AfterContentInit and AfterContentChecked in Angular](#afterviewinit-afterviewchecked-aftercontentinit-and-aftercontentchecked-in-angular) |
-
 
 # Angular Service Interview Questions
 
@@ -1054,6 +1053,33 @@ export class MultiplyPipe implements PipeTransform {
 يتنفذ في كل دورة تغيير (change detection cycle) بغض النظر إذا كانت القيمة أو الـ parameters اتغيرت ولا لأ.
 يعني ممكن الـ impure pipe يتنفذ كتير جداً، زي كل حركة مفتاح (keystroke) أو حركة ماوس (mouse-move).
 ده ممكن يؤدي إلى أداء أبطأ لو استخدمته في أماكن كتير في التطبيق.
+
+</div>
+<hr/>
+
+## What is HttpClient and its benefits?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+الHttpClient هو واحد من الأدوات اللي بيوفرها Angular علشان تتعامل مع الـ backend services اللي بتشتغل بالـ HTTP. زمان كان الناس بتستخدم حاجات زي XMLHttpRequest أو fetch() API علشان يجيبوا البيانات من السيرفر، لكن دلوقتي Angular عامل لنا الموضوع أسهل شوية عن طريق الـ HttpClient اللي مبني أصلاً فوق الـ XMLHttpRequest. يعني، بيقدملك طريقة أبسط وأوضح علشان تشتغل مع الـ HTTP requests.
+
+طيب، هو موجود فين؟ تقدر تضيفه في التطبيق بتاعك عن طريق تعمل import لل HttpClientModule من الباكدج اللي اسمها angular/common/http@ بالطريقة دي:
+
+<div dir="auto" align="left">
+
+```typescript
+import { HttpClientModule } from "@angular/common/http";
+```
+
+</div>
+
+### طيب إيه بقى فايدته؟
+
+تقدر تختبر الكود بتاعك بسهولة لما تستخدمه في الـ HTTP requests.
+تقدر تحدد أنواع البيانات اللي طالعين من وإلى الـ backend، وده بيخليك متأكد إنك شغال على البيانات الصح.
+بيعمل intercept للrequest and response: يعني ممكن تتحكم في الطلبات اللي طالعة من التطبيق بتاعك أو الاستجابات اللي راجعة قبل ما توصل. ده بيساعد في حاجات زي إضافة headers أو التعامل مع الـ tokens.
+بيدعم Observable APIs: لو متعود على الـ Observables في Angular، هتلاقي الـ HttpClient بيشتغل معاهم حلو جداً، وده بيخليك تستفيد من حاجات زي الـ RxJS.
 
 </div>
 <hr/>
@@ -2565,10 +2591,9 @@ createElement() {
 
 </div>
 
+## How to Use @ViewChild and @ViewChildren
 
- ## How to Use @ViewChild and @ViewChildren
-
- [⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top)
 
 <div dir="auto" align="right">
 
@@ -2577,6 +2602,7 @@ createElement() {
 ال@ViewChildren بتديك كل العناصر اللي بتطابق الشرط اللي حطيته، وبتطلعهم في QueryList تقدر تلف عليها وتستخدم كل عنصر منها.
 
 ### إزاي تستخدم ViewChild@؟
+
 <div dir="auto" align="left">
 
 ```typescript
@@ -2590,21 +2616,26 @@ createElement() {
 ```bash
 @ViewChild(ChildComponent, { static: true })
 ```
+
 هنا ChildComponent هو نوع أو كلاس العنصر اللي عايزين نجيبه (في الحالة دي، بنجيب عنصر معين اللي هو الكومبوننت ChildComponent).
 
- 🔴static: true و static: false
+🔴static: true و static: false
 الخيار static بيحدد امتى Angular تجيب العنصر وتديك مرجع ليه. فيه حالتين هنا:
 
 ### static: true
+
 لو حطينا static: true، ده معناه إن Angular هتجيب المرجع للعنصر قبل ما تعمل أول تغيير (Change Detection). بمعنى تاني، Angular هتجيب العنصر من الـ DOM في بداية تحميل الصفحة أو الكومبوننت، وده مفيد لو العنصر دايمًا بيبقى موجود في التيمبلت بتاعنا.
 
 ### static: false
+
 لو حطينا static: false، ده معناه إن Angular هتستنى لحد ما تكمل أول Change Detection وتحدد العناصر اللي هتظهر حسب شروط معينة زي *ngIf أو *ngSwitch.
 
- يعني لو العنصر بيظهر بناءً على شرط معين أو بيتم تحميله ديناميكيًا، لازم تستخدم static: false، عشان Angular تستنى لحد ما الشرط يتحقق أو العنصر يظهر في التيمبلت.
+يعني لو العنصر بيظهر بناءً على شرط معين أو بيتم تحميله ديناميكيًا، لازم تستخدم static: false، عشان Angular تستنى لحد ما الشرط يتحقق أو العنصر يظهر في التيمبلت.
 
- ### مثال للتوضيح
-لو عندنا عنصر بيتحكم في ظهوره شرط معين، زي *ngIf، لازم نستخدم static: false عشان نضمن إن Angular هتنتظر لحد ما يتحقق الشرط ده ويظهر العنصر في التيمبلت.
+### مثال للتوضيح
+
+لو عندنا عنصر بيتحكم في ظهوره شرط معين، زي \*ngIf، لازم نستخدم static: false عشان نضمن إن Angular هتنتظر لحد ما يتحقق الشرط ده ويظهر العنصر في التيمبلت.
+
 <div dir="auto" align="left">
 
 ```HTML
@@ -2625,16 +2656,18 @@ createElement() {
 هنا، Angular هتستنى لحد ما يحصل تغيير (Change Detection) ويتحقق شرط *ngIf، وبعد كده هتجيب ChildComponent لما يكون موجود في التيمبلت.
 
 ### مثال بسيط
+
 عندنا كومبوننت صغير اسمه ChildComponent فيه عداد، وفيه زراير لزيادته أو نقصانه:
+
 <div dir="auto" align="left">
 
 ```typescript
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'child-component',
+  selector: "child-component",
   template: `<h2>Child Component</h2>
-            <p>Current count: {{ count }}</p>`,
+    <p>Current count: {{ count }}</p>`,
 })
 export class ChildComponent {
   count = 0;
@@ -2654,11 +2687,11 @@ export class ChildComponent {
 <div dir="auto" align="left">
 
 ```typescript
-import { Component, ViewChild } from '@angular/core';
-import { ChildComponent } from './child.component';
+import { Component, ViewChild } from "@angular/core";
+import { ChildComponent } from "./child.component";
 
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   template: `
     <h1>Parent Component</h1>
     <button (click)="increment()">Increment</button>
@@ -2701,6 +2734,7 @@ export class AppComponent {
 </div>
 
 ### التعامل مع عناصر الـ HTML باستخدام ElementRef
+
 لو عايز تجيب عنصر HTML زي p أو div، ممكن تستخدم ViewChild@ مع ElementRef.
 
 ### مثال:
@@ -2710,20 +2744,20 @@ export class AppComponent {
 ```HTML
 <p #para>Some text</p>
 ```
-</div>
 
+</div>
 
 <div dir="auto" align="left">
 
 ```typescript
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit } from "@angular/core";
 
 @Component({
-  selector: 'htmlelement',
+  selector: "htmlelement",
   template: `<p #para>Some text</p>`,
 })
 export class HTMLElementComponent implements AfterViewInit {
-  @ViewChild('para', { static: false }) para: ElementRef;
+  @ViewChild("para", { static: false }) para: ElementRef;
 
   ngAfterViewInit() {
     console.log(this.para.nativeElement.innerHTML);
@@ -2735,10 +2769,13 @@ export class HTMLElementComponent implements AfterViewInit {
 </div>
 
 ### 🔴 لو عندك أكتر من عنصر بنفس النوع؟
+
 لو عندك أكتر من عنصر زي ChildComponent في نفس التيمبلت، ViewChild@ هترجعلك أول واحد بس. لكن لو عايز كل العناصر، استخدم ViewChildren@
 
 ### مثال مع ViewChildren@
+
 في المثال ده، عندنا أكتر من input:
+
 <div dir="auto" align="left">
 
 ```HTML
@@ -2752,14 +2789,14 @@ export class HTMLElementComponent implements AfterViewInit {
 <div dir="auto" align="left">
 
 ```typescript
-import { Component, ViewChildren, QueryList, NgModel } from '@angular/core';
+import { Component, ViewChildren, QueryList, NgModel } from "@angular/core";
 
 @Component({
-  selector: 'app-viewchildren-example',
+  selector: "app-viewchildren-example",
   template: `
-    <input name="firstName" [(ngModel)]="firstName">
-    <input name="middleName" [(ngModel)]="middleName">
-    <input name="lastName" [(ngModel)]="lastName">
+    <input name="firstName" [(ngModel)]="firstName" />
+    <input name="middleName" [(ngModel)]="middleName" />
+    <input name="lastName" [(ngModel)]="lastName" />
     <button (click)="show()">Show</button>
   `,
 })
@@ -2767,7 +2804,7 @@ export class ViewChildrenExampleComponent {
   @ViewChildren(NgModel) modelRefList: QueryList<NgModel>;
 
   show() {
-    this.modelRefList.forEach(element => {
+    this.modelRefList.forEach((element) => {
       console.log(element);
     });
   }
@@ -2781,39 +2818,40 @@ export class ViewChildrenExampleComponent {
 
 لما نستخدم ViewChild@ او ViewChildren@ في Angular، بنحتاج نستنى لحد ما العناصر في الـ DOM تكون اتعملها تحميل بالكامل قبل ما نقدر نستخدمها في الكود.
 
- عشان كده، الـlifecycle hook المناسبة للتعامل مع ViewChild@ هي ngAfterViewInit مش ngOnInit.
+عشان كده، الـlifecycle hook المناسبة للتعامل مع ViewChild@ هي ngAfterViewInit مش ngOnInit.
 
 </div>
 
+## ContentChild and ContentChildren in Angular
 
- ## ContentChild and ContentChildren in Angular
-
- [⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top)
 
 <div dir="auto" align="right">
 
 ### إيه هما ContentChild و ContentChildren؟
 
-الContentChild@ و ```ContentChildren@``` هما  (Decorators) في Angular بنستخدمهم عشان نوصل لحاجة اسمها "Projected Content"، اللي هو المحتوى اللي بيجي للكومبوننت من كومبوننت الأب (Parent Component).
+الContentChild@ و `ContentChildren@` هما (Decorators) في Angular بنستخدمهم عشان نوصل لحاجة اسمها "Projected Content"، اللي هو المحتوى اللي بيجي للكومبوننت من كومبوننت الأب (Parent Component).
 
-الProjected Content يعني محتوى جاي من الكومبوننت الأب عشان يتعرض في الكومبوننت الابن، وبنحدده عادةً باستخدام عنصر ```ng-content``` اللي بنضيفه في الكومبوننت الابن عشان يحجز مكان لعرض المحتوى اللي جاي من بره.
+الProjected Content يعني محتوى جاي من الكومبوننت الأب عشان يتعرض في الكومبوننت الابن، وبنحدده عادةً باستخدام عنصر `ng-content` اللي بنضيفه في الكومبوننت الابن عشان يحجز مكان لعرض المحتوى اللي جاي من بره.
 
-### الفرق بين ```ViewChild@``` و ```ContentChild@```
+### الفرق بين `ViewChild@` و `ContentChild@`
+
 🔴 الViewChild@ و ViewChildren@ بيقدروا يجيبوا أي عنصر موجود جوه الكومبوننت نفسه، سواء كان عنصر HTML، أو كومبوننت تاني، أو ديركتيف.
 
-🔴 الContentChild@ و ContentChildren@ بقى بيستخدموا للوصول للمحتوى اللي جاي من الكومبوننت الأب عبر ```ng-content```، يعني بيقدروا يجيبوا أي حاجة جاية من بره مش موجودة بشكل مباشر جوه الكومبوننت.
+🔴 الContentChild@ و ContentChildren@ بقى بيستخدموا للوصول للمحتوى اللي جاي من الكومبوننت الأب عبر `ng-content`، يعني بيقدروا يجيبوا أي حاجة جاية من بره مش موجودة بشكل مباشر جوه الكومبوننت.
 
 ### إزاي بنستخدم ContentChild و ContentChildren؟
+
 1. مثال بسيط على ContentChild
-خلينا نقول عندنا كومبوننت  (CardComponent) بيستخدم <ng-content> عشان ياخد محتوى من بره ويعرضه جواه.
- مثلا الكارت فيه 3 أماكن: ```header```, ```content```, ```وfooter```
+خلينا نقول عندنا كومبوننت (CardComponent) بيستخدم <ng-content> عشان ياخد محتوى من بره ويعرضه جواه.
+مثلا الكارت فيه 3 أماكن: `header`, `content`, `وfooter`
 <div dir="auto" align="left">
 
 ```typescript
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'card',
+  selector: "card",
   template: `
     <div class="card">
       <ng-content select="header"></ng-content>
@@ -2821,7 +2859,15 @@ import { Component } from '@angular/core';
       <ng-content select="footer"></ng-content>
     </div>
   `,
-  styles: [`.card { min-width: 280px; margin: 5px; float: left; }`]
+  styles: [
+    `
+      .card {
+        min-width: 280px;
+        margin: 5px;
+        float: left;
+      }
+    `,
+  ],
 })
 export class CardComponent {}
 ```
@@ -2831,7 +2877,7 @@ export class CardComponent {}
 الكود ده هيحجز 3 أماكن في الكارت: واحد لـ header، والتاني لـ content، والتالت لـ footer
 
 2. استخدام ContentChild للوصول للعنصر المرسل من الكومبوننت الأب
-دلوقتي لو عندنا في الكومبوننت الأب كذا كارت وعايزين نضيف لكل كارت محتوى مختلف، نكتب الكود بالشكل ده:
+   دلوقتي لو عندنا في الكومبوننت الأب كذا كارت وعايزين نضيف لكل كارت محتوى مختلف، نكتب الكود بالشكل ده:
 
 <div dir="auto" align="left">
 
@@ -2845,32 +2891,42 @@ export class CardComponent {}
 
 </div>
 
-في المثال ده، إحنا ضفنا header, content, وfooter لكارت واحد، وحددنا ```<h1 #header>``` اللي موجود في header.
+في المثال ده، إحنا ضفنا header, content, وfooter لكارت واحد، وحددنا `<h1 #header>` اللي موجود في header.
 
 دلوقتي عايزين نوصل للـ h1 اللي في header جوه CardComponent باستخدام ContentChild@
 
 <div dir="auto" align="left">
 
 ```typescript
-import { Component, ContentChild, ElementRef, AfterContentInit, Renderer2 } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  ElementRef,
+  AfterContentInit,
+  Renderer2,
+} from "@angular/core";
 
 @Component({
-  selector: 'card',
+  selector: "card",
   template: `
     <div class="card">
       <ng-content select="header"></ng-content>
       <ng-content select="content"></ng-content>
       <ng-content select="footer"></ng-content>
     </div>
-  `
+  `,
 })
 export class CardComponent implements AfterContentInit {
-  @ContentChild('header') cardContentHeader: ElementRef;
+  @ContentChild("header") cardContentHeader: ElementRef;
 
   constructor(private renderer: Renderer2) {}
 
   ngAfterContentInit() {
-    this.renderer.setStyle(this.cardContentHeader.nativeElement, 'font-size', '20px');
+    this.renderer.setStyle(
+      this.cardContentHeader.nativeElement,
+      "font-size",
+      "20px"
+    );
   }
 }
 ```
@@ -2878,7 +2934,8 @@ export class CardComponent implements AfterContentInit {
 </div>
 
 ### 🔴 النقطة المهمة هنا
-ال```ContentChild('header')@``` بيجيب أول عنصر اسمه header موجود في الـ Projected Content.
+
+ال`ContentChild('header')@` بيجيب أول عنصر اسمه header موجود في الـ Projected Content.
 
 الngAfterContentInit هو الـ lifecycle hook المناسب عشان نضمن إن Angular حملت المحتوى الخارجي.
 
@@ -2895,84 +2952,91 @@ export class CardComponent implements AfterContentInit {
 </div>
 
 ### الفرق بين ContentChild و ContentChildren
+
 ال@ContentChild بيجيب أول عنصر بس يطابق الاسم.
 
 ال@ContentChildren بيجيب كل العناصر اللي ليها نفس الاسم في شكل قائمة (QueryList)، وتقدر تستخدم forEach عشان تتعامل مع كل عنصر لوحده.
 
-### ✅  الفرق بين ViewChild@ و ContentChild@
-| #       | ViewChild و ViewChildren            | ContentChild و ContentChildren                          |
-|--------------|-------------------------------------|-------------------------------------------------------|
-| **الاستخدام** | بيدور على العناصر جوه الكومبوننت نفسه   | بيدور على المحتوى اللي جاي من بره                      |
-| **التوقيت**   | بيشتغل بعد تحميل التيمبلت                | بيشتغل بعد تحميل المحتوى الخارجي (AfterContentInit)    |
+### ✅ الفرق بين ViewChild@ و ContentChild@
 
+| #             | ViewChild و ViewChildren              | ContentChild و ContentChildren                      |
+| ------------- | ------------------------------------- | --------------------------------------------------- |
+| **الاستخدام** | بيدور على العناصر جوه الكومبوننت نفسه | بيدور على المحتوى اللي جاي من بره                   |
+| **التوقيت**   | بيشتغل بعد تحميل التيمبلت             | بيشتغل بعد تحميل المحتوى الخارجي (AfterContentInit) |
 
 </div>
 
- ## What are decorators in angular ?
+## What are decorators in angular ?
 
- [⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top)
 
 <div dir="auto" align="right">
 
-الـ Decorators في Angular هي عبارة عن وظيفة أو دالة بتدي معلومات إضافية عن الكلاس (class) أو  (method) أو  (property) أو  (parameter).
+الـ Decorators في Angular هي عبارة عن وظيفة أو دالة بتدي معلومات إضافية عن الكلاس (class) أو (method) أو (property) أو (parameter).
 
- بتدي معلومات لـ Angular عشان تفهم الكود وتعرف إزاي تتعامل معاه. يعني، الديكوريتور بيزود الكلاس بمعلومات تخليه  (Component)، أو  (Directive)، أو  (Service)... وهكذا.
+بتدي معلومات لـ Angular عشان تفهم الكود وتعرف إزاي تتعامل معاه. يعني، الديكوريتور بيزود الكلاس بمعلومات تخليه (Component)، أو (Directive)، أو (Service)... وهكذا.
 
- ### طيب بنستخدم الـ Decorators ليه في Angular؟
+### طيب بنستخدم الـ Decorators ليه في Angular؟
+
 الAngular بتستخدم الـ Decorators عشان تضيف Metadata (معلومات إضافية) للكود اللي بنكتبه.
 
- المعلومات دي بتساعد Angular تفهم إزاي تتعامل مع الكلاس أو الميثودات اللي جواه.
- 
-  مثلا، لو عندك كلاس وعايز تخليه Component، بنستخدم ديكوريتور اسمه Component@، ولو عايز تعمل Service بنستخدم Injectable@ وهكذا.
+المعلومات دي بتساعد Angular تفهم إزاي تتعامل مع الكلاس أو الميثودات اللي جواه.
 
+مثلا، لو عندك كلاس وعايز تخليه Component، بنستخدم ديكوريتور اسمه Component@، ولو عايز تعمل Service بنستخدم Injectable@ وهكذا.
 
 ### أنواع الديكوريتورز في Angular
+
 الAngular عندها كذا نوع من الـ Decorators، وهنقسمهم لأربع أنواع رئيسية:
 
 #### Class Decorators: بتستخدم على الكلاسات (classes).
-#### Property Decorators: بتستخدم على  (properties).
-#### Method Decorators: بتستخدم على  (methods).
+
+#### Property Decorators: بتستخدم على (properties).
+
+#### Method Decorators: بتستخدم على (methods).
+
 #### Parameter Decorators: بتستخدم على الباراميترز (parameters) بتاعة الـ Constructor.
 
 ### Class Decorators
 
 #### 1- NgModule@
+
 #### 2 -Component@
+
 #### 3- Injectable@
+
 #### 4- Directive@
+
 #### 5- Pipe@
 
 ديكوريتورز بتشتغل على الكلاسات، زي Component@ وDirective@ وInjectable@، ودي بتخلي Angular تتعامل مع الكلاس ده بطريقة معينة.
 
-
-
 ##### Component@
+
 بنستخدمه عشان نقول لـ Angular إن الكلاس ده عبارة عن Component، وده بيخلي Angular تتعامل مع الكلاس ده ك component ممكن يتعرض في التيمبلت.
+
 <div dir="auto" align="left">
 
 ```typescript
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
+  selector: "app-root",
+  templateUrl: "./app.component.html",
 })
-export class AppComponent {
-}
+export class AppComponent {}
 ```
 
 </div>
 
 ##### Injectable@
+
 ديكوريتور بيستخدم عشان نقول لـ Angular إن الكلاس ده محتاج يتعامل كـ Service. ده بيخلي Angular تعرف توفر الكلاس ده لما نحتاجه في component تاني عن طريق الـ Dependency Injection.
 
 <div dir="auto" align="left">
 
 ```typescript
 @Injectable({
-  providedIn: 'root'  
+  providedIn: "root",
 })
-export class MyService {
- 
-}
+export class MyService {}
 ```
 
 </div>
@@ -2980,18 +3044,24 @@ export class MyService {
 ### Property decorators
 
 #### 1- Input@
+
 #### 2- Output@
+
 #### 3- HostBinding@
+
 #### 4- ContentChild@
+
 #### 5- ContentChildren@
+
 #### 6- ViewChild@
+
 #### 7- ViewChildren@
 
 <div dir="auto" align="left">
 
 ```typescript
 export class ChildComponent {
-  @Input() childProperty: string; 
+  @Input() childProperty: string;
 }
 ```
 
@@ -3014,39 +3084,46 @@ export class ChildComponent {
 ### Parameter decorators
 
 #### 1- Inject@
+
 #### 2- Self@
+
 #### 3- SkipSelf@
+
 #### 4- Optional@
+
 #### 5- Host@
 
 <div dir="auto" align="left">
 
 ```typescript
 constructor(@Inject(SomeToken) private myValue) {
- 
+
 }
 ```
 
 </div>
 </div>
 
- ## AfterViewInit, AfterViewChecked, AfterContentInit and AfterContentChecked in Angular
+## AfterViewInit, AfterViewChecked, AfterContentInit and AfterContentChecked in Angular
 
- [⬆️ Back to Top](#top)
+[⬆️ Back to Top](#top)
 
 <div dir="auto" align="right">
 
 ### إيه الفرق بين Content و View في Angular؟
+
 قبل ما نشرح الـ Hooks اللي بنستخدمهم، محتاجين نفهم حاجة مهمة، وهي الفرق بين Content و View:
 
- Content: ده المحتوى اللي بيوصل للكومبوننت كـ Projected Content، يعني محتوى بيجيله من الكومبوننت الأب عن طريق ```<ng-content>```.
+Content: ده المحتوى اللي بيوصل للكومبوننت كـ Projected Content، يعني محتوى بيجيله من الكومبوننت الأب عن طريق `<ng-content>`.
 
 View: دي التيمبلت (Template) أو UI بتاع الكومبوننت نفسه، اللي بنكتبه جواه.
 
 ### الAngular بيستخدم 4 Lifecycle Hooks للتعامل مع الـ Content والـ View:
+
 فيه أربع Hooks مهمين في Angular بيساعدونا نتحكم في التوقيت اللي بنشتغل فيه مع المحتوى اللي جاي من بره (اللي هو الـ Content) والعرض بتاع الكومبوننت (اللي هو الـ View).
 
 #### 1. AfterContentInit
+
 ده Hook بيشتغل أول ما يتعمل تحميل كامل للمحتوى (Content) اللي جاي من الأب.
 
 الAngular كمان بيحدّث الخصائص اللي بنزودها بديكوريتور ContentChild@ أو ContentChildren@ قبل ما تنادي Hook دي.
@@ -3054,6 +3131,7 @@ View: دي التيمبلت (Template) أو UI بتاع الكومبوننت ن�
 بتشتغل مرة واحدة بس.
 
 #### 2. AfterContentChecked
+
 ده Hook بيشتغل كل مرة يحصل Change Detection في التطبيق.
 
 يعني إيه؟ يعني كل مرة Angular بتفحص إذا فيه تغيير حصل، بتشغل الـ Hook ده وتتأكد من أي تغييرات حصلت في المحتوى.
@@ -3061,6 +3139,7 @@ View: دي التيمبلت (Template) أو UI بتاع الكومبوننت ن�
 بـالمختصر، ده بيشوف إذا حصل أي تعديل على المحتوى وبيشتغل كل مرة Angular تعمل عملية فحص للتغييرات (حتى لو بسيط زي الضغط على زرار).
 
 #### 3. AfterViewInit
+
 ده Hook بيشتغل بعد ما ينتهي تحميل الـ View الخاص بالكومبوننت وأي Child Components جواه.
 
 الAngular بيحدّث الخصائص اللي بنزودها بديكوريتور ViewChild@ أو ViewChildren@ قبل ما تنادي Hook دي.
@@ -3068,14 +3147,15 @@ View: دي التيمبلت (Template) أو UI بتاع الكومبوننت ن�
 بتشتغل مرة واحدة بس.
 
 #### 4. AfterViewChecked
-ده Hook بيشتغل كل مرة يحصل Change Detection ويتأكد من أي تغييرات في  (View).
 
-يعني بعد ما Angular تخلص فحص التغييرات، هتشغل الـ Hook ده عشان تشوف إذا  اتعدل ولا لأ.
+ده Hook بيشتغل كل مرة يحصل Change Detection ويتأكد من أي تغييرات في (View).
+
+يعني بعد ما Angular تخلص فحص التغييرات، هتشغل الـ Hook ده عشان تشوف إذا اتعدل ولا لأ.
 
 بـالمختصر، ده زيه زي AfterContentChecked لكن بيركز على العرض بدل المحتوى، وبيشتغل في كل عملية فحص تغييرات.
 
-
 #### ❌ ليه ماينفعش نعدل Bindings في الـ Checked Hooks زي ngAfterViewChecked؟
+
 في Angular، الـ Checked Hooks زي ngAfterViewChecked بتشتغل بعد كل دورة فحص تغييرات (Change Detection Cycle). يعني، كل مرة Angular تشوف إذا فيه حاجة اتغيرت في الكومبوننت أو في الـ View، بيتم استدعاء الـ Hook دي.
 
 المشكلة في تعديل الـ Bindings في الـ Checked Hooks
@@ -3086,54 +3166,26 @@ View: دي التيمبلت (Template) أو UI بتاع الكومبوننت ن�
 الخطأ ده معناه إن فيه قيمة اتغيرت بعد ما Angular انتهت من الفحص، وده بيعمل تعارض في الـ Change Detection.
 
 ### ✅ الحل
+
 لو عايز تقرأ قيمة viewChild.message وتعرضها في التيمبلت من غير مشاكل، اعمل التعديل في Hook زي ngAfterViewInit أو في أماكن تانية مش بتتكرر زي ngOnInit.
 
-
 ### Init Vs Checked Hooks
+
 الInit Hooks (AfterContentInit وAfterViewInit): بتشتغل مرة واحدة بس بعد ما ينتهي تحميل المحتوى أو العرض لأول مرة.
 
 الChecked Hooks (AfterContentChecked وAfterViewChecked): بتشتغل في كل دورة Change Detection.
 
-
 #### 🔴 لما بقول إن الـ Hook "بتشتغل مرة واحدة بس"، أقصد إن الـ Hook دي بتشتغل أول ما يحصل تحميل للكومبوننت بس ومش بتكرر تاني.
 
 ### ليه بتشتغل مرة واحدة بس؟
+
 الفكرة إن الـ Hooks دي متخصصة إنك تستخدمها لإعدادات مبدئية. مثلا لو عايز تعمل حاجة في الكومبوننت بعد ما يخلص تحميله مباشرةً، بس مش محتاج تعملها كل مرة يحصل فيها تغيير في التطبيق. عشان كده Angular بتشغل الـ Hooks دي مرة واحدة بس بعد أول تحميل للكومبوننت أو المحتوى.
 
 ### طيب إيه اللي بيشتغل أكتر من مرة؟
+
 في المقابل، فيه Hooks زي AfterContentChecked و AfterViewChecked. دول بيشتغلوا كل مرة يحصل فيها Change Detection في التطبيق.
 
 </div>
-
-
-
-
-## What is HttpClient and its benefits?
-
-[⬆️ Back to Top](#top)
-
-<div dir="auto" align="right">
-الHttpClient هو واحد من الأدوات اللي بيوفرها Angular علشان تتعامل مع الـ backend services اللي بتشتغل بالـ HTTP. زمان كان الناس بتستخدم حاجات زي XMLHttpRequest أو fetch() API علشان يجيبوا البيانات من السيرفر، لكن دلوقتي Angular عامل لنا الموضوع أسهل شوية عن طريق الـ HttpClient اللي مبني أصلاً فوق الـ XMLHttpRequest. يعني، بيقدملك طريقة أبسط وأوضح علشان تشتغل مع الـ HTTP requests.
-
-طيب، هو موجود فين؟ تقدر تضيفه في التطبيق بتاعك عن طريق تعمل import لل HttpClientModule من الباكدج اللي اسمها angular/common/http@ بالطريقة دي:
-
-<div dir="auto" align="left">
-
-```typescript
-import { HttpClientModule } from "@angular/common/http";
-```
-
-</div>
-
-### طيب إيه بقى فايدته؟
-
-تقدر تختبر الكود بتاعك بسهولة لما تستخدمه في الـ HTTP requests.
-تقدر تحدد أنواع البيانات اللي طالعين من وإلى الـ backend، وده بيخليك متأكد إنك شغال على البيانات الصح.
-بيعمل intercept للrequest and response: يعني ممكن تتحكم في الطلبات اللي طالعة من التطبيق بتاعك أو الاستجابات اللي راجعة قبل ما توصل. ده بيساعد في حاجات زي إضافة headers أو التعامل مع الـ tokens.
-بيدعم Observable APIs: لو متعود على الـ Observables في Angular، هتلاقي الـ HttpClient بيشتغل معاهم حلو جداً، وده بيخليك تستفيد من حاجات زي الـ RxJS.
-
-</div>
-<hr/>
 
 ## What is an Angular Service
 
