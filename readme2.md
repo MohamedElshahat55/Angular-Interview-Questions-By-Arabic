@@ -1,596 +1,221 @@
-<!-- ## How to Use @ViewChild and @ViewChildren
+ <!-- ## What is View Encapsulation in Angular?
 
-[⬆️ Back to Top](#top)
+ [⬆️ Back to Top](#top)
 
 <div dir="auto" align="right">
 
-ال@ViewChild بتستخدمها لو عايز تجيب عنصر معين من عناصر الـ DOM (زي زرار أو كومبوننت تاني) عشان تتعامل معاه من الكود، وبتديك أول عنصر يطابق الشرط اللي حطيته.
+### يعني إيه View Encapsulation؟
+الـ View Encapsulation في Angular بيساعدنا نتحكم في الاستايلات الخاصة بكل كومبوننت بحيث تكون معزولة وماتأثرش على باقي الكومبوننتات في التطبيق.
 
-ال@ViewChildren بتديك كل العناصر اللي بتطابق الشرط اللي حطيته، وبتطلعهم في QueryList تقدر تلف عليها وتستخدم كل عنصر منها.
+ يعني لو عندك استايلات معينة في كومبوننت واحد، مش عايزينها تأثر على استايلات الكومبوننتات التانية.
 
-### إزاي تستخدم ViewChild@؟
+ ### الAngular بيدعم 3 طرق أو استراتيجيات للتحكم في الاستايلات:
 
+###### الViewEncapsulation.None: بدون عزل للاستايلات (يعني الاستايلات تكون global).
+###### الViewEncapsulation.Emulated: عزل وهمي (Emulated Encapsulation).
+###### الViewEncapsulation.ShadowDOM: عزل حقيقي باستخدام الـ Shadow DOM.
+
+###  ViewEncapsulation.None
+يعني إيه ViewEncapsulation.None؟
+
+لو استخدمت ViewEncapsulation.None، يبقى كده مفيش عزل. الاستايلات اللي بتعملها في الكومبوننت ده هتكون  (Global)، يعني ممكن تأثر على كل العناصر في التطبيق.
 <div dir="auto" align="left">
 
 ```typescript
-@ViewChild(ChildComponent, { static: true }) child: ChildComponent;
-```
-
-</div>
-
-### خليني أوضح أكتر النقطة دي:
-
-```bash
-@ViewChild(ChildComponent, { static: true })
-```
-
-هنا ChildComponent هو نوع أو كلاس العنصر اللي عايزين نجيبه (في الحالة دي، بنجيب عنصر معين اللي هو الكومبوننت ChildComponent).
-
-🔴static: true و static: false
-الخيار static بيحدد امتى Angular تجيب العنصر وتديك مرجع ليه. فيه حالتين هنا:
-
-### static: true
-
-لو حطينا static: true، ده معناه إن Angular هتجيب المرجع للعنصر قبل ما تعمل أول تغيير (Change Detection). بمعنى تاني، Angular هتجيب العنصر من الـ DOM في بداية تحميل الصفحة أو الكومبوننت، وده مفيد لو العنصر دايمًا بيبقى موجود في التيمبلت بتاعنا.
-
-### static: false
-
-لو حطينا static: false، ده معناه إن Angular هتستنى لحد ما تكمل أول Change Detection وتحدد العناصر اللي هتظهر حسب شروط معينة زي *ngIf أو *ngSwitch.
-
-يعني لو العنصر بيظهر بناءً على شرط معين أو بيتم تحميله ديناميكيًا، لازم تستخدم static: false، عشان Angular تستنى لحد ما الشرط يتحقق أو العنصر يظهر في التيمبلت.
-
-### مثال للتوضيح
-
-لو عندنا عنصر بيتحكم في ظهوره شرط معين، زي \*ngIf، لازم نستخدم static: false عشان نضمن إن Angular هتنتظر لحد ما يتحقق الشرط ده ويظهر العنصر في التيمبلت.
-
-<div dir="auto" align="left">
-
-```HTML
-<div *ngIf="showChildComponent">
-  <child-component></child-component>
-</div>
-```
-
-</div>
-
-<div dir="auto" align="left">
-
-```typescript
-@ViewChild(ChildComponent, { static: false }) child: ChildComponent;
-```
-
-</div>
-هنا، Angular هتستنى لحد ما يحصل تغيير (Change Detection) ويتحقق شرط *ngIf، وبعد كده هتجيب ChildComponent لما يكون موجود في التيمبلت.
-
-### مثال بسيط
-
-عندنا كومبوننت صغير اسمه ChildComponent فيه عداد، وفيه زراير لزيادته أو نقصانه:
-
-<div dir="auto" align="left">
-
-```typescript
-import { Component } from "@angular/core";
-
+import { Component,ViewEncapsulation } from '@angular/core';
+ 
 @Component({
-  selector: "child-component",
-  template: `<h2>Child Component</h2>
-    <p>Current count: {{ count }}</p>`,
+  selector: 'app-none',
+  template: `<p>I am not encapsulated and in blue 
+             (ViewEncapsulation.None) </p>`,
+  styles: ['p { color:blue}'],
+  encapsulation: ViewEncapsulation.None
 })
-export class ChildComponent {
-  count = 0;
-
-  increment() {
-    this.count++;
-  }
-  decrement() {
-    this.count--;
-  }
-}
-```
-
-</div>
-في الكومبوننت الأب (Parent Component)، عايزين نجيب الـ ChildComponent ونتحكم في العداد بتاعه. نستخدم ViewChild@ كالتالي:
-
-<div dir="auto" align="left">
-
-```typescript
-import { Component, ViewChild } from "@angular/core";
-import { ChildComponent } from "./child.component";
-
-@Component({
-  selector: "app-root",
-  template: `
-    <h1>Parent Component</h1>
-    <button (click)="increment()">Increment</button>
-    <button (click)="decrement()">Decrement</button>
-    <child-component></child-component>
-  `,
-})
-export class AppComponent {
-  @ViewChild(ChildComponent, { static: true }) child: ChildComponent;
-
-  increment() {
-    this.child.increment();
-  }
-
-  decrement() {
-    this.child.decrement();
-  }
-}
-```
-
-</div>
-استخدام Template Reference Variable مع ViewChild@
-بدل ما نحدد النوع بتاع الكومبوننت، ممكن نستخدم Template Reference Variable.
-يعني ندي اسم للعنصر في التيمبلت زي كده:
-
-<div dir="auto" align="left">
-
-```HTML
-<child-component #childRef></child-component>
-```
-
-</div>
-وبعدين نجيبه في الكود:
-<div dir="auto" align="left">
-
-```typescript
-@ViewChild('childRef', { static: true }) child: ChildComponent;
-```
-
-</div>
-
-### التعامل مع عناصر الـ HTML باستخدام ElementRef
-
-لو عايز تجيب عنصر HTML زي p أو div، ممكن تستخدم ViewChild@ مع ElementRef.
-
-### مثال:
-
-<div dir="auto" align="left">
-
-```HTML
-<p #para>Some text</p>
-```
-
-</div>
-
-<div dir="auto" align="left">
-
-```typescript
-import { Component, ElementRef, ViewChild, AfterViewInit } from "@angular/core";
-
-@Component({
-  selector: "htmlelement",
-  template: `<p #para>Some text</p>`,
-})
-export class HTMLElementComponent implements AfterViewInit {
-  @ViewChild("para", { static: false }) para: ElementRef;
-
-  ngAfterViewInit() {
-    console.log(this.para.nativeElement.innerHTML);
-    this.para.nativeElement.innerHTML = "new text";
-  }
+export class ViewNoneComponent {
 }
 ```
 
 </div>
 
-### 🔴 لو عندك أكتر من عنصر بنفس النوع؟
+#### لو أضفنا الكومبوننت ده في التطبيق، الاستايل color: blue هيأثر على كل ```<p>``` في التطبيق، مش بس جوا الكومبوننت ده.
 
-لو عندك أكتر من عنصر زي ChildComponent في نفس التيمبلت، ViewChild@ هترجعلك أول واحد بس. لكن لو عايز كل العناصر، استخدم ViewChildren@
 
-### مثال مع ViewChildren@
+### 2. ViewEncapsulation.Emulated
+يعني إيه ViewEncapsulation.Emulated؟
 
-في المثال ده، عندنا أكتر من input:
+دي تعتبر الاستراتيجية الافتراضية في . Emulated Encapsulation يعني  الAngular هتضيف حاجة زي أكواد HTML Attributes فريدة للكومبوننت والاستايلات الخاصة به، بحيث تضمن إن الاستايلات دي ماتأثرش على باقي الكومبوننتات.
 
-<div dir="auto" align="left">
+يعني Angular بتضيف حاجات زي _ngcontent لكل عنصر جوا الكومبوننت عشان تربط الاستايلات الخاصة بيه بيه بس، بحيث تضمن إن الاستايلات ماتخرجش لباقي التطبيق.
 
-```HTML
-<input name="firstName" [(ngModel)]="firstName">
-<input name="middleName" [(ngModel)]="middleName">
-<input name="lastName" [(ngModel)]="lastName">
-```
-
-</div>
-نجيبهم باستخدام ViewChildren@ كالتالي:
 <div dir="auto" align="left">
 
 ```typescript
-import { Component, ViewChildren, QueryList, NgModel } from "@angular/core";
-
+import { Component,ViewEncapsulation } from '@angular/core';
+ 
 @Component({
-  selector: "app-viewchildren-example",
-  template: `
-    <input name="firstName" [(ngModel)]="firstName" />
-    <input name="middleName" [(ngModel)]="middleName" />
-    <input name="lastName" [(ngModel)]="lastName" />
-    <button (click)="show()">Show</button>
-  `,
+  selector: 'app-emulated',
+  template: `<p>Using Emulator</p>`,
+  styles: ['p { color:red}'],
+  encapsulation: ViewEncapsulation.Emulated
 })
-export class ViewChildrenExampleComponent {
-  @ViewChildren(NgModel) modelRefList: QueryList<NgModel>;
-
-  show() {
-    this.modelRefList.forEach((element) => {
-      console.log(element);
-    });
-  }
+export class ViewEmulatedComponent {
 }
 ```
 
 </div>
-هنا ViewChildren@ بترجع كل input، وتقدر تلف عليهم باستخدام ()forEach
 
-### 🔴 ملحوظلة
+### إيه اللي بيحصل هنا؟
+لما تفتح   (Developer Tools)، هتلاقي Angular ضافت Attribute فريد زي ```_ngcontent-c2``` على عنصر ```<p>``` والاستايلات الخاصة به. ده بيخلي الاستايلات دي تنطبق بس على العناصر اللي جوا الكومبوننت ده، وماتأثرش على باقي التطبيق.
 
-لما نستخدم ViewChild@ او ViewChildren@ في Angular، بنحتاج نستنى لحد ما العناصر في الـ DOM تكون اتعملها تحميل بالكامل قبل ما نقدر نستخدمها في الكود.
+### ViewEncapsulation.ShadowDOM
+يعني إيه ViewEncapsulation.ShadowDOM؟
 
-عشان كده، الـlifecycle hook المناسبة للتعامل مع ViewChild@ هي ngAfterViewInit مش ngOnInit.
+الـ Shadow DOM هو جزء من Web Components وبيوفر عزل حقيقي للاستايلات.
+
+ لما تستخدمه، الاستايلات الخاصة بالكومبوننت ده مش هتخرج بره الكومبوننت، ومش هتأثر على أي عناصر تانية بره الكومبوننت.
+
+ملاحظة: مش كل المتصفحات بتدعم الـ Shadow DOM، فالأفضل تشغل التطبيق على متصفح زي جوجل كروم.
+
+<div dir="auto" align="left">
+
+```typescript
+import { Component,ViewEncapsulation } from '@angular/core';
+ 
+@Component({
+  selector: 'app-shadowdom',
+  template: `<p>I am encapsulated inside a Shadow DOM ViewEncapsulation.ShadowDom</p>`,
+  styles: ['p { color:brown}'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})
+export class ViewShadowdomComponent {
+ 
+}
+```
 
 </div>
 
-## ContentChild and ContentChildren in Angular
+### إيه اللي بيحصل هنا؟
+الAngular بترندر الكومبوننت ده جوا عنصر اسمه shadow-root#.
 
-[⬆️ Back to Top](#top)
+ العنصر ده بيعزل الاستايلات الخاصة بالكومبوننت عن باقي التطبيق، وده بيحقق عزل حقيقي.
+
+### مزايا وعيوب Shadow DOM
+مزايا: عزل حقيقي للاستايلات، وبكده تضمن إن الاستايلات ماتأثرش على أي حاجة بره الكومبوننت.
+
+عيوب: مش كل المتصفحات بتدعمه، وبعض الاستايلات المشتركة بين الكومبوننتات ممكن ماتشتغلش زي ما تتوقع.
+
+### 🚀 الخلاصة
+الViewEncapsulation.None: استخدامه لما تكون عايز الاستايلات تأثر على التطبيق كله.
+
+الViewEncapsulation.Emulated: الاختيار الافتراضي، بيعزل الاستايلات باستخدام ng-content.
+
+الViewEncapsulation.ShadowDOM: بيعزل الاستايلات بشكل كامل لكن ممكن مايشتغلش على كل المتصفحات.
+</div>
+
+ ## What are Host and hostContext in angular? 
+
+ [⬆️ Back to Top](#top)
 
 <div dir="auto" align="right">
 
-### إيه هما ContentChild و ContentChildren؟
+### أولاً: إيه هو host:؟
+الhost هو CSS Selector بنستخدمه في Angular عشان نستهدف العنصر الأساسي بتاع الكومبوننت نفسه.
 
-الContentChild@ و `ContentChildren@` هما (Decorators) في Angular بنستخدمهم عشان نوصل لحاجة اسمها "Projected Content"، اللي هو المحتوى اللي بيجي للكومبوننت من كومبوننت الأب (Parent Component).
+ لما بتستخدمه، هو بيخليك تضيف استايلات على العنصر الرئيسي للكومبوننت من غير ما تتعرض للعناصر اللي جواه أو من غير ما تضطر تضيف كلاس معين عليه.
 
-الProjected Content يعني محتوى جاي من الكومبوننت الأب عشان يتعرض في الكومبوننت الابن، وبنحدده عادةً باستخدام عنصر `ng-content` اللي بنضيفه في الكومبوننت الابن عشان يحجز مكان لعرض المحتوى اللي جاي من بره.
+ ### ليه بنستخدم :host في Angular
+ 
+  كل كومبوننت بيبقى ليه استايلات خاصة بيه، ولو عايز تضيف استايل للعنصر الأساسي بتاع الكومبوننت من غير ما تأثر على باقي الكومبوننتات أو محتوى الصفحة، هنا :host بيبقى مفيد.
 
-### الفرق بين `ViewChild@` و `ContentChild@`
-
-🔴 الViewChild@ و ViewChildren@ بيقدروا يجيبوا أي عنصر موجود جوه الكومبوننت نفسه، سواء كان عنصر HTML، أو كومبوننت تاني، أو ديركتيف.
-
-🔴 الContentChild@ و ContentChildren@ بقى بيستخدموا للوصول للمحتوى اللي جاي من الكومبوننت الأب عبر `ng-content`، يعني بيقدروا يجيبوا أي حاجة جاية من بره مش موجودة بشكل مباشر جوه الكومبوننت.
-
-### إزاي بنستخدم ContentChild و ContentChildren؟
-
-1. مثال بسيط على ContentChild
-خلينا نقول عندنا كومبوننت (CardComponent) بيستخدم <ng-content> عشان ياخد محتوى من بره ويعرضه جواه.
-مثلا الكارت فيه 3 أماكن: `header`, `content`, `وfooter`
+  ### مثال عملي:
+خلينا نقول عندك كومبوننت اسمه app-card وعايز تخلي العنصر الأساسي  يظهر بحدود (border) ولون خلفية (background color) محددين.
 <div dir="auto" align="left">
 
 ```typescript
-import { Component } from "@angular/core";
-
 @Component({
-  selector: "card",
+  selector: 'app-card',
   template: `
-    <div class="card">
-      <ng-content select="header"></ng-content>
-      <ng-content select="content"></ng-content>
-      <ng-content select="footer"></ng-content>
+    <div class="content">
+      <p>this is a content</p>
     </div>
   `,
-  styles: [
-    `
-      .card {
-        min-width: 280px;
-        margin: 5px;
-        float: left;
-      }
-    `,
-  ],
+  styles: [`
+    :host {
+      display: block;
+      border: 2px solid #333;
+      background-color: #f9f9f9;
+      padding: 16px;
+      border-radius: 8px;
+    }
+  `]
 })
-export class CardComponent {}
+export class CardComponent { }
 ```
 
 </div>
 
-الكود ده هيحجز 3 أماكن في الكارت: واحد لـ header، والتاني لـ content، والتالت لـ footer
+الـ :host هنا بيخلي الاستايلات تطبق على العنصر الأساسي بتاع app-card نفسه.
 
-2. استخدام ContentChild للوصول للعنصر المرسل من الكومبوننت الأب
-   دلوقتي لو عندنا في الكومبوننت الأب كذا كارت وعايزين نضيف لكل كارت محتوى مختلف، نكتب الكود بالشكل ده:
+مش محتاج تضيف كلاس أو تعمل حاجة مخصوص للعنصر الرئيسي، لأن :host بيفهم لوحده إن ده هو العنصر الحاوي للكومبوننت، وبيطبق عليه الاستايلات مباشرة.
+
+### ثانياً: إيه هو :host-context؟
+الhost-context هو CSS Selector بيستخدم في Angular عشان تتحكم في الاستايلات بناءً على السياق الخارجي للكومبوننت. يعني بيشوف الكومبوننت موجود فين أو جواه إيه، ويطبق الاستايلات بناءً على ده.
+
+تخيل :host-context زي شرط بيقول: "لو الكومبوننت موجود في سياق معين أو محاط بعنصر معين، يبقى طبق الاستايل ده".
+
+
+### مثال
+
+افترض إن عندك كومبوننت في Angular فيه عنصر ```<input>```، وعايز هذا الكومبوننت يظهر بشكل مختلف بناءً على المكان اللي بيتواجد فيه. يعني مثلًا:
+
+لو الكومبوننت ده موجود جوا Dropdown، عايز عرض الـ ```<input>``` يكون 50%.
+
+لو الكومبوننت ده موجود جوا Table، عايز عرض الـ ```<input>``` يكون 100%.
+
+### إزاي نستخدم :host-context في المثال بتاعنا؟
+لو عندنا كومبوننت MyInputComponent اللي فيه ```<input>```، عايزين نخليه يغير عرضه بناءً على المكان اللي هو فيه.
+
+الكومبوننت MyInputComponent هيظهر في أماكن مختلفة، زي my-dropdown و my-table.
+
+لو الكومبوننت ده جوه ```<my-dropdown>```، العرض يكون 50%.
+لو الكومبوننت ده جوه ```<my-table>```، العرض يكون 100%.
+<div dir="auto" align="left">
+
+```CSS
+:host-context(my-dropdown) input {
+  width: 50%; /* العرض لما يكون جوا dropdown */
+}
+
+:host-context(my-table) input {
+  width: 100%; /* العرض لما يكون جوا table */
+}
+```
+
+</div>
+
+ال:host-context(my-dropdown) input: ده بيقول إنه لو الكومبوننت MyInputComponent موجود جوا عنصر ```<my-dropdown>```، يخلي عرض ```<input>``` في الكومبوننت ده 50%.
+
+ال:host-context(my-table) input: ده بيقول إنه لو الكومبوننت MyInputComponent موجود جوا ```<my-table>```، يخلي عرض ```<input>``` في الكومبوننت ده 100%.
+
+دلوقتي لو حطيت MyInputComponent جوا <my-dropdown> أو <my-table>، هيتم تطبيق الاستايل اللي يناسب السياق بشكل تلقائي.
 
 <div dir="auto" align="left">
 
 ```HTML
-<card>
-  <header><h1 #header>Angular</h1></header>
-  <content>One framework. Mobile & desktop.</content>
-  <footer><b>Super-powered by Google</b></footer>
-</card>
+<my-dropdown>
+  <my-input></my-input> <!-- العرض 50% هنا عشان موجود في dropdown -->
+</my-dropdown>
+
+<my-table>
+  <my-input></my-input> <!-- العرض 100% هنا عشان موجود في table -->
+</my-table>
 ```
 
 </div>
 
-في المثال ده، إحنا ضفنا header, content, وfooter لكارت واحد، وحددنا `<h1 #header>` اللي موجود في header.
+### ليه host-context مفيد في الحالة دي؟
 
-دلوقتي عايزين نوصل للـ h1 اللي في header جوه CardComponent باستخدام ContentChild@
-
-<div dir="auto" align="left">
-
-```typescript
-import {
-  Component,
-  ContentChild,
-  ElementRef,
-  AfterContentInit,
-  Renderer2,
-} from "@angular/core";
-
-@Component({
-  selector: "card",
-  template: `
-    <div class="card">
-      <ng-content select="header"></ng-content>
-      <ng-content select="content"></ng-content>
-      <ng-content select="footer"></ng-content>
-    </div>
-  `,
-})
-export class CardComponent implements AfterContentInit {
-  @ContentChild("header") cardContentHeader: ElementRef;
-
-  constructor(private renderer: Renderer2) {}
-
-  ngAfterContentInit() {
-    this.renderer.setStyle(
-      this.cardContentHeader.nativeElement,
-      "font-size",
-      "20px"
-    );
-  }
-}
-```
-
-</div>
-
-### 🔴 النقطة المهمة هنا
-
-ال`ContentChild('header')@` بيجيب أول عنصر اسمه header موجود في الـ Projected Content.
-
-الngAfterContentInit هو الـ lifecycle hook المناسب عشان نضمن إن Angular حملت المحتوى الخارجي.
-
-### ContentChildren@ عشان تجيب أكتر من عنصر
-
-لو عندنا كذا عنصر بنفس الاسم (مثلا كذا عنصر header)، ممكن نستخدم ContentChildren@ عشان نجيبهم كلهم في شكل قائمة (QueryList) ونقدر نلف عليهم ونتعامل مع كل عنصر فيهم.
-
-<div dir="auto" align="left">
-
-```typescript
-@ContentChildren('header') headers: QueryList<ElementRef>;
-```
-
-</div>
-
-### الفرق بين ContentChild و ContentChildren
-
-ال@ContentChild بيجيب أول عنصر بس يطابق الاسم.
-
-ال@ContentChildren بيجيب كل العناصر اللي ليها نفس الاسم في شكل قائمة (QueryList)، وتقدر تستخدم forEach عشان تتعامل مع كل عنصر لوحده.
-
-### ✅ الفرق بين ViewChild@ و ContentChild@
-
-| #             | ViewChild و ViewChildren              | ContentChild و ContentChildren                      |
-| ------------- | ------------------------------------- | --------------------------------------------------- |
-| **الاستخدام** | بيدور على العناصر جوه الكومبوننت نفسه | بيدور على المحتوى اللي جاي من بره                   |
-| **التوقيت**   | بيشتغل بعد تحميل التيمبلت             | بيشتغل بعد تحميل المحتوى الخارجي (AfterContentInit) |
-
-</div>
-
-## What are decorators in angular ?
-
-[⬆️ Back to Top](#top)
-
-<div dir="auto" align="right">
-
-الـ Decorators في Angular هي عبارة عن وظيفة أو دالة بتدي معلومات إضافية عن الكلاس (class) أو (method) أو (property) أو (parameter).
-
-بتدي معلومات لـ Angular عشان تفهم الكود وتعرف إزاي تتعامل معاه. يعني، الديكوريتور بيزود الكلاس بمعلومات تخليه (Component)، أو (Directive)، أو (Service)... وهكذا.
-
-### طيب بنستخدم الـ Decorators ليه في Angular؟
-
-الAngular بتستخدم الـ Decorators عشان تضيف Metadata (معلومات إضافية) للكود اللي بنكتبه.
-
-المعلومات دي بتساعد Angular تفهم إزاي تتعامل مع الكلاس أو الميثودات اللي جواه.
-
-مثلا، لو عندك كلاس وعايز تخليه Component، بنستخدم ديكوريتور اسمه Component@، ولو عايز تعمل Service بنستخدم Injectable@ وهكذا.
-
-### أنواع الديكوريتورز في Angular
-
-الAngular عندها كذا نوع من الـ Decorators، وهنقسمهم لأربع أنواع رئيسية:
-
-#### Class Decorators: بتستخدم على الكلاسات (classes).
-
-#### Property Decorators: بتستخدم على (properties).
-
-#### Method Decorators: بتستخدم على (methods).
-
-#### Parameter Decorators: بتستخدم على الباراميترز (parameters) بتاعة الـ Constructor.
-
-### Class Decorators
-
-#### 1- NgModule@
-
-#### 2 -Component@
-
-#### 3- Injectable@
-
-#### 4- Directive@
-
-#### 5- Pipe@
-
-ديكوريتورز بتشتغل على الكلاسات، زي Component@ وDirective@ وInjectable@، ودي بتخلي Angular تتعامل مع الكلاس ده بطريقة معينة.
-
-##### Component@
-
-بنستخدمه عشان نقول لـ Angular إن الكلاس ده عبارة عن Component، وده بيخلي Angular تتعامل مع الكلاس ده ك component ممكن يتعرض في التيمبلت.
-
-<div dir="auto" align="left">
-
-```typescript
-@Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-})
-export class AppComponent {}
-```
-
-</div>
-
-##### Injectable@
-
-ديكوريتور بيستخدم عشان نقول لـ Angular إن الكلاس ده محتاج يتعامل كـ Service. ده بيخلي Angular تعرف توفر الكلاس ده لما نحتاجه في component تاني عن طريق الـ Dependency Injection.
-
-<div dir="auto" align="left">
-
-```typescript
-@Injectable({
-  providedIn: "root",
-})
-export class MyService {}
-```
-
-</div>
-
-### Property decorators
-
-#### 1- Input@
-
-#### 2- Output@
-
-#### 3- HostBinding@
-
-#### 4- ContentChild@
-
-#### 5- ContentChildren@
-
-#### 6- ViewChild@
-
-#### 7- ViewChildren@
-
-<div dir="auto" align="left">
-
-```typescript
-export class ChildComponent {
-  @Input() childProperty: string;
-}
-```
-
-</div>
-
-### Method decorators
-
-#### 1- HostListener@
-
-<div dir="auto" align="left">
-
-```typescript
-@HostListener('click') onClick() {
-  console.log(' cliked');
-}
-```
-
-</div>
-
-### Parameter decorators
-
-#### 1- Inject@
-
-#### 2- Self@
-
-#### 3- SkipSelf@
-
-#### 4- Optional@
-
-#### 5- Host@
-
-<div dir="auto" align="left">
-
-```typescript
-constructor(@Inject(SomeToken) private myValue) {
-
-}
-```
-
-</div>
-</div>
-
-## AfterViewInit, AfterViewChecked, AfterContentInit and AfterContentChecked in Angular
-
-[⬆️ Back to Top](#top)
-
-<div dir="auto" align="right">
-
-### إيه الفرق بين Content و View في Angular؟
-
-قبل ما نشرح الـ Hooks اللي بنستخدمهم، محتاجين نفهم حاجة مهمة، وهي الفرق بين Content و View:
-
-Content: ده المحتوى اللي بيوصل للكومبوننت كـ Projected Content، يعني محتوى بيجيله من الكومبوننت الأب عن طريق `<ng-content>`.
-
-View: دي التيمبلت (Template) أو UI بتاع الكومبوننت نفسه، اللي بنكتبه جواه.
-
-### الAngular بيستخدم 4 Lifecycle Hooks للتعامل مع الـ Content والـ View:
-
-فيه أربع Hooks مهمين في Angular بيساعدونا نتحكم في التوقيت اللي بنشتغل فيه مع المحتوى اللي جاي من بره (اللي هو الـ Content) والعرض بتاع الكومبوننت (اللي هو الـ View).
-
-#### 1. AfterContentInit
-
-ده Hook بيشتغل أول ما يتعمل تحميل كامل للمحتوى (Content) اللي جاي من الأب.
-
-الAngular كمان بيحدّث الخصائص اللي بنزودها بديكوريتور ContentChild@ أو ContentChildren@ قبل ما تنادي Hook دي.
-
-بتشتغل مرة واحدة بس.
-
-#### 2. AfterContentChecked
-
-ده Hook بيشتغل كل مرة يحصل Change Detection في التطبيق.
-
-يعني إيه؟ يعني كل مرة Angular بتفحص إذا فيه تغيير حصل، بتشغل الـ Hook ده وتتأكد من أي تغييرات حصلت في المحتوى.
-
-بـالمختصر، ده بيشوف إذا حصل أي تعديل على المحتوى وبيشتغل كل مرة Angular تعمل عملية فحص للتغييرات (حتى لو بسيط زي الضغط على زرار).
-
-#### 3. AfterViewInit
-
-ده Hook بيشتغل بعد ما ينتهي تحميل الـ View الخاص بالكومبوننت وأي Child Components جواه.
-
-الAngular بيحدّث الخصائص اللي بنزودها بديكوريتور ViewChild@ أو ViewChildren@ قبل ما تنادي Hook دي.
-
-بتشتغل مرة واحدة بس.
-
-#### 4. AfterViewChecked
-
-ده Hook بيشتغل كل مرة يحصل Change Detection ويتأكد من أي تغييرات في (View).
-
-يعني بعد ما Angular تخلص فحص التغييرات، هتشغل الـ Hook ده عشان تشوف إذا اتعدل ولا لأ.
-
-بـالمختصر، ده زيه زي AfterContentChecked لكن بيركز على العرض بدل المحتوى، وبيشتغل في كل عملية فحص تغييرات.
-
-#### ❌ ليه ماينفعش نعدل Bindings في الـ Checked Hooks زي ngAfterViewChecked؟
-
-في Angular، الـ Checked Hooks زي ngAfterViewChecked بتشتغل بعد كل دورة فحص تغييرات (Change Detection Cycle). يعني، كل مرة Angular تشوف إذا فيه حاجة اتغيرت في الكومبوننت أو في الـ View، بيتم استدعاء الـ Hook دي.
-
-المشكلة في تعديل الـ Bindings في الـ Checked Hooks
-لما تعمل تعديل على Binding (زي تعديل قيمة متغيرة بتظهر في التيمبلت) في ngAfterViewChecked، ده بيعمل مشكلة لإن Angular هتضطر تدخل في دورة فحص جديدة عشان تتأكد من التغييرات، وهكذا تفضل في حلقة مفرغة (Infinite Loop) من دورات الفحص.
-
-###### 🔴 المشكلة الكبيرة هنا إنك ممكن تواجه خطأ اسمه: ExpressionChangedAfterItHasBeenCheckedError
-
-الخطأ ده معناه إن فيه قيمة اتغيرت بعد ما Angular انتهت من الفحص، وده بيعمل تعارض في الـ Change Detection.
-
-### ✅ الحل
-
-لو عايز تقرأ قيمة viewChild.message وتعرضها في التيمبلت من غير مشاكل، اعمل التعديل في Hook زي ngAfterViewInit أو في أماكن تانية مش بتتكرر زي ngOnInit.
-
-### Init Vs Checked Hooks
-
-الInit Hooks (AfterContentInit وAfterViewInit): بتشتغل مرة واحدة بس بعد ما ينتهي تحميل المحتوى أو العرض لأول مرة.
-
-الChecked Hooks (AfterContentChecked وAfterViewChecked): بتشتغل في كل دورة Change Detection.
-
-#### 🔴 لما بقول إن الـ Hook "بتشتغل مرة واحدة بس"، أقصد إن الـ Hook دي بتشتغل أول ما يحصل تحميل للكومبوننت بس ومش بتكرر تاني.
-
-### ليه بتشتغل مرة واحدة بس؟
-
-الفكرة إن الـ Hooks دي متخصصة إنك تستخدمها لإعدادات مبدئية. مثلا لو عايز تعمل حاجة في الكومبوننت بعد ما يخلص تحميله مباشرةً، بس مش محتاج تعملها كل مرة يحصل فيها تغيير في التطبيق. عشان كده Angular بتشغل الـ Hooks دي مرة واحدة بس بعد أول تحميل للكومبوننت أو المحتوى.
-
-### طيب إيه اللي بيشتغل أكتر من مرة؟
-
-في المقابل، فيه Hooks زي AfterContentChecked و AfterViewChecked. دول بيشتغلوا كل مرة يحصل فيها Change Detection في التطبيق.
+بدل ما تكتب كود إضافي في كل مكان أو تضيف كلاس جديد للتحكم في الاستايل، host-context بيسهل عليك التحكم في استايلات الكومبوننت بناءً على السياق الخارجي اللي الكومبوننت موجود فيه، من غير ما تعدل على الكومبوننت نفسه كل مرة.
 
 </div> -->
 
