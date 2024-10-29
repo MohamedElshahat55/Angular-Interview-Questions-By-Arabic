@@ -56,6 +56,11 @@ This Repo is inspired by the following sources:
 | 41  | [What is Effect in Signal?](#what-is-effect-in-signal)                                                                 |
 | 42  | [ElementRef in Angular](#elementref-in-angular)                                                                        |
 | 43  | [What is Renderer2?](#what-is-renderer2)                                                                               |
+| 44  | [How to Use @ViewChild and @ViewChildren](#how-to-use-viewchild-and-viewchildren)                             |
+| 45  | [ContentChild and ContentChildren in Angular](#contentchild-and-contentchildren-in-angular)                   |
+| 46  | [What are decorators in angular?](#what-are-decorators-in-angular)                                           |
+| 47  | [AfterViewInit, AfterViewChecked, AfterContentInit and AfterContentChecked in Angular](#afterviewinit-afterviewchecked-aftercontentinit-and-aftercontentchecked-in-angular) |
+
 
 # Angular Service Interview Questions
 
@@ -913,6 +918,143 @@ Birthday is Jun 18, 1987
 
 </div>
 فالـpipes بتسهل عليك شغل كتير لو محتاج تعدل أو تنسق البيانات قبل عرضها للمستخدمين.
+</div>
+<hr/>
+
+## What is a parameterized pipe?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+الـ Parameterized Pipe في Angular ببساطة هو طريقة لتعديل الـ output بتاع الـ pipe باستخدام بارامترات إضافية. يعني تقدر تتحكم في النتيجة اللي هتطلع من الـ pipe عن طريق إضافة بارامترات بعد اسم الـ pipe باستخدام الـ colon " : ". لو الـ pipe بيقبل أكتر من باراميتر، بتفصل بينهم بـ colons تانية.
+
+خلينا نوضح الموضوع بمثال بسيط زي اللي انت جبته عن عيد الميلاد. في الكود اللي انت كتبته، بنستخدم الـ date pipe عشان نعرض تاريخ معين لكن بالصيغة اللي احنا عايزنها (يوم/شهر/سنة).
+
+<div dir="auto" align="left">
+
+```typescript
+import { Component } from "@angular/core";
+
+@Component({
+  selector: "app-birthday",
+  template: `<p>Birthday is {{ birthday | date : "dd/MM/yyyy" }}</p>`, // 18/06/1987
+})
+export class BirthdayComponent {
+  birthday = new Date(1987, 6, 18);
+}
+```
+
+</div>
+هنا، الـ date pipe بيقبل باراميتر وهو الصيغة اللي انت عايز تعرض بيها التاريخ، واللي هنا عبارة عن 'dd/MM/yyyy'. الـ pipe هيقوم بتحويل التاريخ اللي موجود في birthday (اللي هو 18 يونيو 1987) للصيغة اللي انت عايزها، وهيطلعلك 18/06/1987.
+
+لو الـ pipe بيقبل أكتر من باراميتر، هتفصلهم بنفس الطريقة عن طريق colons.
+
+</div>
+<hr/>
+
+## How do you chain pipes?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+انت بتستخدم أكثر من pipe وبتسميها chaining pipes. يعني بتربط أكثر من pipe مع بعض عشان تنفذ مجموعة عمليات على القيمة.
+
+الفكرة ببساطة انك بتبدأ من القيمة الأولانية وبتعديها على أول pipe، وبعد ما الـ pipe الأول يخلص، النتيجة بتاعت الـ pipe الأول بتروح للـ pipe اللي بعده، وهكذا لغاية ما يخلصوا كل الـ pipes اللي انت حاططهم.
+
+في المثال بتاعك، انت عندك خاصية birthday اللي هي تاريخ الميلاد:
+
+<div dir="auto" align="left">
+
+```typescript
+birthday = new Date(1987, 6, 18);
+```
+
+</div>
+ده معناه ان عندك التاريخ 18 يوليو 1987 (شهر 6 هو يوليو عشان الـ JavaScript بتمشي بالأصفار).
+
+اللي بيحصل هنا:
+الdate pipe: بيحول قيمة التاريخ ويعرضها بشكل معين. انت استخدمت الفورمات 'fullDate'، فالتاريخ هيظهر كامل زي "Thursday, June 18, 1987".
+
+الuppercase pipe: بياخد النتيجة اللي طلعت من الـ date pipe وبيحولها لحروف كبيرة، فالناتج النهائي هيكون: "THURSDAY, JUNE 18, 1987".
+
+### طريقة الكتابة
+
+<div dir="auto" align="left">
+
+```HTML
+<p>Birthday is {{ birthday | date:'fullDate' | uppercase }} </p>
+```
+
+</div>
+
+</div>
+<hr/>
+
+## What is a custom pipe?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+الـ "custom pipe" ببساطة هو أن انت تكتب حاجة بنفسك في Angular عشان تحوّل البيانات بشكل معين، غير الـ "built-in pipes" اللي Angular بتوفّرها زي الـ date أو uppercase وكده.
+
+أول حاجة لازم تعملها لما تيجي تكتب "custom pipe" هي إنك تستخدم الـ @Pipe ديكوريتور اللي بتجيبها من الـ core Angular.
+
+<div dir="auto" align="left">
+
+```typescript
+@Pipe({name: 'myCustomPipe'})
+```
+
+</div>
+بعد كده بتكتب class وبتخلّيه implement للـ PipeTransform interface اللي فيه الميثود الأساسية اللي هي transform. الميثود دي بتاخد الـ value اللي عاوز تحولها، وكمان ممكن تاخد شوية parameters إضافية. وتبقى النتيجة هي القيمة الجديدة اللي متحوّلة.
+
+#### مثلا، لو هنعمل pipe بيحوّل أي input لقيمته مضروبة في رقم معيّن
+
+<div dir="auto" align="left">
+
+```typescript
+import { Pipe, PipeTransform } from "@angular/core";
+
+@Pipe({ name: "multiply" })
+export class MultiplyPipe implements PipeTransform {
+  transform(value: number, multiplier: number): number {
+    return value * multiplier;
+  }
+}
+```
+
+</div>
+كده لو عندك template وعايز تستخدم الـ pipe ده، هتعمله زي ما بتعمل مع الـ built-in pipes:
+<div dir="auto" align="left">
+
+```HTML
+{{ 5 | multiply: 2 }} // 10
+```
+
+</div>
+النقطة اللي لازم تركز عليها إن اسم الـ pipe اللي بتكتبه في الـ @Pipe ديكوريتور هو اللي هتستخدمه في الـ template. والـ transform method دي هي اللي بتكتب فيها اللوجيك اللي عاوز تطبقه على البيانات.
+</div>
+<hr/>
+
+## What is the difference between pure and impure pipe?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+طبعاً، الفرق بين الـ pure pipe والـ impure pipe في Angular بيكون في إزاي بيتعاملوا مع دورة التغيير (change detection)
+
+### Pure Pipe
+
+يتنفذ بس لما يكون في تغيير في القيمة أو في الـ parameters اللي اتبعتت للـ pipe.
+يعني لو عندك قيمة primitive زي String أو Number أو Boolean، ولو اتغيرت القيمة دي، أو لو كان فيه تغيير في الـ object reference زي Date أو Array أو Function أو Object.
+ده بيخلي الـ pure pipe أكتر كفاءة لأنها مش بتتنفذ كتير، وبتشتغل بس لما يكون في حاجة اتغيرت فعلاً.
+
+### Impure Pipe
+
+يتنفذ في كل دورة تغيير (change detection cycle) بغض النظر إذا كانت القيمة أو الـ parameters اتغيرت ولا لأ.
+يعني ممكن الـ impure pipe يتنفذ كتير جداً، زي كل حركة مفتاح (keystroke) أو حركة ماوس (mouse-move).
+ده ممكن يؤدي إلى أداء أبطأ لو استخدمته في أماكن كتير في التطبيق.
+
 </div>
 <hr/>
 
@@ -2423,142 +2565,548 @@ createElement() {
 
 </div>
 
-## What is a parameterized pipe?
 
-[⬆️ Back to Top](#top)
+ ## How to Use @ViewChild and @ViewChildren
+
+ [⬆️ Back to Top](#top)
 
 <div dir="auto" align="right">
-الـ Parameterized Pipe في Angular ببساطة هو طريقة لتعديل الـ output بتاع الـ pipe باستخدام بارامترات إضافية. يعني تقدر تتحكم في النتيجة اللي هتطلع من الـ pipe عن طريق إضافة بارامترات بعد اسم الـ pipe باستخدام الـ colon " : ". لو الـ pipe بيقبل أكتر من باراميتر، بتفصل بينهم بـ colons تانية.
 
-خلينا نوضح الموضوع بمثال بسيط زي اللي انت جبته عن عيد الميلاد. في الكود اللي انت كتبته، بنستخدم الـ date pipe عشان نعرض تاريخ معين لكن بالصيغة اللي احنا عايزنها (يوم/شهر/سنة).
+ال@ViewChild بتستخدمها لو عايز تجيب عنصر معين من عناصر الـ DOM (زي زرار أو كومبوننت تاني) عشان تتعامل معاه من الكود، وبتديك أول عنصر يطابق الشرط اللي حطيته.
 
+ال@ViewChildren بتديك كل العناصر اللي بتطابق الشرط اللي حطيته، وبتطلعهم في QueryList تقدر تلف عليها وتستخدم كل عنصر منها.
+
+### إزاي تستخدم ViewChild@؟
 <div dir="auto" align="left">
 
 ```typescript
-import { Component } from "@angular/core";
-
-@Component({
-  selector: "app-birthday",
-  template: `<p>Birthday is {{ birthday | date : "dd/MM/yyyy" }}</p>`, // 18/06/1987
-})
-export class BirthdayComponent {
-  birthday = new Date(1987, 6, 18);
-}
+@ViewChild(ChildComponent, { static: true }) child: ChildComponent;
 ```
 
 </div>
-هنا، الـ date pipe بيقبل باراميتر وهو الصيغة اللي انت عايز تعرض بيها التاريخ، واللي هنا عبارة عن 'dd/MM/yyyy'. الـ pipe هيقوم بتحويل التاريخ اللي موجود في birthday (اللي هو 18 يونيو 1987) للصيغة اللي انت عايزها، وهيطلعلك 18/06/1987.
 
-لو الـ pipe بيقبل أكتر من باراميتر، هتفصلهم بنفس الطريقة عن طريق colons.
+### خليني أوضح أكتر النقطة دي:
 
-</div>
-<hr/>
-
-## How do you chain pipes?
-
-[⬆️ Back to Top](#top)
-
-<div dir="auto" align="right">
-انت بتستخدم أكثر من pipe وبتسميها chaining pipes. يعني بتربط أكثر من pipe مع بعض عشان تنفذ مجموعة عمليات على القيمة.
-
-الفكرة ببساطة انك بتبدأ من القيمة الأولانية وبتعديها على أول pipe، وبعد ما الـ pipe الأول يخلص، النتيجة بتاعت الـ pipe الأول بتروح للـ pipe اللي بعده، وهكذا لغاية ما يخلصوا كل الـ pipes اللي انت حاططهم.
-
-في المثال بتاعك، انت عندك خاصية birthday اللي هي تاريخ الميلاد:
-
-<div dir="auto" align="left">
-
-```typescript
-birthday = new Date(1987, 6, 18);
+```bash
+@ViewChild(ChildComponent, { static: true })
 ```
+هنا ChildComponent هو نوع أو كلاس العنصر اللي عايزين نجيبه (في الحالة دي، بنجيب عنصر معين اللي هو الكومبوننت ChildComponent).
 
-</div>
-ده معناه ان عندك التاريخ 18 يوليو 1987 (شهر 6 هو يوليو عشان الـ JavaScript بتمشي بالأصفار).
+ 🔴static: true و static: false
+الخيار static بيحدد امتى Angular تجيب العنصر وتديك مرجع ليه. فيه حالتين هنا:
 
-اللي بيحصل هنا:
-الdate pipe: بيحول قيمة التاريخ ويعرضها بشكل معين. انت استخدمت الفورمات 'fullDate'، فالتاريخ هيظهر كامل زي "Thursday, June 18, 1987".
+### static: true
+لو حطينا static: true، ده معناه إن Angular هتجيب المرجع للعنصر قبل ما تعمل أول تغيير (Change Detection). بمعنى تاني، Angular هتجيب العنصر من الـ DOM في بداية تحميل الصفحة أو الكومبوننت، وده مفيد لو العنصر دايمًا بيبقى موجود في التيمبلت بتاعنا.
 
-الuppercase pipe: بياخد النتيجة اللي طلعت من الـ date pipe وبيحولها لحروف كبيرة، فالناتج النهائي هيكون: "THURSDAY, JUNE 18, 1987".
+### static: false
+لو حطينا static: false، ده معناه إن Angular هتستنى لحد ما تكمل أول Change Detection وتحدد العناصر اللي هتظهر حسب شروط معينة زي *ngIf أو *ngSwitch.
 
-### طريقة الكتابة
+ يعني لو العنصر بيظهر بناءً على شرط معين أو بيتم تحميله ديناميكيًا، لازم تستخدم static: false، عشان Angular تستنى لحد ما الشرط يتحقق أو العنصر يظهر في التيمبلت.
 
+ ### مثال للتوضيح
+لو عندنا عنصر بيتحكم في ظهوره شرط معين، زي *ngIf، لازم نستخدم static: false عشان نضمن إن Angular هتنتظر لحد ما يتحقق الشرط ده ويظهر العنصر في التيمبلت.
 <div dir="auto" align="left">
 
 ```HTML
-<p>Birthday is {{ birthday | date:'fullDate' | uppercase }} </p>
+<div *ngIf="showChildComponent">
+  <child-component></child-component>
+</div>
 ```
 
 </div>
 
-</div>
-<hr/>
-
-## What is a custom pipe?
-
-[⬆️ Back to Top](#top)
-
-<div dir="auto" align="right">
-الـ "custom pipe" ببساطة هو أن انت تكتب حاجة بنفسك في Angular عشان تحوّل البيانات بشكل معين، غير الـ "built-in pipes" اللي Angular بتوفّرها زي الـ date أو uppercase وكده.
-
-أول حاجة لازم تعملها لما تيجي تكتب "custom pipe" هي إنك تستخدم الـ @Pipe ديكوريتور اللي بتجيبها من الـ core Angular.
-
 <div dir="auto" align="left">
 
 ```typescript
-@Pipe({name: 'myCustomPipe'})
+@ViewChild(ChildComponent, { static: false }) child: ChildComponent;
 ```
 
 </div>
-بعد كده بتكتب class وبتخلّيه implement للـ PipeTransform interface اللي فيه الميثود الأساسية اللي هي transform. الميثود دي بتاخد الـ value اللي عاوز تحولها، وكمان ممكن تاخد شوية parameters إضافية. وتبقى النتيجة هي القيمة الجديدة اللي متحوّلة.
+هنا، Angular هتستنى لحد ما يحصل تغيير (Change Detection) ويتحقق شرط *ngIf، وبعد كده هتجيب ChildComponent لما يكون موجود في التيمبلت.
 
-#### مثلا، لو هنعمل pipe بيحوّل أي input لقيمته مضروبة في رقم معيّن
-
+### مثال بسيط
+عندنا كومبوننت صغير اسمه ChildComponent فيه عداد، وفيه زراير لزيادته أو نقصانه:
 <div dir="auto" align="left">
 
 ```typescript
-import { Pipe, PipeTransform } from "@angular/core";
+import { Component } from '@angular/core';
 
-@Pipe({ name: "multiply" })
-export class MultiplyPipe implements PipeTransform {
-  transform(value: number, multiplier: number): number {
-    return value * multiplier;
+@Component({
+  selector: 'child-component',
+  template: `<h2>Child Component</h2>
+            <p>Current count: {{ count }}</p>`,
+})
+export class ChildComponent {
+  count = 0;
+
+  increment() {
+    this.count++;
+  }
+  decrement() {
+    this.count--;
   }
 }
 ```
 
 </div>
-كده لو عندك template وعايز تستخدم الـ pipe ده، هتعمله زي ما بتعمل مع الـ built-in pipes:
+في الكومبوننت الأب (Parent Component)، عايزين نجيب الـ ChildComponent ونتحكم في العداد بتاعه. نستخدم ViewChild@ كالتالي:
+
 <div dir="auto" align="left">
 
-```HTML
-{{ 5 | multiply: 2 }} // 10
+```typescript
+import { Component, ViewChild } from '@angular/core';
+import { ChildComponent } from './child.component';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <h1>Parent Component</h1>
+    <button (click)="increment()">Increment</button>
+    <button (click)="decrement()">Decrement</button>
+    <child-component></child-component>
+  `,
+})
+export class AppComponent {
+  @ViewChild(ChildComponent, { static: true }) child: ChildComponent;
+
+  increment() {
+    this.child.increment();
+  }
+
+  decrement() {
+    this.child.decrement();
+  }
+}
 ```
 
 </div>
-النقطة اللي لازم تركز عليها إن اسم الـ pipe اللي بتكتبه في الـ @Pipe ديكوريتور هو اللي هتستخدمه في الـ template. والـ transform method دي هي اللي بتكتب فيها اللوجيك اللي عاوز تطبقه على البيانات.
+استخدام Template Reference Variable مع ViewChild@
+بدل ما نحدد النوع بتاع الكومبوننت، ممكن نستخدم Template Reference Variable. 
+يعني ندي اسم للعنصر في التيمبلت زي كده:
+
+<div dir="auto" align="left">
+
+```HTML
+<child-component #childRef></child-component>
+```
+
 </div>
-<hr/>
+وبعدين نجيبه في الكود:
+<div dir="auto" align="left">
 
-## What is the difference between pure and impure pipe?
+```typescript
+@ViewChild('childRef', { static: true }) child: ChildComponent;
+```
 
-[⬆️ Back to Top](#top)
+</div>
+
+### التعامل مع عناصر الـ HTML باستخدام ElementRef
+لو عايز تجيب عنصر HTML زي p أو div، ممكن تستخدم ViewChild@ مع ElementRef.
+
+### مثال:
+
+<div dir="auto" align="left">
+
+```HTML
+<p #para>Some text</p>
+```
+</div>
+
+
+<div dir="auto" align="left">
+
+```typescript
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+
+@Component({
+  selector: 'htmlelement',
+  template: `<p #para>Some text</p>`,
+})
+export class HTMLElementComponent implements AfterViewInit {
+  @ViewChild('para', { static: false }) para: ElementRef;
+
+  ngAfterViewInit() {
+    console.log(this.para.nativeElement.innerHTML);
+    this.para.nativeElement.innerHTML = "new text";
+  }
+}
+```
+
+</div>
+
+### 🔴 لو عندك أكتر من عنصر بنفس النوع؟
+لو عندك أكتر من عنصر زي ChildComponent في نفس التيمبلت، ViewChild@ هترجعلك أول واحد بس. لكن لو عايز كل العناصر، استخدم ViewChildren@
+
+### مثال مع ViewChildren@
+في المثال ده، عندنا أكتر من input:
+<div dir="auto" align="left">
+
+```HTML
+<input name="firstName" [(ngModel)]="firstName">
+<input name="middleName" [(ngModel)]="middleName">
+<input name="lastName" [(ngModel)]="lastName">
+```
+
+</div>
+نجيبهم باستخدام ViewChildren@ كالتالي:
+<div dir="auto" align="left">
+
+```typescript
+import { Component, ViewChildren, QueryList, NgModel } from '@angular/core';
+
+@Component({
+  selector: 'app-viewchildren-example',
+  template: `
+    <input name="firstName" [(ngModel)]="firstName">
+    <input name="middleName" [(ngModel)]="middleName">
+    <input name="lastName" [(ngModel)]="lastName">
+    <button (click)="show()">Show</button>
+  `,
+})
+export class ViewChildrenExampleComponent {
+  @ViewChildren(NgModel) modelRefList: QueryList<NgModel>;
+
+  show() {
+    this.modelRefList.forEach(element => {
+      console.log(element);
+    });
+  }
+}
+```
+
+</div>
+هنا ViewChildren@ بترجع كل input، وتقدر تلف عليهم باستخدام ()forEach
+
+### 🔴 ملحوظلة
+
+لما نستخدم ViewChild@ او ViewChildren@ في Angular، بنحتاج نستنى لحد ما العناصر في الـ DOM تكون اتعملها تحميل بالكامل قبل ما نقدر نستخدمها في الكود.
+
+ عشان كده، الـlifecycle hook المناسبة للتعامل مع ViewChild@ هي ngAfterViewInit مش ngOnInit.
+
+</div>
+
+
+ ## ContentChild and ContentChildren in Angular
+
+ [⬆️ Back to Top](#top)
 
 <div dir="auto" align="right">
-طبعاً، الفرق بين الـ pure pipe والـ impure pipe في Angular بيكون في إزاي بيتعاملوا مع دورة التغيير (change detection)
 
-### Pure Pipe
+### إيه هما ContentChild و ContentChildren؟
 
-يتنفذ بس لما يكون في تغيير في القيمة أو في الـ parameters اللي اتبعتت للـ pipe.
-يعني لو عندك قيمة primitive زي String أو Number أو Boolean، ولو اتغيرت القيمة دي، أو لو كان فيه تغيير في الـ object reference زي Date أو Array أو Function أو Object.
-ده بيخلي الـ pure pipe أكتر كفاءة لأنها مش بتتنفذ كتير، وبتشتغل بس لما يكون في حاجة اتغيرت فعلاً.
+الContentChild@ و ```ContentChildren@``` هما  (Decorators) في Angular بنستخدمهم عشان نوصل لحاجة اسمها "Projected Content"، اللي هو المحتوى اللي بيجي للكومبوننت من كومبوننت الأب (Parent Component).
 
-### Impure Pipe
+الProjected Content يعني محتوى جاي من الكومبوننت الأب عشان يتعرض في الكومبوننت الابن، وبنحدده عادةً باستخدام عنصر ```ng-content``` اللي بنضيفه في الكومبوننت الابن عشان يحجز مكان لعرض المحتوى اللي جاي من بره.
 
-يتنفذ في كل دورة تغيير (change detection cycle) بغض النظر إذا كانت القيمة أو الـ parameters اتغيرت ولا لأ.
-يعني ممكن الـ impure pipe يتنفذ كتير جداً، زي كل حركة مفتاح (keystroke) أو حركة ماوس (mouse-move).
-ده ممكن يؤدي إلى أداء أبطأ لو استخدمته في أماكن كتير في التطبيق.
+### الفرق بين ```ViewChild@``` و ```ContentChild@```
+🔴 الViewChild@ و ViewChildren@ بيقدروا يجيبوا أي عنصر موجود جوه الكومبوننت نفسه، سواء كان عنصر HTML، أو كومبوننت تاني، أو ديركتيف.
+
+🔴 الContentChild@ و ContentChildren@ بقى بيستخدموا للوصول للمحتوى اللي جاي من الكومبوننت الأب عبر ```ng-content```، يعني بيقدروا يجيبوا أي حاجة جاية من بره مش موجودة بشكل مباشر جوه الكومبوننت.
+
+### إزاي بنستخدم ContentChild و ContentChildren؟
+1. مثال بسيط على ContentChild
+خلينا نقول عندنا كومبوننت  (CardComponent) بيستخدم <ng-content> عشان ياخد محتوى من بره ويعرضه جواه.
+ مثلا الكارت فيه 3 أماكن: ```header```, ```content```, ```وfooter```
+<div dir="auto" align="left">
+
+```typescript
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'card',
+  template: `
+    <div class="card">
+      <ng-content select="header"></ng-content>
+      <ng-content select="content"></ng-content>
+      <ng-content select="footer"></ng-content>
+    </div>
+  `,
+  styles: [`.card { min-width: 280px; margin: 5px; float: left; }`]
+})
+export class CardComponent {}
+```
 
 </div>
-<hr/>
+
+الكود ده هيحجز 3 أماكن في الكارت: واحد لـ header، والتاني لـ content، والتالت لـ footer
+
+2. استخدام ContentChild للوصول للعنصر المرسل من الكومبوننت الأب
+دلوقتي لو عندنا في الكومبوننت الأب كذا كارت وعايزين نضيف لكل كارت محتوى مختلف، نكتب الكود بالشكل ده:
+
+<div dir="auto" align="left">
+
+```HTML
+<card>
+  <header><h1 #header>Angular</h1></header>
+  <content>One framework. Mobile & desktop.</content>
+  <footer><b>Super-powered by Google</b></footer>
+</card>
+```
+
+</div>
+
+في المثال ده، إحنا ضفنا header, content, وfooter لكارت واحد، وحددنا ```<h1 #header>``` اللي موجود في header.
+
+دلوقتي عايزين نوصل للـ h1 اللي في header جوه CardComponent باستخدام ContentChild@
+
+<div dir="auto" align="left">
+
+```typescript
+import { Component, ContentChild, ElementRef, AfterContentInit, Renderer2 } from '@angular/core';
+
+@Component({
+  selector: 'card',
+  template: `
+    <div class="card">
+      <ng-content select="header"></ng-content>
+      <ng-content select="content"></ng-content>
+      <ng-content select="footer"></ng-content>
+    </div>
+  `
+})
+export class CardComponent implements AfterContentInit {
+  @ContentChild('header') cardContentHeader: ElementRef;
+
+  constructor(private renderer: Renderer2) {}
+
+  ngAfterContentInit() {
+    this.renderer.setStyle(this.cardContentHeader.nativeElement, 'font-size', '20px');
+  }
+}
+```
+
+</div>
+
+### 🔴 النقطة المهمة هنا
+ال```ContentChild('header')@``` بيجيب أول عنصر اسمه header موجود في الـ Projected Content.
+
+الngAfterContentInit هو الـ lifecycle hook المناسب عشان نضمن إن Angular حملت المحتوى الخارجي.
+
+### ContentChildren@ عشان تجيب أكتر من عنصر
+
+لو عندنا كذا عنصر بنفس الاسم (مثلا كذا عنصر header)، ممكن نستخدم ContentChildren@ عشان نجيبهم كلهم في شكل قائمة (QueryList) ونقدر نلف عليهم ونتعامل مع كل عنصر فيهم.
+
+<div dir="auto" align="left">
+
+```typescript
+@ContentChildren('header') headers: QueryList<ElementRef>;
+```
+
+</div>
+
+### الفرق بين ContentChild و ContentChildren
+ال@ContentChild بيجيب أول عنصر بس يطابق الاسم.
+
+ال@ContentChildren بيجيب كل العناصر اللي ليها نفس الاسم في شكل قائمة (QueryList)، وتقدر تستخدم forEach عشان تتعامل مع كل عنصر لوحده.
+
+### ✅  الفرق بين ViewChild@ و ContentChild@
+| #       | ViewChild و ViewChildren            | ContentChild و ContentChildren                          |
+|--------------|-------------------------------------|-------------------------------------------------------|
+| **الاستخدام** | بيدور على العناصر جوه الكومبوننت نفسه   | بيدور على المحتوى اللي جاي من بره                      |
+| **التوقيت**   | بيشتغل بعد تحميل التيمبلت                | بيشتغل بعد تحميل المحتوى الخارجي (AfterContentInit)    |
+
+
+</div>
+
+ ## What are decorators in angular ?
+
+ [⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+
+الـ Decorators في Angular هي عبارة عن وظيفة أو دالة بتدي معلومات إضافية عن الكلاس (class) أو  (method) أو  (property) أو  (parameter).
+
+ بتدي معلومات لـ Angular عشان تفهم الكود وتعرف إزاي تتعامل معاه. يعني، الديكوريتور بيزود الكلاس بمعلومات تخليه  (Component)، أو  (Directive)، أو  (Service)... وهكذا.
+
+ ### طيب بنستخدم الـ Decorators ليه في Angular؟
+الAngular بتستخدم الـ Decorators عشان تضيف Metadata (معلومات إضافية) للكود اللي بنكتبه.
+
+ المعلومات دي بتساعد Angular تفهم إزاي تتعامل مع الكلاس أو الميثودات اللي جواه.
+ 
+  مثلا، لو عندك كلاس وعايز تخليه Component، بنستخدم ديكوريتور اسمه Component@، ولو عايز تعمل Service بنستخدم Injectable@ وهكذا.
+
+
+### أنواع الديكوريتورز في Angular
+الAngular عندها كذا نوع من الـ Decorators، وهنقسمهم لأربع أنواع رئيسية:
+
+#### Class Decorators: بتستخدم على الكلاسات (classes).
+#### Property Decorators: بتستخدم على  (properties).
+#### Method Decorators: بتستخدم على  (methods).
+#### Parameter Decorators: بتستخدم على الباراميترز (parameters) بتاعة الـ Constructor.
+
+### Class Decorators
+
+#### 1- NgModule@
+#### 2 -Component@
+#### 3- Injectable@
+#### 4- Directive@
+#### 5- Pipe@
+
+ديكوريتورز بتشتغل على الكلاسات، زي Component@ وDirective@ وInjectable@، ودي بتخلي Angular تتعامل مع الكلاس ده بطريقة معينة.
+
+
+
+##### Component@
+بنستخدمه عشان نقول لـ Angular إن الكلاس ده عبارة عن Component، وده بيخلي Angular تتعامل مع الكلاس ده ك component ممكن يتعرض في التيمبلت.
+<div dir="auto" align="left">
+
+```typescript
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+})
+export class AppComponent {
+}
+```
+
+</div>
+
+##### Injectable@
+ديكوريتور بيستخدم عشان نقول لـ Angular إن الكلاس ده محتاج يتعامل كـ Service. ده بيخلي Angular تعرف توفر الكلاس ده لما نحتاجه في component تاني عن طريق الـ Dependency Injection.
+
+<div dir="auto" align="left">
+
+```typescript
+@Injectable({
+  providedIn: 'root'  
+})
+export class MyService {
+ 
+}
+```
+
+</div>
+
+### Property decorators
+
+#### 1- Input@
+#### 2- Output@
+#### 3- HostBinding@
+#### 4- ContentChild@
+#### 5- ContentChildren@
+#### 6- ViewChild@
+#### 7- ViewChildren@
+
+<div dir="auto" align="left">
+
+```typescript
+export class ChildComponent {
+  @Input() childProperty: string; 
+}
+```
+
+</div>
+
+### Method decorators
+
+#### 1- HostListener@
+
+<div dir="auto" align="left">
+
+```typescript
+@HostListener('click') onClick() {
+  console.log(' cliked');
+}
+```
+
+</div>
+
+### Parameter decorators
+
+#### 1- Inject@
+#### 2- Self@
+#### 3- SkipSelf@
+#### 4- Optional@
+#### 5- Host@
+
+<div dir="auto" align="left">
+
+```typescript
+constructor(@Inject(SomeToken) private myValue) {
+ 
+}
+```
+
+</div>
+</div>
+
+ ## AfterViewInit, AfterViewChecked, AfterContentInit and AfterContentChecked in Angular
+
+ [⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+
+### إيه الفرق بين Content و View في Angular؟
+قبل ما نشرح الـ Hooks اللي بنستخدمهم، محتاجين نفهم حاجة مهمة، وهي الفرق بين Content و View:
+
+ Content: ده المحتوى اللي بيوصل للكومبوننت كـ Projected Content، يعني محتوى بيجيله من الكومبوننت الأب عن طريق ```<ng-content>```.
+
+View: دي التيمبلت (Template) أو UI بتاع الكومبوننت نفسه، اللي بنكتبه جواه.
+
+### الAngular بيستخدم 4 Lifecycle Hooks للتعامل مع الـ Content والـ View:
+فيه أربع Hooks مهمين في Angular بيساعدونا نتحكم في التوقيت اللي بنشتغل فيه مع المحتوى اللي جاي من بره (اللي هو الـ Content) والعرض بتاع الكومبوننت (اللي هو الـ View).
+
+#### 1. AfterContentInit
+ده Hook بيشتغل أول ما يتعمل تحميل كامل للمحتوى (Content) اللي جاي من الأب.
+
+الAngular كمان بيحدّث الخصائص اللي بنزودها بديكوريتور ContentChild@ أو ContentChildren@ قبل ما تنادي Hook دي.
+
+بتشتغل مرة واحدة بس.
+
+#### 2. AfterContentChecked
+ده Hook بيشتغل كل مرة يحصل Change Detection في التطبيق.
+
+يعني إيه؟ يعني كل مرة Angular بتفحص إذا فيه تغيير حصل، بتشغل الـ Hook ده وتتأكد من أي تغييرات حصلت في المحتوى.
+
+بـالمختصر، ده بيشوف إذا حصل أي تعديل على المحتوى وبيشتغل كل مرة Angular تعمل عملية فحص للتغييرات (حتى لو بسيط زي الضغط على زرار).
+
+#### 3. AfterViewInit
+ده Hook بيشتغل بعد ما ينتهي تحميل الـ View الخاص بالكومبوننت وأي Child Components جواه.
+
+الAngular بيحدّث الخصائص اللي بنزودها بديكوريتور ViewChild@ أو ViewChildren@ قبل ما تنادي Hook دي.
+
+بتشتغل مرة واحدة بس.
+
+#### 4. AfterViewChecked
+ده Hook بيشتغل كل مرة يحصل Change Detection ويتأكد من أي تغييرات في  (View).
+
+يعني بعد ما Angular تخلص فحص التغييرات، هتشغل الـ Hook ده عشان تشوف إذا  اتعدل ولا لأ.
+
+بـالمختصر، ده زيه زي AfterContentChecked لكن بيركز على العرض بدل المحتوى، وبيشتغل في كل عملية فحص تغييرات.
+
+
+#### ❌ ليه ماينفعش نعدل Bindings في الـ Checked Hooks زي ngAfterViewChecked؟
+في Angular، الـ Checked Hooks زي ngAfterViewChecked بتشتغل بعد كل دورة فحص تغييرات (Change Detection Cycle). يعني، كل مرة Angular تشوف إذا فيه حاجة اتغيرت في الكومبوننت أو في الـ View، بيتم استدعاء الـ Hook دي.
+
+المشكلة في تعديل الـ Bindings في الـ Checked Hooks
+لما تعمل تعديل على Binding (زي تعديل قيمة متغيرة بتظهر في التيمبلت) في ngAfterViewChecked، ده بيعمل مشكلة لإن Angular هتضطر تدخل في دورة فحص جديدة عشان تتأكد من التغييرات، وهكذا تفضل في حلقة مفرغة (Infinite Loop) من دورات الفحص.
+
+###### 🔴 المشكلة الكبيرة هنا إنك ممكن تواجه خطأ اسمه: ExpressionChangedAfterItHasBeenCheckedError
+
+الخطأ ده معناه إن فيه قيمة اتغيرت بعد ما Angular انتهت من الفحص، وده بيعمل تعارض في الـ Change Detection.
+
+### ✅ الحل
+لو عايز تقرأ قيمة viewChild.message وتعرضها في التيمبلت من غير مشاكل، اعمل التعديل في Hook زي ngAfterViewInit أو في أماكن تانية مش بتتكرر زي ngOnInit.
+
+
+### Init Vs Checked Hooks
+الInit Hooks (AfterContentInit وAfterViewInit): بتشتغل مرة واحدة بس بعد ما ينتهي تحميل المحتوى أو العرض لأول مرة.
+
+الChecked Hooks (AfterContentChecked وAfterViewChecked): بتشتغل في كل دورة Change Detection.
+
+
+#### 🔴 لما بقول إن الـ Hook "بتشتغل مرة واحدة بس"، أقصد إن الـ Hook دي بتشتغل أول ما يحصل تحميل للكومبوننت بس ومش بتكرر تاني.
+
+### ليه بتشتغل مرة واحدة بس؟
+الفكرة إن الـ Hooks دي متخصصة إنك تستخدمها لإعدادات مبدئية. مثلا لو عايز تعمل حاجة في الكومبوننت بعد ما يخلص تحميله مباشرةً، بس مش محتاج تعملها كل مرة يحصل فيها تغيير في التطبيق. عشان كده Angular بتشغل الـ Hooks دي مرة واحدة بس بعد أول تحميل للكومبوننت أو المحتوى.
+
+### طيب إيه اللي بيشتغل أكتر من مرة؟
+في المقابل، فيه Hooks زي AfterContentChecked و AfterViewChecked. دول بيشتغلوا كل مرة يحصل فيها Change Detection في التطبيق.
+
+</div>
+
+
+
 
 ## What is HttpClient and its benefits?
 
