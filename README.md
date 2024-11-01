@@ -3426,6 +3426,8 @@ export class CardComponent {}
 
 </div>
 
+## Angular Change Detection - How Does It Really Work?
+
 [⬆️ Back to Top](#top)
 
 <div dir="auto" align="right">
