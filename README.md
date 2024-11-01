@@ -62,7 +62,7 @@ This Repo is inspired by the following sources:
 | 47  | [AfterViewInit, AfterViewChecked, AfterContentInit and AfterContentChecked in Angular](#afterviewinit-afterviewchecked-aftercontentinit-and-aftercontentchecked-in-angular) |
 | 48  | [What is View Encapsulation in Angular?](#what-is-view-encapsulation-in-angular)                                                                                            |
 | 49  | [What are Host and hostContext in Angular?](#what-are-host-and-hostcontext-in-angular)                                                                                      |
-| 50  | [Angular Change Detection - How Does It Really Work?](#angular-change-detection-how-does-it-really-work)                                                                    |
+| 50  | [Angular Change Detection How Does It Really Work?](#angular-change-detection-how-does-it-really-work)                                                                      |
 
 # Angular Service Interview Questions
 
@@ -3426,7 +3426,7 @@ export class CardComponent {}
 
 </div>
 
-## Angular Change Detection - How Does It Really Work?
+## Angular Change Detection How Does It Really Work?
 
 [⬆️ Back to Top](#top)
 
