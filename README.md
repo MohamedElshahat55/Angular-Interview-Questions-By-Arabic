@@ -13,57 +13,57 @@ This Repo is inspired by the following sources:
 3. [Logo ConcretePage.com](https://www.concretepage.com/angular/)
 4. [List of 300 Angular Interview Questions and answers](https://github.com/sudheerj/angular-interview-questions)
 
-| No. | Questions                                                                                                                                                                   |
-| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | [What is Angular Framework?](#what-is-angular-framework)                                                                                                                    |
-| 3   | [What is TypeScript?](#what-is-typescript)                                                                                                                                  |
-| 4   | [Write a pictorial diagram of Angular architecture?](#write-a-pictorial-diagram-of-angular-architecture)                                                                    |
-| 5   | [What are the key components of Angular?](#what-are-the-key-components-of-angular)                                                                                          |
-| 6   | [What are directives?](#what-are-directives)                                                                                                                                |
-| 7   | [What are components?](#what-are-components)                                                                                                                                |
-| 9   | [What is a template?](#what-is-a-template)                                                                                                                                  |
-| 10  | [What is a module?](#what-is-a-module)                                                                                                                                      |
-| 11  | [What are lifecycle hooks available?](#what-are-lifecycle-hooks-available)                                                                                                  |
-| 12  | [What is a data binding?](#what-is-a-data-binding)                                                                                                                          |
-| 13  | [What is metadata?](#what-is-metadata)                                                                                                                                      |
-| 14  | [What is Angular CLI?](#what-is-angular-cli)                                                                                                                                |
-| 15  | [What is the difference between constructor and ngOnInit?](#what-is-the-difference-between-constructor-and-ngoninit)                                                        |
-| 16  | [What is a service?](#what-is-a-service)                                                                                                                                    |
-| 17  | [What is dependency injection in Angular?](#what-is-dependency-injection-in-angular)                                                                                        |
-| 18  | [What is the purpose of async pipe?](#what-is-the-purpose-of-async-pipe)                                                                                                    |
-| 19  | [What is the purpose of \*ngFor directive?](#what-is-the-purpose-of-ngfor-directive)                                                                                        |
-| 20  | [What are pipes?](#what-are-pipes)                                                                                                                                          |
-| 21  | [What is a parameterized pipe?](#what-is-a-parameterized-pipe)                                                                                                              |
-| 22  | [How do you chain pipes?](#how-do-you-chain-pipes)                                                                                                                          |
-| 23  | [What is a custom pipe?](#what-is-a-custom-pipe)                                                                                                                            |
-| 24  | [What is the difference between pure and impure pipe?](#what-is-the-difference-between-pure-and-impure-pipe)                                                                |
-| 25  | [What is HttpClient and its benefits?](#what-is-httpclient-and-its-benefits)                                                                                                |
-| 26  | [What are dynamic components?](#what-are-dynamic-components)                                                                                                                |
-| 27  | [What are router events?](#what-are-router-events)                                                                                                                          |
-| 28  | [What is activated route?](#what-is-activated-route)                                                                                                                        |
-| 29  | [How do you define routes?](#how-do-you-define-routes)                                                                                                                      |
-| 30  | [What is the purpose of Wildcard route?](#what-is-the-purpose-of-wildcard-route)                                                                                            |
-| 31  | [What is Angular Universal?](#what-is-angular-universal)                                                                                                                    |
-| 32  | [What is ng-content?](#what-is-ng-content)                                                                                                                                  |
-| 33  | [What is Angular Input and Output and EventEmitter?](#what-is-angular-input-and-output-and-eventemitter)                                                                    |
-| 34  | [Template Reference Variable in Angular](#template-reference-variable-in-angular)                                                                                           |
-| 35  | [What is ng-container in Angular?](#what-is-ng-container-in-angular)                                                                                                        |
-| 36  | [How to use ng-template and TemplateRef in Angular?](#how-to-use-ng-template-and-templateref-in-angular)                                                                    |
-| 37  | [How to Use ngTemplateOutlet in Angular?](#how-to-use-ngtemplateoutlet-in-angular)                                                                                          |
-| 38  | [What are Signals?](#what-are-signals)                                                                                                                                      |
-| 39  | [Why Signal?](#why-signal)                                                                                                                                                  |
-| 40  | [Angular Signals and Observables: How and When to Use Each](#angular-signals-and-observables-how-and-when-to-use-each)                                                      |
-| 41  | [What is Effect in Signal?](#what-is-effect-in-signal)                                                                                                                      |
-| 42  | [ElementRef in Angular](#elementref-in-angular)                                                                                                                             |
-| 43  | [What is Renderer2?](#what-is-renderer2)                                                                                                                                    |
-| 44  | [How to Use @ViewChild and @ViewChildren](#how-to-use-viewchild-and-viewchildren)                                                                                           |
-| 45  | [ContentChild and ContentChildren in Angular](#contentchild-and-contentchildren-in-angular)                                                                                 |
-| 46  | [What are decorators in angular?](#what-are-decorators-in-angular)                                                                                                          |
-| 47  | [AfterViewInit, AfterViewChecked, AfterContentInit and AfterContentChecked in Angular](#afterviewinit-afterviewchecked-aftercontentinit-and-aftercontentchecked-in-angular) |
-| 48  | [What is View Encapsulation in Angular?](#what-is-view-encapsulation-in-angular)                                                                                            |
-| 49  | [What are Host and hostContext in Angular?](#what-are-host-and-hostcontext-in-angular)                                                                                      |
-| 50  | [Angular Change Detection How Does It Really Work?](#angular-change-detection-how-does-it-really-work)                                                                      |
-| 51  | [A Change Detection, Zone.js, Zoneless, Local Change Detection, and Signals Story](#a-change-detection-zone-js-zoneless-local-change-detection-and-signals-story)           |
+| No. | Questions                                                                                                                                                                             |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | [What is Angular Framework?](#what-is-angular-framework)                                                                                                                              |
+| 3   | [What is TypeScript?](#what-is-typescript)                                                                                                                                            |
+| 4   | [Write a pictorial diagram of Angular architecture?](#write-a-pictorial-diagram-of-angular-architecture)                                                                              |
+| 5   | [What are the key components of Angular?](#what-are-the-key-components-of-angular)                                                                                                    |
+| 6   | [What are directives?](#what-are-directives)                                                                                                                                          |
+| 7   | [What are components?](#what-are-components)                                                                                                                                          |
+| 9   | [What is a template?](#what-is-a-template)                                                                                                                                            |
+| 10  | [What is a module?](#what-is-a-module)                                                                                                                                                |
+| 11  | [What are lifecycle hooks available?](#what-are-lifecycle-hooks-available)                                                                                                            |
+| 12  | [What is a data binding?](#what-is-a-data-binding)                                                                                                                                    |
+| 13  | [What is metadata?](#what-is-metadata)                                                                                                                                                |
+| 14  | [What is Angular CLI?](#what-is-angular-cli)                                                                                                                                          |
+| 15  | [What is the difference between constructor and ngOnInit?](#what-is-the-difference-between-constructor-and-ngoninit)                                                                  |
+| 16  | [What is a service?](#what-is-a-service)                                                                                                                                              |
+| 17  | [What is dependency injection in Angular?](#what-is-dependency-injection-in-angular)                                                                                                  |
+| 18  | [What is the purpose of async pipe?](#what-is-the-purpose-of-async-pipe)                                                                                                              |
+| 19  | [What is the purpose of \*ngFor directive?](#what-is-the-purpose-of-ngfor-directive)                                                                                                  |
+| 20  | [What are pipes?](#what-are-pipes)                                                                                                                                                    |
+| 21  | [What is a parameterized pipe?](#what-is-a-parameterized-pipe)                                                                                                                        |
+| 22  | [How do you chain pipes?](#how-do-you-chain-pipes)                                                                                                                                    |
+| 23  | [What is a custom pipe?](#what-is-a-custom-pipe)                                                                                                                                      |
+| 24  | [What is the difference between pure and impure pipe?](#what-is-the-difference-between-pure-and-impure-pipe)                                                                          |
+| 25  | [What is HttpClient and its benefits?](#what-is-httpclient-and-its-benefits)                                                                                                          |
+| 26  | [What are dynamic components?](#what-are-dynamic-components)                                                                                                                          |
+| 27  | [What are router events?](#what-are-router-events)                                                                                                                                    |
+| 28  | [What is activated route?](#what-is-activated-route)                                                                                                                                  |
+| 29  | [How do you define routes?](#how-do-you-define-routes)                                                                                                                                |
+| 30  | [What is the purpose of Wildcard route?](#what-is-the-purpose-of-wildcard-route)                                                                                                      |
+| 31  | [What is Angular Universal?](#what-is-angular-universal)                                                                                                                              |
+| 32  | [What is ng-content?](#what-is-ng-content)                                                                                                                                            |
+| 33  | [What is Angular Input and Output and EventEmitter?](#what-is-angular-input-and-output-and-eventemitter)                                                                              |
+| 34  | [Template Reference Variable in Angular](#template-reference-variable-in-angular)                                                                                                     |
+| 35  | [What is ng-container in Angular?](#what-is-ng-container-in-angular)                                                                                                                  |
+| 36  | [How to use ng-template and TemplateRef in Angular?](#how-to-use-ng-template-and-templateref-in-angular)                                                                              |
+| 37  | [How to Use ngTemplateOutlet in Angular?](#how-to-use-ngtemplateoutlet-in-angular)                                                                                                    |
+| 38  | [What are Signals?](#what-are-signals)                                                                                                                                                |
+| 39  | [Why Signal?](#why-signal)                                                                                                                                                            |
+| 40  | [Angular Signals and Observables: How and When to Use Each](#angular-signals-and-observables-how-and-when-to-use-each)                                                                |
+| 41  | [What is Effect in Signal?](#what-is-effect-in-signal)                                                                                                                                |
+| 42  | [ElementRef in Angular](#elementref-in-angular)                                                                                                                                       |
+| 43  | [What is Renderer2?](#what-is-renderer2)                                                                                                                                              |
+| 44  | [How to Use @ViewChild and @ViewChildren](#how-to-use-viewchild-and-viewchildren)                                                                                                     |
+| 45  | [ContentChild and ContentChildren in Angular](#contentchild-and-contentchildren-in-angular)                                                                                           |
+| 46  | [What are decorators in angular?](#what-are-decorators-in-angular)                                                                                                                    |
+| 47  | [AfterViewInit, AfterViewChecked, AfterContentInit and AfterContentChecked in Angular](#afterviewinit-afterviewchecked-aftercontentinit-and-aftercontentchecked-in-angular)           |
+| 48  | [What is View Encapsulation in Angular?](#what-is-view-encapsulation-in-angular)                                                                                                      |
+| 49  | [What are Host and hostContext in Angular?](#what-are-host-and-hostcontext-in-angular)                                                                                                |
+| 50  | [Angular Change Detection How Does It Really Work?](#angular-change-detection-how-does-it-really-work)                                                                                |
+| 51  | [A Change Detection and Zone.js and Zoneless and Local Change Detection and Signals Story](#a-change-detection-and-zone-js-and-zoneless-and-local-change-detection-and-signals-story) |
 
 # Angular Service Interview Questions
 
@@ -3771,7 +3771,7 @@ export class UserComponent {
 </div>
 </div>
 
-## A Change Detection, Zone.js, Zoneless, Local Change Detection, and Signals Story
+## A Change Detection and Zone.js and Zoneless and Local Change Detection and Signals Story
 
 [⬆️ Back to Top](#top)
 
