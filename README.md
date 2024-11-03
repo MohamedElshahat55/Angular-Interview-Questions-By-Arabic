@@ -3771,7 +3771,7 @@ export class UserComponent {
 </div>
 </div>
 
-## A change detection, zone.js, zoneless, local change detection, and signals story
+## A Change Detection, Zone.js, Zoneless, Local Change Detection, and Signals Story
 
 [⬆️ Back to Top](#top)
 
