@@ -62,604 +62,711 @@ logError(): void {
 
 </div>
 
-<!-- ## A change detection, zone.js, zoneless, local change detection, and signals story
+<!-- ## Angular Signals Component API input and output and model
 
 [⬆️ Back to Top](#top)
 
 <div dir="auto" align="right">
 
-الAngular هو إطار عمل بيشتغل بطريقة الـ component-driven، يعني كل حاجة في التطبيق مبنية على مكونات (components). وزي أي إطار عمل تاني، فكرته الأساسية إنه يعرض الداتا للمستخدم ويعمل تحديث للواجهة (view) لما الداتا تتغير.
+في أنجولار، بقت في طريقة جديدة لكتابة الcomponents والdirectives والpipes، والطريقة دي اسمها Signal Components، وهي أبسط وأقوى من الطريقة التقليدية.
 
-فكرة كشف التغييرات (change detection) ببساطة هي عملية متابعة التغييرات اللي بتحصل في الداتا، ولما يحصل تغيير، يبتدي يعرضه للمستخدم في الواجهة. يعني لو مثلا عندك اسم بيظهر على الشاشة والمستخدم غيره، Angular بيعمل تحديث تلقائي للعرض عشان يظهر الاسم الجديد.
 
-زمان، Angular كانت بتستخدم حاجة اسمها Zone.js عشان تتتبع التغييرات دي. Zone.js كان مسؤول عن متابعة كل الأحداث اللي بتحصل في التطبيق، زيcilke و (server responses)، ولما يحصل تغيير، بيبدأ عملية كشف التغييرات عشان يحدّث الواجهة.
+الSignal Components هي بديل كامل للdecorators زي ```Input``` و ```Output```. كمان بتوفر طريقة جديدة لعمل two-way binding (التواصل رايح جاي). والمفروض إن دي تبقى الطريقة المفضلة اللي تكتب بيها الcomponents الجديدة في أنجولار من دلوقتي، وبالمناسبة هي جاهزة للاستخدام حالياً.
 
-دلوقتي، في توجه جديد اسمه زونليس (zoneless)، وده يعني إننا بنحاول نبعد عن استخدام Zone.js عشان نخلي الأداء أسرع ونقلل التعقيدات. الفكرة هنا إنك تتابع التغييرات بشكل محلي في كل component لوحده، وده اللي بيسموه الكشف المحلي للتغييرات (local change detection). يعني كل component يتابع الداتا بتاعته بس، من غير ما يدخل Zone.js في كل عملية.
+الميزة الأساسية في Signal Components إنها مش محتاجة decorators، وكمان مفيش أغلب lifecycle hooks اللي متعودين عليها، لأنها متكاملة بشكل عميق مع الإشارات (signals).
 
-وفي مفهوم جديد ظهر اسمه (signals)، وده عبارة عن طريقة ذكية عشان تعرف Angular إن في حاجة اتغيرت، من غير ما تتابع كل التفاصيل الصغيرة. يعني بدل ما التطبيق كله يبقى بيراقب الداتا طول الوقت، signals هتدي إشارة لما يحصل تغيير، وده يخلي الأداء أحسن والتحميل أسرع.
+لو عايز تستفيد من Signal Components، لازم تحدث لنسخة Angular 17.3 أو أعلى.
 
-![A UserCard component that shows user data in the template](https://justangular.com/cd-article/user-card-change.webp)
+في الدليل ده، حاشرح إزاي تكتب components بطريقة Signal، وإزاي تستخدم الأدوات الأساسية زي input و output و model عشان تبني Signal Components في أنجولار.
 
-A UserCard component that shows user data in the template
+<div dir="auto" align="left">
 
-![Component structure](https://justangular.com/cd-article/component-structure.webp)
+### Signal inputs with input()
 
-### مع الوقت، وإحنا بنبني components أكتر في التطبيق، بنبدأ نركبهم مع بعض ونعمل شجرة من (component tree) زي اللي موضحة في الرسم اللي فوق.
+</div>
 
-### طيب، إزاي Angular بتعرف إمتى تحدث الUI؟
+الـinput() function بقت بديل للـInput() decorator، وده بيعتبر طريقة جديدة في Angular للتعامل مع الـinputs.
 
-إزاي بتعرف إن في داتا اتغيرت؟ وإزاي بتعرف إنها محتاجة تشغل كشف التغييرات (change detection)؟
+لكن مهم تعرف إن Input() decorator لسه شغال وهيفضل مدعوم لفترة جاية.
 
-### 🔴 Change detection with synchronous code
+لما نستخدم input، القيمة اللي بنحطها للـinput property بتتحول لحاجة اسمها Signal. بمعنى إن الـSignal ده بيحتفظ دايمًا بأحدث قيمة متاحة للـinput اللي جاية من الجزء الأب أو الـparent.
 
-خلينا نبدأ بمثال بسيط. عندنا (component) فيه خاصية اسمها `name` ودالة اسمها `changeName`. لما ندوس على الزرار، بنادي دالة `changeName` اللي بتغير قيمة `name`
+مثال عملي: هنشوف إزاي نعمل input property اسمها book في BookComponent
 
 <div dir="auto" align="left">
 
 ```typescript
-@Component({
-  template: `
-    <button (click)="changeName()">Change name</button>
-    <p>{{ name }}</p>
-  `,
-})
-export class AppComponent {
-  name = "John";
+import { Component, input } from "@angular/core";
 
-  changeName() {
-    this.name = "Jane";
-  }
+@Component({...})
+class BookComponent {
+ book = input<Book>()
 }
 ```
 
 </div>
 
-لما بندوس على الزرار، changeName بتشتغل وبتغير القيمة بتاعت name من "John" لـ "Jane". لأن Angular بتحاوط كل حاجة بآلية كشف التغييرات، فإحنا نقدر نفترض بأمان إنه بعد تغيير الاسم، Angular هتشغل كود عشان تحدث العرض وتخلي كل حاجة متزامنة (in sync).
+هنا استخدمنا input عشان نعمل input field اسمها book.
 
-مثال للكود اللي Angular ممكن تشغله وراء الكواليس:
+الفرق هنا إن input بيرجع قيمة نوعها ```InputSignal<Book>``` . وده معناه إن book مش مجرد object عادي زي الطريقة القديمة باستخدام @Input، لكنها بقت حاجة بتحافظ دايمًا على آخر قيمة جايه من الجزء الأب.
 
-تخيل إن Angular شغلت كود زي ده ورا الكواليس:
+لكن بالرغم من استخدام الطريقة الجديدة، من ناحية الجزء الأب اللي بيبعت البيانات للـBookComponent، مفيش أي تغيير. تقدر تبعت بيانات بالطريقة المعتادة:
+<div dir="auto" align="left">
+
+```HTML
+<book [book]="angularCoreDeepDiveBook" />
+```
+
+</div>
+ <div dir="auto" align="left">
+
+```typescript
+angularCoreDeepDiveBook = {
+  title: "Angular Core Deep Dive",
+  synopsis: "A deep dive into Angular core concepts",
+};
+```
+
+</div>
+<div dir="auto" align="left">
+
+### Reading input() values
+
+</div>
+
+من ناحية الـ Parent Component، كل حاجة بتفضل زي ما هي.
+
+لكن بالنسبة للـ Component نفسه، إزاي نقدر نجيب قيمة الـ input؟
+
+علشان نقرا القيمة، محتاجين نستدعي الـ Signal بتاع الـ book، زي أي Signal تاني في Angular:
 
 <div dir="auto" align="left">
 
 ```typescript
-component.changeName();
-angular.runChangeDetection();
+book();
 ```
 
 </div>
 
-ده شغال تمام في الحالة البسيطة دي، عشان كل التغييرات بتحصل في نفس اللحظة (synchronously)، وده بيخلي Angular تشغل كشف التغييرات بدون مشاكل.
+السطر ده لما نستدعيه، هيجيب لنا أحدث قيمة موجودة في book signal، اللي فيها قيمة angularBook object.
 
-لكن في أغلب الوقت، لما بنغير الداتا، الموضوع مش بيحصل بشكل متزامن. غالباً بنبعت طلب HTTP، أو بنعتمد على مؤقتات (timers)، أو بنستنى أحداث تانية تحصل قبل ما نحدث الداتا. وده هنا اللي بيسبب المشاكل!
+خلي بالك إن Signals دايمًا بيكون ليها قيمة، فـ ()book هترجع لنا يا إما undefined لو مفيش حاجة، أو قيمة book object.
 
-### فين المشكلة؟
-
-لما يكون التغيير مرتبط بأحداث غير متزامنة (async)، Angular مش هتقدر تعرف لوحدها إن في حاجة اتغيرت. عشان كده بتعتمد على Zone.js (لو مش شغالين بزونليس)، اللي بيراقب الأحداث زي طلبات HTTP أو مؤقتات، وبيخبر Angular لما يحصل تغيير في الداتا، عشان تشغل كشف التغييرات وتحدث العرض.
-
-لكن استخدام الأحداث غير المتزامنة مع Angular بيخلي الأمور معقدة أكتر وبيحتاج انتباه، عشان نتأكد إن Angular دايماً في حالة تحديث (in sync) مع التغييرات.
-
-### 🔴 Change detection with asynchronous code
-
-في المثال ده، إحنا عاوزين نغير قيمة `name` بعد ثانية واحدة، وهنعمل ده باستخدام `setTimeout`.
+دلوقتي هنعدل الـ Component بتاعنا علشان نعرض title وsynopsis بتوع الكتاب في template بتاعه:
 
 <div dir="auto" align="left">
 
 ```typescript
-@Component({
-  template: `
-    <button (click)="changeName()">Change name</button>
-    <p>{{ name }}</p>
-  `,
-})
-export class AppComponent {
-  name = "John";
+import { Component, input } from "@angular/core";
 
-  changeName() {
-    setTimeout(() => {
-      this.name = "Jane";
-    }, 1000);
-  }
+@Component({
+  selector: "book",
+  standalone: true,
+  template: `<div class="book-card">
+    <b>{{ book()?.title }}</b>
+    <div>{{ book()?.synopsis }}</div>
+  </div> `,
+})
+class BookComponent {
+  book = input<Book>();
 }
 ```
 
 </div>
 
-لما ندوس على الزرار، `changeName` بتتنادي وsetTimeout بيشتغل. `setTimeout` هتستنى ثانية، وبعدها هتنفذ اللي جواها عشان تغير قيمة `name` لـ "Jane".
+لاحظ إننا في template استدعينا الـ Signal بتاع ()book، وبعد كده دخلنا على الـ title وsynopsis properties.
 
-خلينا نضيف نفس الكود اللي تخيلنا إنه شغال ورا الكواليس في Angular:
+استخدمنا ?. (الـ Optional Chaining) علشان لو الـ book ممكن يبقى undefined.
+
+الكود ده شغال، لكن ممكن يبقى متعب شوية.
+
+طب إيه اللي هيحصل لو إحنا متأكدين وضامنين إن قيمة book عمرها ما هتكون undefined؟
+
+هنا بقى يظهر لنا الفرق بين نوعين من Signal Inputs اللي ممكن نستخدمهم في Angular:
+
+#### Optional Inputs
+#### Required Inputs
 
 <div dir="auto" align="left">
 
-```typescript
-component.changeName();
+### Optional signal inputs
 
-angular.runChangeDetection();
+</div>
+
+بشكل افتراضي، inputs اللي بنعملها باستخدام ()input بتعتبر optional.
+
+ده معناه إننا مش مضطرين نحدد قيمة للـ input لما نستخدم component ده من جوه parent component.
+
+المثال اللي استخدمناه فوق مع BookComponent كان optional input.
+
+وده معناه حاجتين مهمين:
+
+أول حاجة، ممكن نستخدم BookComponent من غير ما نحدد قيمة للـ book input:
+<div dir="auto" align="left">
+
+```HTML
+<book />
 ```
 
 </div>
 
-### إيه المشكلة هنا؟
+تاني حاجة، في الحالة دي، الـ book signal هيبقى قيمته undefined.
 
-بسبب ترتيب الكود في stack، الـ callback بتاع setTimeout مش هيتنفذ غير بعد ما Angular تكون شغلت runChangeDetection. فبالتالي، Angular هتشغل كشف التغييرات، لكن name لسه ما اتغيرتش، وده هيخلي (view) ما يتحدثش، عشان كده مش هنشوف اسم "Jane" على الشاشة بعد ما نضغط الزرار. وده بيسبب مشكلة في التطبيق ⚠️.
-
-### لكن في الواقع، Angular بتحل المشكلة
-
-لو فاكرين، Angular بتستخدم Zone.js، اللي بيراقب كل الأحداث غير المتزامنة زي setTimeout. فلما setTimeout ينفذ بعد ثانية ويغير name، Zone.js هيلاحظ التغيير ويخطر Angular إنها تشغل runChangeDetection مرة تانية. وده هيخلي (view) يتحدث ويظهر القيمة الجديدة "Jane".
-
-### 🔴 Zone.js to the rescue
-
-#### إيه هي Zone.js وإزاي بتشتغل؟
-
-الZone.js موجودة من أيام Angular 2.0، وهي مكتبة بتعمل حاجة اسمها "monkey patching" لمجموعة من واجهات المتصفح (browser APIs) وتسمح لنا ندخل في دورة حياة (lifecycle) الأحداث اللي بتحصل في المتصفح. طيب إيه معنى الكلام ده؟ ببساطة، ده معناه إننا نقدر نشغل كود معين قبل أو بعد أحداث معينة بتحصل في المتصفح.
-
-خلينا نشوف مثال بسيط:
-
+لو مش عايزين تبقى القيمة الافتراضية هي undefined، ممكن كمان نحدد قيمة مبدئية للـ optional input كالتالي:
 <div dir="auto" align="left">
 
 ```typescript
-setTimeout(() => {
-  console.log("Hello world");
-}, 1000);
+const age = input<number>(0);
 ```
 
 </div>
-الكود ده هيطبع "Hello world" بعد ثانية. طيب، لو إحنا عاوزين نشغل كود معين قبل أو بعد ما setTimeout ينفذ، لأي أسباب تتعلق بالشغل مثلًا 😄؟ ده بيكون مهم لإطار عمل زي Angular، اللي ممكن يكون عاوز يشغل كود معين قبل أو بعد ما setTimeout ينفذ، عشان يتأكد إن كل التغييرات متزامنة مع كشف التغييرات (change detection).
 
-هنا بتيجي Zone.js بدورها. بتسمح لنا نعمل "zone" (ودي حاجة Angular نفسها بتستخدمها) ونتدخل في دورة حياة الـ setTimeout.
+كده، القيمة المبدئية للـ age input signal هتبقى 0 بدل undefined.
 
-مثال مع Zone.js
-هنعمل زون جديدة ونضيف عمليات قبل وبعد تنفيذ setTimeout
+<div dir="auto" align="left">
+
+### Making an input to be required
+
+</div>
+
+في بعض الحالات، بنحتاج إن input properties تكون required بدل ما تبقى optional. وده بيكون مفيد لما نكون عايزين نضمن إن قيمة معينة هتكون موجودة دايمًا.
+
+إزاي نعمل ده؟ ببساطة، بنستخدم input.required بالشكل ده:
 
 <div dir="auto" align="left">
 
 ```typescript
-const zone = Zone.current.fork({
-  onInvokeTask: (delegate, current, target, task, applyThis, applyArgs) => {
-    console.log("Before setTimeout"); // الكود ده هيشتغل قبل `setTimeout`
-    delegate.invokeTask(target, task, applyThis, applyArgs); // هنا بيشغل `setTimeout`
-    console.log("After setTimeout"); // الكود ده هيشتغل بعد `setTimeout`
+import { Component, input } from "@angular/core";
+
+@Component({
+  selector: "book",
+  standalone: true,
+  template: `<div class="book-card">
+    <b>{{ book().title }}</b>
+    <div>{{ book().synopsis }}</div>
+  </div> `,
+  styles: ``,
+})
+class BookComponent {
+  book = input.required<Book>();
+}
+```
+
+</div>
+
+فيه شوية حاجات مهمة لما بنستخدم input.required
+
+🔴 مش ممكن نحدد قيمة مبدئية للـ input signal. القيمة الأولية هتبقى هي   القيمة اللي بنمررها للـ input من الـ parent component.
+
+🔴 ماينفعش نهمل الـ book property في الـ parent component
+
+<div dir="auto" align="left">
+
+```HTML
+<book />
+```
+
+</div>
+
+لو عملنا كده، هيظهر خطأ في الـ compilation لأن الـ book input field مش optional دلوقتي!
+
+علشان نحل المشكلة دي، لازم نمرر قيمة للـ book property لما نستخدم BookComponent:
+
+<div dir="auto" align="left">
+
+```HTML
+<book [book]="angularBook" />
+```
+
+</div>
+وبكده نكون غطينا أساسيات الفرق بين optional وrequired inputs.
+
+<div dir="auto" align="left">
+
+### Setting an input property alias
+
+</div>
+
+غالبًا، بنحب نخلي اسم input property هو نفسه اسم input signal.
+
+لكن أحيانًا ممكن نحتاج ندي الـ input property اسم مختلف، وده نادرًا ما بيحصل، لكنه مفيد في بعض الحالات.
+
+لو واجهت موقف زي ده، دي الطريقة اللي تقدر تعمل بيها input alias سواء للـ optional أو required inputs:
+
+لعمل alias لـ optional input:
+
+<div dir="auto" align="left">
+
+```typescript
+book = input<Book>(null, {
+  alias: "bookInput",
+});
+```
+
+</div>
+لعمل alias لـ required input:
+
+<div dir="auto" align="left">
+
+```typescript
+book = input.required<Book>({
+  alias: "bookInput",
+});
+```
+
+</div>
+
+إزاي نستخدم الـ input alias في parent component:
+لما نيجي نستخدم الـ alias في parent component، بيكون بالشكل ده:
+<div dir="auto" align="left">
+
+```HTML
+<book [bookInput]="angularBook" />
+```
+
+</div>
+
+### 🔴 ملاحظة:
+لو حاولت تستخدم اسم الـ input property الأصلي بدل alias، زي كده:
+<div dir="auto" align="left">
+
+```HTML
+<book [book]="angularBook" />
+```
+
+</div>
+
+####  ❌ الكود مش هيشتغل، وهيطلع لك خطأ
+
+<div dir="auto" align="left">
+
+### Input value transformation: the transform function
+
+</div>
+
+في بعض الحالات النادرة، ممكن نحتاج نعدل قيمة الـ input قبل ما تتخزن في input signal.
+
+بنعمل كده عن طريق استخدام input transform، اللي بيخلينا نغير البيانات اللي جاية من parent component قبل ما تتخزن.
+
+دي الطريقة اللي نقدر نحدد بيها input transforms سواء للـ optional أو required inputs:
+
+للـ optional input:
+
+<div dir="auto" align="left">
+
+```typescript
+book = input(null, {
+  transform: (value: Book | null) => {
+    if (!value) return null;
+
+    value.title += " :TRANSFORMED";
+
+    return value;
   },
 });
 ```
 
 </div>
 
-عشان نشغل `setTimeout` داخل الزون، محتاجين نستخدم `zone.run` زي كده:
+للـ required input:
 
 <div dir="auto" align="left">
 
 ```typescript
-zone.run(() => {
-  setTimeout(() => {
-    console.log("Hello world");
-  }, 1000);
+book = input.required({
+  transform: (value: Book | null) => {
+    if (!value) return null;
+
+    value.title += " :TRANSFORMED";
+
+    return value;
+  },
 });
 ```
 
 </div>
 
-الناتج
-لما نشغل الكود ده، هنشوف التالي في الـ console
+####  🔴ملاحظة:
+قيمة خاصية transform لازم تكون pure function، يعني دالة بتشتغل بدون side effects (تأثيرات جانبية).
 
-```
-Before setTimeout
-Hello world
-After setTimeout
+في الدالة دي بنكتب منطق تحويل القيمة اللي محتاجينه، ومهم جدًا إننا نرجع قيمة من الدالة علشان الـ transform يشتغل صح.
 
-```
+<div dir="auto" align="left">
 
-### ازاي Zone.js بتعمل ده؟
+### Deriving values from signal inputs
 
-اللي Zone.js بتعمله هو إنها بتعدل في الطريقة اللي المتصفح بيشغل بيها الـ APIs زي setTimeout وsetInterval وغيرها. ده بيسمح ل Angular إنها "ترصد" التغييرات اللي بتحصل في الـ components وتحدث UI بشكل متزامن مع الأحداث، وده بيضمن إن كل حاجة في التطبيق شغالة بتناغم وكفاءة.
+</div>
 
-### 🔴 Zone.js + Angular
+بما إن input في الأساس هو مجرد signal، نقدر نعمل بيه كل اللي بنعمله مع أي signal تاني، وده بيشمل حساب derived signal منه.
 
-الZone.js و Angular: إزاي Angular بتستخدم NgZone في التطبيقات
-الAngular بتشغل Zone.js تلقائيًا في كل تطبيق، وبتعمل حاجة اسمها NgZone، وده نوع من الـ zones المخصصة اللي بتراقب التطبيق. NgZone فيها حاجة اسمها onMicrotaskEmpty، ودي عبارة عن Observable، يعني زي عداد بيتابع الأحداث اللي بتحصل في التطبيق. الـ Observable ده بيبعث قيمة لما مفيش أي مهام صغيرة (microtasks) فاضلة في الطابور. وده اللي Angular بتستخدمه عشان تعرف إن كل الكود غير المتزامن (asynchronous code) خلص، وتقدر تشغل كشف التغييرات (change detection) بأمان.
-
-![NgZone wraps every angular application today](https://justangular.com/cd-article/ngzone-1.webp)
-
-NgZone wraps every angular application today
-
-### 🔴 Component Dirty Marking in Angular
-
-في Angular، لما يحصل تغيير جوه (component)، بتقوم بتمييز component كـ "متسخ" (dirty)، وده معناه إن component محتاج يتحدث عشان يظهر التغييرات الجديدة. فكرة "تمييز component كـ dirty" بتساعد Angular إنها تحدد إيه اللي محتاج يتحدث بدل ما تحدث كل حاجة في التطبيق.
-
-#### إيه الحاجات اللي بتخلي Angular تميّز component كـ dirty؟
-
-1. الأحداث (Events زي click، mouseover، إلخ)
-   كل مرة بندوس على زرار أو بنعمل حدث معين في (template) عنده مستمع (listener)، Angular بيلف الدالة المستجيبة (callback function) بدالة تانية اسمها wrapListenerIn_markDirtyAndPreventDefault. زي ما الاسم بيوضح 😅، الدالة دي بتعلّم Component كـ dirty.
-
-2. تغييرات (Changed Inputs)
-   أثناء تشغيل كشف التغييرات، Angular بتشيك إذا كان فيه تغيير حصل في قيمة (input value) الخاصة بcomponent. لو Inputs اتغير، Angular بتميّز component كـ dirty. وده بيخلي component يعرف إنه محتاج يتحدث.
-
-3. الـ Output Emissions
-   عشان تستمع للـ outputs في Angular، بنسجل حدث في template. وزي ما شفنا قبل كده، الـ callback بتتلف بدالة تانية، ولما يتم استدعاء الحدث، component بيتعلّم كـ dirty.
-
-### وظيفة markViewDirty
-
-هي المسؤولة عن تمييز (view) الحالي وكل الأجداد (ancestors) كـ dirty.
-
-### إزاي markViewDirty بتشتغل؟
-
-دي بتعمل تمييز للview الحالي، وكمان لكل Components اللي فوقه (الأجداد) كـ dirty. وده معناه إن لما يحصل تغيير، Angular بتعرف إنها مش بس محتاجة تحدث Component ده، لكن كمان كل الأجزاء اللي بتعتمد عليه.
-
-![Dirty marking component and its ancestor up to the root](https://justangular.com/cd-article/dirty-marking.webp)
-
-Dirty marking component and its ancestor up to the root
-
-### كيف يعمل تحديث البيانات في Angular عند الضغط على الزر؟
-
-لما ندوس على الزر، Angular بتستدعي callback اللي هي هنا `changeName`. وبما إن دي ملفوفة داخل دالة `wrapListenerIn_markDirtyAndPreventDefault`، فده بيخلي Angular تميّز الـ component كـ dirty.
-
-زي ما قولنا قبل كده، Angular بتستخدم Zone.js وبتحاوط التطبيق كله بيه.
-
-![ Dirty marking component and its ancestor up to the root
-](https://justangular.com/cd-article/cd-change.webp)
-
-Dirty marking component and its ancestor up to the root
-
-### الخطوات وراء الكواليس
-
-التمييز كـ Dirty: لما `wrapListenerIn_markDirtyAndPreventDefault` تشتغل، بتقوم بتمييز الـ component وكل الأجداد كـ dirty، وبكده Angular بتعرف إن في حاجة اتغيرت في الـ component أو الـ components اللي فوقه.
-
-تنبيه Zone.js: بعد تمييز الـ components، `wrapListenerIn_markDirtyAndPreventDefault` بتشغل Zone.js.
-
-الonMicrotaskEmpty: بما إن Angular بتراقب الـ observable onMicrotaskEmpty، وأي حدث (زي click) بيسجل listener مع Zone.js، فالـ zone هيعرف إن الـ listener خلص شغله ويقدر يبعث قيمة لـ onMicrotaskEmpty.
-
-إطلاق الـ onMicrotaskEmpty: لما onMicrotaskEmpty يشتغل، ده بيقول لـ Angular إن كل المهام الصغيرة (microtasks) خلصت، وبالتالي الوقت مناسب لتشغيل change detection.
-
-![ Dirty marking component and its ancestor up to the root
-](https://justangular.com/cd-article/zone-notifying.webp)
-
-### تحديث الـ Component Binding
-
-أول ما Angular تشغل change detection، بتبدأ تراجع كل الـ components من فوق لتحت. يعني بتمر على كل الـ components (سواء كانت marked كـ dirty أو لا) وبتشيك على كل الـ bindings. لو الـ binding اتغير، بيتم تحديث الـ view.
-
-لكن ليه Angular بتشيك على كل الـ components 🤔؟ ليه ما تراجعش الـ components اللي marked كـ dirty بس؟ 🤔
-
-الإجابة هنا ليها علاقة بـ استراتيجية change detection
-
-![ Dirty marking component and its ancestor up to the root
-](https://justangular.com/cd-article/cd-binding-refresh.webp)
-
-### 🔴 OnPush Change Detection
-
-في Angular، فيه استراتيجية اسمها OnPush لـ change detection. لما نستخدم الاستراتيجية دي، Angular هتشغل change detection فقط على الـ component اللي متعلم كـ dirty.
+إزاي نقدر نعمل derived signal من input signal باستخدام computed:
 
 <div dir="auto" align="left">
 
 ```typescript
+import { Component, input, computed } from "@angular/core";
+
 @Component({
-  // ...
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: "book",
+  standalone: true,
+  template: `<div class="book-card">
+    <b>{{ book()?.title }}</b>
+    <div>{{ book()?.synopsis }}</div>
+    <div>{{ bookLength() }}</div>
+  </div> `,
+  styles: ``,
 })
-export class UserCard {}
+class BookComponent {
+  book = input.required<Book>();
+
+  bookLength = computed(() => this.book().title.length);
+}
 ```
 
 </div>
 
-![ Dirty marking component and its ancestor up to the root
-](https://justangular.com/cd-article/cd-onpush.webp)
+في الكود ده، bookLength هو derived signal ناتج من book signal.
 
-### إزاي change detection بيشتغل مع OnPush؟
+بمعنى، في أي وقت تتغير فيه قيمة book input signal، الـ bookLength signal هيتم حسابه من جديد.
 
-دلوقتي خلينا نشوف الرسوم التوضيحية عشان نفهم أكتر إزاي change detection بيشتغل لما نستخدم استراتيجية OnPush.
+كمان ممكن نستخدم effect علشان نراقب أي تغييرات بتحصل في book signal لو حابين.
 
-بعض الـ components هتكون معلمة كـ OnPush (وأي children ليها هيبقوا تلقائيًا كمان OnPush).
+خلوا في بالكم، input signal هو مجرد read-only signal، يعني مفيش حاجة خاصة بيه، تقدروا تعملوا عليه كل العمليات اللي ممكن تعملوها مع أي signal تاني.
 
-خلينا نعمل نفس الخطوة اللي فاتت، ندوس على زرار في الـ component ونغير قيمة `name`.
+<div dir="auto" align="left">
 
-1. مرحلة Dirty Marking
+### No more need for the OnChanges lifecycle hook
 
-![ Dirty marking component and its ancestor up to the root
-](https://justangular.com/cd-article/cd-on-push-click.webp)
+</div>
 
-2. إشعار Zone.js بالـ Event
-   بعدها، الـ event listener هيشعر Zone.js بالحدث.
+استخدام signal inputs بدلًا من Input() decorator بيدينا فائدة مخفية وهي تبسيط عملية متابعة التغييرات في الـ input بدون الحاجة لاستخدام OnChanges lifecycle hook.
 
-![ Dirty marking component and its ancestor up to the root
-](https://justangular.com/cd-article/on-push-zone-notify.webp)
+خلينا نوضح ده بمثال:
 
-3. انتظار انتهاء الكود غير المتزامن
-   لما كل الكود غير المتزامن يخلص، onMicrotaskEmpty هتشتغل.
-
-![ Dirty marking component and its ancestor up to the root
-](https://justangular.com/cd-article/on-push-microtask-empty.webp)
-
-4. تشغيل tick في Angular
-   بعد كده، Angular هتشغل tick وتبدأ تمر على كل الـ components من فوق لتحت وتشيك عليهم.
-
-لو الـ component حالته كانت:
-
-لوOnPush + Non-Dirty -> تتجاهله
-لوOnPush + Dirty -> تشيك الـ bindings -> تحدث الـ bindings -> تشيك الـ children
-
-![ Dirty marking component and its ancestor up to the root
-](https://justangular.com/cd-article/onpush-refresh.webp)
-
-الفائدة من OnPush
-باستخدام OnPush، Angular تقدر تتخطى أجزاء من الشجرة اللي مفيهاش أي تغييرات، وده بيقلل من تكلفة التحديث ويحسن أداء التطبيق.
-
-### 🔴 OnPush + Observables + async pipe
-
-في الAngular، observables بقت الأداة الأساسية لإدارة البيانات وتحديث الحالة (state changes). ولأن Angular بتدعم observables، هي بتوفر async pipe اللي بيعمل اشتراك (subscription) في الـ observable ويرجع آخر قيمة.
-
-عشان Angular تعرف إن القيمة اتغيرت، `async pipe` بيستخدم `markForCheck` اللي جاية من كلاس `ChangeDetectorRef`.
-
-### ازاي بيشتغل async pipe مع OnPush؟
-
-الكود التالي بيوضح الأساس اللي async pipe بيشتغل عليه:
+الطريقة التقليدية باستخدام Input@ و OnChanges:
+في الطريقة القديمة، لو عايزين نتابع تغييرات الـ input بنستخدم OnChanges بالشكل ده:
 
 <div dir="auto" align="left">
 
 ```typescript
-@Pipe()
-export class AsyncPipe implements OnDestroy, PipeTransform {
-  constructor(ref: ChangeDetectorRef) {}
+import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 
-  transform<T>(obj: Observable<T>): T | null {}
+@Component({
+  selector: "book",
+  standalone: true,
+  template: `<div class="book-card">
+    <b>{{ book?.title }}</b>
+    <div>{{ book?.synopsis }}</div>
+  </div> `,
+})
+class BookComponent implements OnChanges {
+  @Input() book: Book;
 
-  private _updateLatestValue(async: any, value: Object): void {
-    // code removed for brevity
-    this._ref!.markForCheck();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes["book"]) {
+      console.log("Book changed: ", changes.book.currentValue);
+    }
   }
 }
 ```
 
 </div>
 
-الasync pipe بيتابع الـ observable، وأول ما يحصل تغيير في القيمة، بيشغل markForCheck. الطريقة دي هي اللي بتعلّم الـ component كـ dirty، وده بيخلّي Angular تعرف إنه محتاج تحديث.
+الطريقة الجديدة باستخدام signals وeffect
 
-### ليه ده مهم؟
-
-باستخدام async pipe مع الobservables، Angular بتقدر تتأكد من إن الـ component بيتحدث تلقائيًا لما البيانات تتغير، بدون الحاجة لاستخدام .subscribe بشكل مباشر في الكود. وبما إن markForCheck بيشتغل مع OnPush، Angular بتعرف إنها محتاجة تشيك فقط على الـ components اللي اتعلمت كـ dirty، وده بيخلي التحديثات أكتر كفاءة وأقل تكلفة.
-
-![ Dirty marking component and its ancestor up to the root](https://justangular.com/cd-article/onpush-async-pipe.webp)
-
-### 🔴 OnPush + Observables + Who is triggering zone.js?
-
-في حالة إن البيانات اتغيرت بدون أي event مباشر (زي click أو mouseover)، غالبًا بيكون فيه حاجة شغالة في الخلفية زي setTimeout أو setInterval أو استدعاء HTTP بيحفز Zone.js.
-
+دلوقتي، مع نظام signal-based الجديد، مابقيناش محتاجين OnChanges lifecycle hook. بدل كده، بنستخدم effect لمتابعة أي تغيير يحصل في input signal بشكل مباشر:
 <div dir="auto" align="left">
 
 ```typescript
+import { Component, input, effect } from "@angular/core";
+
 @Component({
-  selector: "todos",
+  selector: "book",
   standalone: true,
-  imports: [AsyncPipe, JsonPipe],
-  template: `{{ todos$ | async | json }}`,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `<div class="book-card">
+    <b>{{ book()?.title }}</b>
+    <div>{{ book()?.synopsis }}</div>
+  </div> `,
+  styles: ``,
 })
-export class TodosComponent {
-  private http = inject(HttpClient);
-  private ngZone = inject(NgZone);
+class BookComponent {
+  book = input.required<Book>();
 
-  todos$ = of([] as any[]);
-
-  ngOnInit() {
-    this.ngZone.runOutsideAngular(() => {
-      setTimeout(() => {
-        // هنا البيانات هتتحدث، لكن مفيش حاجة هتشغّل Zone.js
-        this.todos$ = this.getTodos();
-      });
+  constructor() {
+    effect(() => {
+      console.log("Book changed: ", this.book());
     });
   }
+}
+```
 
-  getTodos() {
-    return this.http
-      .get<any>("https://jsonplaceholder.typicode.com/todos/1")
-      .pipe(shareReplay(1));
+</div>
+
+### الفكرة الأساسية:
+بدون الحاجة لأي lifecycle hook خاص، مجرد استدعاء effect بيكون كافي علشان يتابع أي تغييرات تحصل في input signal.
+
+<div dir="auto" align="left">
+
+### Angular component outputs with output()
+
+</div>
+
+الـ output() API هو بديل مباشر للـ Output() decorator التقليدي في Angular.
+
+رغم إن Output مش هيتم إيقافه، لكن استخدام output بيخلي كتابة الكود أكثر تناسقًا، خاصة لو كنا بنستخدم input، وبيقدم طريقة أكثر type-safe وأفضل تكاملًا مع RxJs مقارنة بالطريقة القديمة اللي بتستخدم EventEmitter.
+
+إزاي نستخدم output لتحديد component output في Angular:
+
+<div dir="auto" align="left">
+
+```typescript
+import { Component, output } from "@angular/core";
+
+@Component({
+  selector: "book",
+  standalone: true,
+  template: `<div class="book-card">
+    <b>{{ book()?.title }}</b>
+    <div>{{ book()?.synopsis }}</div>
+    <button (click)="onDelete()">Delete Book</button>
+  </div>`,
+})
+class BookComponent {
+  deleteBook = output<Book>();
+
+  onDelete() {
+    this.deleteBook.emit({
+      title: "Angular Deep Dive",
+      synopsis: "A deep dive into Angular core concepts",
+    });
   }
 }
 ```
 
 </div>
 
-### إيه اللي بيحصل هنا؟
+من وجهة نظر parent component
 
-في `ngOnInit`، استخدمنا `ngZone.runOutsideAngular`، وده API بيسمح لنا نشغّل حاجات خارج نطاق Angular zone.
-
-استخدمنا setTimeout (عشان نتخطى أول عملية تكون شغالة وكمان عشان Angular بيشغّل change detection على الأقل مرة واحدة بشكل تلقائي)، وفي داخل setTimeout، أسندنا قيمة جديدة للـ observable (todos$).
-
-بما إن setTimeout شغّال خارج نطاق Angular zone، كمان استدعاء الـ API هيشتغل خارج الـ zone عشان الكود كله جوه runOutsideAngular. وبكده، مفيش حاجة بتنبّه Zone.js إن فيه حاجة اتغيرت.
-
-### النتيجة
-
-لما تشغّل الكود ده في التطبيق، هتلاقي إن اللي بيظهر في المتصفح هو “[]” بس.
-
-### Broken State 🧨!
-
-ده وضع غير مثالي 😄، وبيفتح لنا تساؤل تاني: ازاي Angular تقدر تتعامل مع التغييرات اللي بتحصل خارج نطاق Zone.js، وخصوصًا مع استراتيجية OnPush؟
-
-### الحل؟
-
-في الحالة دي، نقدر نستخدم `ChangeDetectorRef` وندعي `markForCheck` بعد التحديث عشان نجبر Angular على تشغيل change detection على الـ component ده بالتحديد، وده هيضمن إن التحديثات بتظهر في العرض حتى لو التغييرات حصلت خارج Zone.js.
-
-### 🔴 Why can’t we just run the change detection for the component that is marked as dirty?
-
-#### ليه ما نقدرش نكتفي بتشغيل change detection للـ component اللي متعلم كـ dirty؟
-
-ممكن نعمل كده باستخدام detectChanges في كلاس ChangeDetectorRef، لكن ليها مشاكلها. لأن detectChanges بيشغل change detection بشكل متزامن، وده ممكن يسبب مشاكل في الأداء. لأن كل حاجة هتتنفذ في نفس مهمة المتصفح (browser task)، وده ممكن يسبب "performance issues" في الـ main thread ويخلي الأداء متقطع (jank).
-
-تخيل مثلاً إنك بتشيك على التغييرات في قائمة فيها 100 عنصر كل ثانية أو ثانيتين، ده هيكون عبء كبير على المتصفح
-
-#### الفرق بين markForCheck و detectChanges (تشغيل متزامن vs تشغيل مؤجل)
-
-الmarkForCheck: لما بنستخدم markForCheck، إحنا بس بنقول لـ Angular إن فيه component متعلم كـ dirty، لكن مفيش أي تحديث بيحصل في اللحظة دي. حتى لو دعينا markForCheck 1000 مرة، مش هيبقى فيه مشكلة، لأن التحديث الفعلي هيحصل في دورة الـ change detection التالية، وده بيوفر أداء أفضل.
-
-الdetectChanges: لما نستخدم detectChanges، Angular بتعمل الشغل الحقيقي فورًا، زي إنها تراجع الـ bindings وتحدث العرض (view) لو في حاجة محتاجة تتحدث. وده ممكن يسبب ضغط على الأداء، وخصوصًا لو عندنا مكونات كتيرة أو
-تحديثات متكررة.
-
-#### ليه يفضل نستخدم markForCheck بدل detectChanges؟
-
-الmarkForCheck بيسمح لـ Angular إنها تشتغل بكفاءة أعلى عن طريق تأجيل التحديثات لحد ما تكون جاهزة لتشغيل change detection بشكل مجمع (coalesced run) بدل ما يكون فيه تحديثات متزامنة (sync runs) لكل component منفصل. وده بيخلي أداء التطبيق سلس أكتر ويقلل الضغط على الـ main thread في المتصفح.
-
-### Signals 🚦
-
-الـ Signals في Angular جابت تحسينات كبيرة في تجربة المطورين. نقدر بسهولة نخلق ونعمل اشتقاق للـ state وكمان نشغل side effects لما الـ state يتغير باستخدام الـ effects. مش محتاجين نعمل اشتراك ولا إلغاء اشتراك فيها، ومش محتاجين نقلق من مشاكل الـ memory leaks 🧯.
-<div dir="auto" align="left">
-
-```typescript
-const name = signal('John');
-const upperCaseName = computed(() => name().toUpperCase());
-
-effect(() => {
-  console.log(name() + ' ' + upperCaseName());
-});
-
-setTimeout(() => {
-  name('Jane');
-}, 1000);
-
-// Output:
-// John JOHN
-// Jane JANE
-```
-
-</div>
-كمان بنقدر نستخدم الـ signals في الـ template زي ما بنستخدم الـ function calls العادية.
-
+بنفس طريقة event handling المعتادة، الـ parent component ممكن يستمع لحدث
+deleteBook بالشكل ده:
 <div dir="auto" align="left">
 
 ```HTML
-@Component({
-  template: `
-    <button (click)="name.set('Jane')">Change name</button>
-    <p>{{ name() }}</p>
-  `
-})
-export class AppComponent {
-  name = signal('John');
+<book (deleteBook)="deleteBookEvent($event)" />
+```
+
+</div>
+وفي  deleteBookEvent، هنستقبل قيمة book اللي تم إرسالها ونقدر نستخدمها في الكود:
+<div dir="auto" align="left">
+
+```typescript
+deleteBookEvent(book: Book) {
+  console.log(book);
 }
 ```
 
 </div>
 
-### 🔴 Signals and Change Detection
+<div dir="auto" align="left">
 
-في الإصدار الجديد من Angular v17، حصل تطوير في موضوع الـchange detection أو "كشف التغيرات" في الـtemplates، اللي بيخليها تستجيب لأي تحديثات في البيانات تلقائيًا بطريقة أسهل وأسرع.
+### Setting an alias on an output()
 
-#### 1. الـSignals بدل الـAsync Pipe
-زمان كنا بنستخدم حاجة اسمها async pipe عشان نقدر نستجيب لتحديثات البيانات في الـtemplate. يعني لو في قيمة بتتغير، الـasync pipe كان بيخلي Angular يعرف إن في تحديث ويعمل markForCheck للـtemplate عشان يرندر التغييرات دي. بس دلوقتي مع الإصدار الجديد، Angular بقى بيفهم إن الإشارات (signals) اللي بنستدعيها في الـtemplate مش مجرد استدعاءات دوال، لأ بقى بيشوفها كحاجات تستاهل المتابعة. وبالتالي، لو استخدمنا signal، Angular أوتوماتيك هيسجل حاجة اسمها effect (أو consumer) عشان يرائب الـsignal دي ويعمل markForCheck كل ما يحصل أي تغيير في قيمتها.
+</div>
 
-![ Dirty marking component and its ancestor up to the root](https://justangular.com/cd-article/signals-data-in-template.webp)
+زي ما قدرنا نحدد alias للـ signal inputs، كمان ممكن نحدد alias للـ output بالطريقة دي
 
-#### فإيه الفايدة هنا؟
-مش محتاجين الـasync pipe: دلوقتي بقى سهل تستدعي الـsignal في الـtemplate عادي من غير ما تضطر تستخدم async pipe.
+<div dir="auto" align="left">
 
-أداء أسرع: الـsignals دلوقتي بتوفر أداء أفضل لإن الـchange detection بيحصل في الأماكن اللي محتاجينها بس.
+```typescript
+deleteBook = output<Book>({
+  alias: "deleteBookOutput",
+});
+```
 
+</div>
+إزاي parent component يستخدم الـ alias:
+لما نحدد alias، الـ parent component هيستخدم الاسم الجديد deleteBookOutput للاستماع للحدث:
+<div dir="auto" align="left">
 
-###  🔴Improving “how” – signals
+```HTML
+<book (deleteBookOutput)="deleteBookEvent($event)" />
+```
 
-لما signal  ياخد قيمة جديدة في الـ template بتاعة الـ component، اللي بيحصل إنه بيقول لـ reactive consumer (اللي هو الكود اللي بيتابع التغيرات) إنه فيه تغيير محتاج يتشاف. لكن هنا التركيز على حاجة معينة: اللي بيتم تعليمه كأنه "dirty" أو محتاج تحديث هو reactive consumer اللي متعلق بالـ component view مش component view نفسها. يعني مش الكومبوننت ككل اللي بيتعلم كأنه عايز يتحدث، زي اللي بيحصل في الحالة العادية لو كنت بتستخدم OnPush.
+</div>
 
-#### يعني إيه Reactive Consumer؟
-ببساطة، reactive consumer هو كود أو جزء من البرنامج وظيفته إنه "يراقب" signals أو بيانات معينة عشان يشوف لو حصل عليها تغيير، ويقرر إزاي يتصرف بناءً على التغيير ده. يعني هو "المستهلك" للتحديثات اللي بتحصل على البيانات، وبيشتغل بطريقة reactive (تفاعلية).
+<div dir="auto" align="left">
 
-#### مثال توضيحي
-تخيل عندك تطبيق فيه قائمة مهام، وكل ما المستخدم يضيف مهمة جديدة أو يحذف مهمة، عايز القائمة تتحدث تلقائيًا. هنا، الـ reactive consumer بيكون الجزء من الكود اللي "منتظر" يشوف لو فيه تغيير في قائمة المهام عشان يظهرها أو يخفيها من الشاشة. لما يحصل تغيير (زي إضافة مهمة جديدة)، الـ reactive consumer يعرف إنه فيه حاجة جديدة وبيتعلم إنه "dirty" أو محتاج يتحدث عشان يعرض التغيير.
+### output() RxJs Interoperability using outputFromObservable()
 
+</div>
 
-#### ليه بنحتاج الـ Reactive Consumer؟
-الفكرة هنا إنك مش عايز التطبيق يعيد بناء كل الكومبوننت أو الـ UI من الأول في كل مرة يحصل فيها تغيير بسيط. بدل كده، بنستفيد من إن عندنا reactive consumers، بحيث يقدروا يتابعوا البيانات المطلوبة ويحدثوا بس الأجزاء المتأثرة. ده بيساعدنا نحسن الأداء، لأننا مش بنعيد بناء الكل، بس بنركز على اللي اتغير.
+زي ما وضحنا، الـ ()output مش مبني على signals، لكنه أكتر type-safe من الـ Output@ التقليدي، وبيوفر تكامل أفضل مع RxJs.
 
+واحدة من الميزات القوية هي إننا نقدر بسهولة نعمل output signal بيصدر القيم من Observable.
 
-#### يعني إيه Component View؟
-الComponent view هي الشكل أو  (View) اللي بيظهر للمستخدم من component معين في Angular. كل component بيكون ليه "view" خاص بيه، وده اللي بيعرض واجهة المستخدم (UI) اللي مرتبطة بالكومبوننت ده.
+علشان نعمل ده، بنستخدم outputFromObservable، ودي الطريقة:
 
-#### علاقة Component View بـ Change Detection
-الـ Component View هو الجزء اللي Angular بيعمل عليه "فحص للتغييرات" (change detection)، بحيث لما يحصل تغيير على البيانات اللي مرتبطة بالـ view، بيتم تحديثها على الشاشة للمستخدم بدون الحاجة لتحديث الكومبوننت بالكامل. الفكرة دي بتساعد في تحسين أداء التطبيق لأنك مش مضطر تعمل إعادة بناء لكل الكومبوننتات مرة واحدة، لكن بس الجزء اللي فعلاً حصل فيه تغيير.
+<div dir="auto" align="left">
 
+```typescript
+import { Component } from "@angular/core";
+import { outputFromObservable } from "@angular/core/rxjs-interop";
+import { of } from "rxjs";
 
-![ Dirty marking component and its ancestor up to the root](https://wp.angular.love/wp-content/uploads/2024/10/one-path.gif)
+@Component({
+  selector: "book",
+  standalone: true,
+  template: `<div class="book-card">
+    <b>{{ book()?.title }}</b>
+    <div>{{ book()?.synopsis }}</div>
+  </div>`,
+})
+class BookComponent {
+  deleteBook = outputFromObservable<Book>(
+    of({
+      title: "Angular Core Deep Dive",
+      synopsis: "A deep dive into the core features of Angular.",
+    })
+  );
+}
+```
 
-#### قبل Angular 17
-قبل إصدار Angular 17، لما الـ reactive consumer كان بيتعلم إنه "dirty"، ده كمان كان بيخلي الـ component view نفسها تتعلم كأنها محتاجة تحديث. وده بيخلي الطريقة شبيهة باللي بتعمله AsyncPipe: بيشوف لو فيه تحديث، ويعمل التحديث على مستوى الكومبوننت ككل.
+</div>
 
+🚀 الميزة هنا هي إننا نقدر نربط بين Observables وoutputs في Angular بشكل مباشر، وده بيسهل الشغل مع streams وتكامل RxJs، خصوصًا لو بنعتمد على reactive programming.
 
-بالتالي، لو عايز تطبق الاستراتيجية دي وتقلل الكشف على التغيرات (عشان تتحسن الكفاءة)، كنت هتستخدم OnPush على كل الـ components، بحيث الكشف على التغيرات يتم على مسار واحد بس، ومش بيشمل كل مكونات التطبيق مرة واحدة.
+<div dir="auto" align="left">
 
+### output() RxJs interoperability with outputToObservable()
 
-#### بعد Angular 17
-مع إصدار Angular 17 والأحدث، الوضع اتغير شوية. لما الـ reactive consumer يتعلم كأنه "dirty"، ده مش بيأثر على component view نفسها. بدل من كده، فيه دالة جديدة اسمها markAncestorsForTraversal بتشتغل. الدالة دي بتعمل حاجة شبيهة، لكنها بتمشي من الـ component لغاية فوق عند كل الـ components الجدود (من الـ component الحالي لغاية الكومبوننت الرئيسية اللي فوق الكل).
+</div>
 
+زي ما قدرنا نحول Observable لـ output باستخدام outputFromObservable، ممكن كمان نحول output إلى Observable باستخدام outputToObservable.
 
-لكن الفرق هنا إن الدالة دي مش بتعلمهم إنهم كلهم محتاجين تحديث، لا! هي بتعلم بس الجدود إن عندهم مكون فرعي (child component) محتاج تحديث. وبتديهم علامة اسمها HasChildViewsToRefresh كإشارة إنه فيه تغيير جاي من تحت، لكن مش بتعمل تحديث فعلي غير لما يوصل عند الـ component اللي فيه التغيير الفعلي.
+دي الطريقة:
 
-![ Dirty marking component and its ancestor up to the root](https://wp.angular.love/wp-content/uploads/2024/10/mark-traversal.gif)
+<div dir="auto" align="left">
 
-التقنية الجديدة للتأكد من التغيير (change detection) اتحدثت. دلوقتي لما العملية تبدأ والشجرة في الحالة دي، بيعدي على الـcomponents A وE من غير ما يعمل لهم change detection، وده لأنهم OnPush لكن مش dirty. بفضل الـHasChildViewsToRefresh flag، Angular بيكمل يزور النودز اللي معمول لها علامة بالـflag ده ويدور على الـcomponent اللي محتاج change detection (في مثالنا هنا هو اللي فيه reactive consumer ومتعلّم عليه إنه dirty). لما يوصل للـcomponent F، يلاقي إن الـreactive consumer بتاعه dirty، فـcomponent ده بس اللي بيحصل له change detection – وده component الوحيد!
+```typescript
+import { Component } from "@angular/core";
+import { output, outputToObservable } from "@angular/core/rxjs-interop";
 
+@Component({
+  selector: "book",
+  standalone: true,
+  template: `<div class="book-card">
+    <b>{{ book()?.title }}</b>
+    <div>{{ book()?.synopsis }}</div>
+    <button (click)="onDelete()">Delete Book</button>
+  </div>`,
+})
+class BookComponent {
+  deleteBook = output<Book>();
 
-حلو، صح؟ بدل ما يعمل change detection للمسار الكامل بتاع الـcomponents، دلوقتي بقى بيعمله component واحد بس. ده مثال مبسط لشجرة components، لكن المكاسب في الأداء في التطبيقات الفعلية أكبر بكتير.
+  deleteBookObservable$ = outputToObservable(this.deleteBook);
 
-النهج الجديد في الـchange detection، اللي بيخلي component واحد بس يحصل له change detection بفضل الـsignals، بيطلق عليه "شبه محلي" أو “global-local/glocal” change detection.
+  constructor() {
+    this.deleteBookObservable$.subscribe((book: Book) => {
+      console.log("Book emitted: ", book);
+    });
+  }
 
-🔴 تحذيرات لكن في شوية تحذيرات لازم تاخد بالك منها. خلينا نبص على مثال، لما ضغط المستخدم على الزرار وتسبب في تغيير إشارة signal:
+  onDelete() {
+    this.deleteBook.emit({
+      title: "Angular Core Deep Dive",
+      synopsis: "A deep dive into Angular core concepts",
+    });
+  }
+}
+```
 
-### الـglocal change detection caveat
+</div>
 
+استخدمنا outputToObservable لتحويل deleteBook output إلى Observable اسمه deleteBookObservable$.
 
-![ Dirty marking component and its ancestor up to the root](https://wp.angular.love/wp-content/uploads/2024/10/caveat1.gif)
+دلوقتي أي قيمة بيصدرها deleteBook output، هيتم استقبالها برضه في deleteBookObservable$.
 
+استخدمنا subscribe لمتابعة القيم الصادرة وطباعة أي book object جديد في الكونسول.
 
-### فين المشكلة؟
+🚀 الميزة هنا هي إننا نقدر نشتغل مع outputs كـ Observables، وده بيسهل التكامل مع RxJs وreactive programming.
 
-المشكلة بتحصل لو التغيير جاي من حاجة معينة، زي لما المستخدم يدوس على زرار، وده بيعمل تغيير في البيانات. في الحالة دي، Angular بيطبّق القواعد القديمة وبيعتبر إن الوحدة نفسها وكل اللي فوقها في الشجرة dirty، وده بيرجعنا للطريقة التقليدية اللي بتفحص الوحدات كلها، حتى لو بس وحدة واحدة محتاجة تحديث.
+<div dir="auto" align="left">
 
-### إيه اللي نتعلمه من ده؟
+### What is the model() API?
 
-لو التغيير في البيانات جاي من حاجة زي setTimeout أو Observable، ساعتها Angular هيشتغل بالنظام الجديد ويفحص الوحدات اللي محتاجة فقط. لكن لو التغيير سببه حاجة زي ضغط زرار، النظام القديم بيشتغل وبيعمل فحص لكل الوحدات اللي فوق الوحدة دي.
+</div>
 
-### 🔴 تحذير تاني:
+بالإضافة إلى ```()input``` و ```()output```، أضافت Angular API جديدة اسمها ```()model```، واللي بنستخدمها لإنشاء model inputs.
 
-لو في وحدات مش بتستخدم نظام OnPush، فحتى مع النظام الجديد، الوحدات دي هيتعمل لها فحص كل مرة، لأنها مش متعلّم عليها بالنظام الجديد.
+#### ما هو Model Input؟
+الModel Input هو نوع خاص من inputs بيكون writeable، يعني قابل للقراءة والكتابة! وده معناه إننا بنقدر نعمل two-way data binding بين الـ parent component والـ child component.
 
-![ Dirty marking component and its ancestor up to the root](https://wp.angular.love/wp-content/uploads/2024/10/caveat2a.gif)
+ببساطة،  بيسمح للـ parent component إنه يمرر بيانات للـ child component، وفي نفس الوقت، child component يقدر يرجع بيانات للـ parent component.
 
-### إيه اللي بيحصل لو مفيش OnPush؟
+مثال على استخدام ```()model```
+خلينا نشوف مثال يوضح استخدام ```()model``` في two-way binding:
 
-لو عندنا شجرة فيها وحدات زي A، B، C، وD، وكلهم مش شغالين بـOnPush، والوحدة F فيها تغيير بسيط أو تحديث، اللي هيحصل هو إن مش بس الوحدة F اللي هيتعمل لها change detection، لكن كمان الوحدات اللي في الشجرة ABCD هيتعمل لها فحص كامل في نفس الوقت. السبب إن الوحدات اللي مش بتستخدم OnPush بتشتغل على النظام الافتراضي اللي بيفحصها كل مرة يحصل فيها أي تغيير في التطبيق، حتى لو مش محتاجة.
+<div dir="auto" align="left">
 
-### ليه ده بيأثر علينا؟
+```typescript
+import { Component, model } from "@angular/core";
 
-ده بيأثر على كفاءة التطبيق، لأنه بيزود عدد الوحدات اللي بيتم فحصها مع كل تغيير، حتى لو التغيير حصل في جزء بعيد عنها. وبالتالي، وجود وحدات مش بتستخدم OnPush بيلغي جزء من الفائدة اللي بنحصل عليها من نظام الـsemi-local change detection، لأنه بيخلينا نفحص وحدات أكتر من اللي محتاجة فعلاً.
+@Component({
+  selector: "book",
+  standalone: true,
+  template: `<div class="book-card">
+    <input [(ngModel)]="bookModel().title" />
+    <div>{{ bookModel().synopsis }}</div>
+    <button (click)="updateBook()">Update Book</button>
+  </div>`,
+})
+class BookComponent {
+  bookModel = model<Book>();
 
+  updateBook() {
+    const updatedBook = {
+      ...this.bookModel(),
+      title: "Updated Title",
+    };
+    this.bookModel.set(updatedBook); // Emit updated data to the parent
+  }
+}
+```
 
-### 🔴 Zoneless Angular — Let’s remove zone.js from Angular
+</div>
 
-ليه نشيل Zone.js أصلاً؟ خلينا نفكر الأول ليه ممكن نحب نتخلص من Zone.js. فيه شوية أسباب:
+الـ parent component ممكن يمرر قيمة للـ model باستخدام [(bookModel)] بالطريقة المعتادة.
+child component يقدر يقرأ أو يعدل قيمة الـ model input، ولما يعمل تعديل باستخدام ()set, البيانات الجديدة بتترجع للـ parent component مباشرة.
 
-تقليل حجم الـ bundle في البداية: بص كده على الـ outputs اللي قدامك (واحد Zone-full وواحد Zoneless). زي ما انت شايف، Zone.js حجمه حوالي 30kB خام، وبيقل لـ 10kB لما يتضغط. ده حجم مش قليل، خصوصاً إنه بيدخل ضمن الحاجات اللي لازم تتحمل قبل ما التطبيق يبدأ يشتغل.
+من منظور parent component:
+<div dir="auto" align="left">
 
-![Zone-full vs Zoneless build output](https://wp.angular.love/wp-content/uploads/2024/10/build-output.png)
+```HTML
+<book [(bookModel)]="parentBook"></book>
+```
 
-تجنب الـ change detection اللي ملهاش لازمة: Zone.js بيساعد في إن Angular يعمل change detection من خلال إنه بيبلغه لما أي عملية تخلص. لكن هو في الحقيقة مش بيعرف إذا كانت العمليات دي غيرت أي داتا ولا لأ. عشان كده، الفريم وورك بيبالغ شوية وبيعمل run "للاحتياط".
+</div>
+الـ parentBook هتتحدث تلقائيًا لما child component يغير قيمة الـ model.
 
-عايز أوضح حاجة – Zone.js كان أداة رهيبة (أو على الأقل كان كده لما بدأ) وساهم كتير في نجاح Angular من الأول. كان بيخلي التعامل مع الفريم وورك سهل حتى للمطورين المبتدئين – يركزوا بس على شغلهم، وكل حاجة تشتغل بطرق سحرية.
+<div dir="auto" align="left">
 
-لكن، زي ما شوفنا، السحر ده له تكلفة. متأكد إن كتير من التطبيقات شغالة كويس جداً مع Zone.js. بس في حالات التطبيقات المعقدة اللي محتاجة أداء أعلى، أكيد البحث عن بدائل خطوة منطقية.
+### When to use model()?
 
-###  🔴Zoneless scheduler
+</div>
 
-الـ "Zoneless Scheduler" الجديد اللي تم تقديمه في الإصدار 17.1 بيغير طريقة عمل الـ "Zone.js" events وبيستنى لحد ما يجي له إشعار صريح من أجزاء تانية في الفريمورك عن أي تغييرات. التغيير ده مهم لأنه بدل ما يشغل عملية الـ "change detection" لما "أي عملية تحصل وخلاص"، النظام بقى يشغله "لما يوصل له إشعار أن فيه بيانات اتغيرت".
+في بعض الحالات، مثلًا لو عندنا date picker component بيحتوي على قيمة رئيسية (زي قيمة date نفسها)، ```()model```ممكن يكون مفيد جدًا. في المثال ده:
 
-عشان يحقق ده، الجدول الجديد بيعرض طريقة خاصة اسمها "notify" وبتتدعي في الحالات دي:
+الparent component هيحدد initial value للتاريخ.
 
-لما "signal" اللي بيتقرا في الـ "template" يوصل له قيمة جديدة (بالتحديد، لما "markAncestorsForTraversal" تتدعي).
+الchild component يقدر يرجع القيم المحدثة للـ parent لما المستخدم يغيرها.
 
-لما الـ "component" يتعلم أنه بقى "dirty" عن طريق "markViewDirty". ده ممكن يحصل بسبب وصول قيمة جديدة من "AsyncPipe"، أو "template-bound event"، أو عن طريق استدعاء "ComponentRef.setInput"، أو استدعاء "ChangeDetectorRef.
+ ✨ومع ذلك، في الغالب:
 
-markForCheck" بشكل مباشر، أو حاجات تانية.
+يفضل استخدام inputs وoutputs العادية لأنها أكثر وضوحًا وأسهل في الفهم.
 
-لما "afterRender hook" يتسجل، أو لما "view" يتضاف تاني للـ "change detection tree" أو يتشال من الـ "DOM". في الحالات دي، "notify" بتتدعي لكنها بس بتنفذ الـ "hooks" من غير ما تعمل "refresh" للـ "view".
+ال```()model``` لو تم استخدامها بدون سبب قوي، ممكن تؤدي لكتابة كود صعب الفهم وصعب تتبعه أثناء الـ debugging.
 
-ممكن تسأل لو "change detection" ممكن يشتغل كتير لو "signals" كتيرة اتغيرت في نفس الوقت أو لو حصلت "events" بسرعة ورا بعض. لكن التنفيذ بتاع الـ "scheduler" معمول عشان يتعامل مع ده بكفاءة. بيجمع الإشعارات على مدار فترة قصيرة وبيعمل "schedule" لتشغيل "change detection" مرة واحدة بدل ما يشغله كذا مرة. السلوك ده مبني على سباق بين "setTimeout" و "requestAnimationFrame"، بس مش هندخل في التفاصيل دي هنا. المهم إن "notify" دي بتتجمع، عشان تضمن أحسن أداء.
-
-![Zone-full vs Zoneless build output](https://wp.angular.love/wp-content/uploads/2024/10/zoneless.gif)
+تخيل إنك بتستخدم model input عبر عدة مستويات من components متداخلة، هيبقى صعب تعرف مصدر قيمة معينة أثناء تتبع الأخطاء.
 
 </div> -->
 
