@@ -64,7 +64,7 @@ This Repo is inspired by the following sources:
 | 49  | [What are Host and hostContext in Angular?](#what-are-host-and-hostcontext-in-angular)                                                                                                |
 | 50  | [Angular Change Detection How Does It Really Work?](#angular-change-detection-how-does-it-really-work)                                                                                |
 | 51  | [A Change Detection and Zone.js and Zoneless and Local Change Detection and Signals Story](#a-change-detection-and-zone-js-and-zoneless-and-local-change-detection-and-signals-story) |
-| 52  | [Angular Signals Component API input and output and model](#angular-signals-component-api-input-output-and-model)                                                                     |
+| 52  | [Angular Signals Component API input and output and model](#angular-signals-component-api-input-and-output-and-model)                                                                 |
 
 # Angular Service Interview Questions
 
