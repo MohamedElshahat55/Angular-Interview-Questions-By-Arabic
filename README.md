@@ -65,7 +65,7 @@ This Repo is inspired by the following sources:
 | 50  | [Angular Change Detection How Does It Really Work?](#angular-change-detection-how-does-it-really-work)                                                                                |
 | 51  | [A Change Detection and Zone.js and Zoneless and Local Change Detection and Signals Story](#a-change-detection-and-zone-js-and-zoneless-and-local-change-detection-and-signals-story) |
 | 52  | [Angular Signals Component API input and output and model](#angular-signals-component-api-input-and-output-and-model)                                                                 |
-| 53  | [What is Resource API?](#what-is-resource-api)                                                                   |
+| 53  | [What is Resource API?](#what-is-resource-api)                                                                                                                                        |
 
 # Angular Service Interview Questions
 
@@ -5142,7 +5142,9 @@ export class MyComponent {
 بنستخدم `()status` عشان نعرف حالة البيانات (مثلاً: بتتحمل ولا خلصت).
 بنستخدم `()error `لو حصلت مشكلة.
 
-```
+<div dir="auto" align="left">
+
+```typescript
 Value: undefined
 Status: 'loading'
 Error: undefined
@@ -5152,21 +5154,25 @@ Status: 'resolved'
 Error: undefined
 ```
 
+</div>
+
 ### في الأول
 
 الValue: undefined (لإن البيانات لسه ما وصلتش).
+
 الStatus: 'loading' (معناها إن البيانات لسه في مرحلة التحميل).
+
 الError: undefined (لإن مفيش أي مشاكل).
 
 ### بعد ما البيانات توصل
 
-الValue: { id: 1, title: "Hello World", completed: false } (البيانات اللي رجعت).
+الValue: `{ id: 1, title: "Hello World", completed: false }` (البيانات اللي رجعت).
 
 الStatus: 'resolved' (معناها إن التحميل خلص).
 
 الError: undefined (برضه مفيش مشاكل).
 
-### Updating the data locally
+### 🔴 Updating the data locally
 
 توضيح فكرة تحديث البيانات محليًا
 
@@ -5217,7 +5223,7 @@ Error: undefined
 
 ده بيساعدك لو عايز تفرق بين البيانات اللي جت من السيرفر وبين اللي تم تعديلها يدويًا.
 
-### Loading the data
+### 🔴 Loading the data
 
 تحميل البيانات من السيرفر
 
@@ -5312,7 +5318,7 @@ Error: undefined
 بمجرد ما البيانات توصل، تقدر تعرضها مباشرة في الـ UI.
 لو حصلت مشكلة، الـ error هتوضح لك السبب.
 
-### Refreshing the data
+### 🔴 Refreshing the data
 
 في بعض الأحيان، ممكن تحتاج تعيد تحميل البيانات (refresh) بناءً على تفاعل المستخدم، زي لما يضغط على زرار.
 
@@ -5351,7 +5357,7 @@ export class MyComponent {
 
 ده معناه إن الطلبات مش هتتكرر أو تتداخل، وده نفس السلوك اللي بنشوفه مع exhaustMap في RxJS.
 
-### Loading specific date based on other signals
+### 🔴 Loading specific date based on other signals
 
 تحميل البيانات بناءً على Signals
 
@@ -5385,7 +5391,7 @@ This will work fine, but one this to notice is that `loader` is `untracked` and 
 رغم إن todoId عبارة عن Signal، الـ loader هنا مش بيتتبع التغييرات اللي بتحصل في todoId.
 لو غيرت قيمة todoId، البيانات مش هتتحدث تلقائيًا.
 
-### Separate the request and the loader
+### 🔴 Separate the request and the loader
 
 عند الحاجة إلى جعل البيانات تتحدث تلقائيًا عند تغيير Signal مثل `todoId`، يمكننا استخدام خاصية `request` داخل الـ `resource`. الـ `request` تتيح تمرير Signal أو مجموعة من Signals ليتم تتبعها تلقائيًا.
 
@@ -5453,6 +5459,7 @@ todosResource = resource({
 </div>
 
 ### فايدة الـ abortSignal
+
 الـ abortSignal بتستخدم لإلغاء الطلبات اللي لسه شغالة (Unfinished Requests) لما يحصل تغيير يستدعي طلب جديد. وده بيحسن الأداء ويمنع التداخل بين الطلبات.
 
 ### الموقف اللي محتاج فيه abortSignal
@@ -5462,7 +5469,7 @@ todosResource = resource({
 مثلاً: المستخدم زوّد limit من 10 لـ 20 لـ 30 في وقت قليل.
 كل قيمة جديدة بتحتاج طلب جديد للبيانات.
 
-بدون abortSignal: الطلبات القديمة هتكمل لحد ما تخلص، وده هيستهلك موارد السيرفر 
+بدون abortSignal: الطلبات القديمة هتكمل لحد ما تخلص، وده هيستهلك موارد السيرفر
 
 مع abortSignal: الطلب القديم يتلغي أول ما يبدأ طلب جديد.
 لو حصل تغيير في أكثر من Signal مع بعض:
@@ -5470,12 +5477,14 @@ todosResource = resource({
 زي تغيير limit وquery في نفس الوقت.
 abortSignal يضمن إن الطلبات القديمة تُلغى بسرعة.
 
-### What happens when we have a request in progress and update data locally?
+### 🔴 What happens when we have a request in progress and update data locally?
+
 عندك طلب بيانات شغال (جاري تحميل البيانات من السيرفر).
 
 في نفس الوقت، قررت إنك تعدّل البيانات محليًا (من غير ما تستنى الرد من السيرفر).
 
 #### اللي بيحصل:
+
 البيانات المحلية تتحدث فورًا:
 
 أول ما تعدّل البيانات، Angular Resource API بتقوم بتحديث البيانات اللي عندك مباشرة في الواجهة (Local Update).
@@ -5487,7 +5496,7 @@ abortSignal يضمن إن الطلبات القديمة تُلغى بسرعة.
 الطلب اللي كان شغال من السيرفر (request in progress) يتم إلغاؤه تلقائيًا.
 السبب: البيانات اللي كان هيجيبها الطلب مبقتش لازمة لأنك بالفعل عدّلتها محليًا.
 
-### Create more reusable resources
+### 🔴 Create more reusable resources
 
 عن طريق فصل القيم التفاعلية (reactive values) عن الـ loader
 ممكن ننقل loader logic إلى function مستقلة ونستخدمها في أماكن مختلفة بسهولة.
@@ -5498,29 +5507,31 @@ abortSignal يضمن إن الطلبات القديمة تُلغى بسرعة.
 
 ```typescript
 todoResource = resource({
-    request: this.todoId,
-    loader: ({ request: todoId, abortSignal }) => {  
-        return fetch(
-          `https://jsonplaceholder.typicode.com/todos/${todoId}`, 
-          { signal: abortSignal } 
-        ).then((res) => res.json() as Promise<Todo>);
-    },
+  request: this.todoId,
+  loader: ({ request: todoId, abortSignal }) => {
+    return fetch(`https://jsonplaceholder.typicode.com/todos/${todoId}`, {
+      signal: abortSignal,
+    }).then((res) => res.json() as Promise<Todo>);
+  },
 });
 ```
 
 </div>
 
 الكود بعد التعديل:
+
 <div dir="auto" align="left">
 
 ```typescript
 import { ResourceLoaderParams } from "@angular/core";
 
-function todoLoader({ request: todoId, abortSignal }: ResourceLoaderParams<number>): Promise<Todo> {
-    return fetch(
-      `https://jsonplaceholder.typicode.com/todos/${todoId}`, 
-      { signal: abortSignal } 
-    ).then((res) => res.json() as Promise<Todo>);
+function todoLoader({
+  request: todoId,
+  abortSignal,
+}: ResourceLoaderParams<number>): Promise<Todo> {
+  return fetch(`https://jsonplaceholder.typicode.com/todos/${todoId}`, {
+    signal: abortSignal,
+  }).then((res) => res.json() as Promise<Todo>);
 }
 
 todoResource = resource({ request: this.todoId, loader: todoLoader });
@@ -5532,7 +5543,7 @@ todoResource = resource({ request: this.todoId, loader: todoLoader });
 
 بتعتمد على النوع ResourceLoaderParams عشان تحصل على المعلومات اللي محتاجة زي request و abortSignal.
 
-### RxResource -> The Observable based resource API
+### 🔴 RxResource -> The Observable based resource API
 
 في Angular، الاعتماد على Observables لعمليات تحميل البيانات هو أمر شائع. باستخدام rxResource، يمكننا استخدام Observables بدلاً من Signals وPromises لتحميل البيانات بشكل أكثر تفاعلية ومرونة.
 
@@ -5557,7 +5568,6 @@ export class MyComponent {
 ```
 
 </div>
-
 
 </div>
 
