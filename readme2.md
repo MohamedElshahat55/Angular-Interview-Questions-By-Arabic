@@ -62,439 +62,83 @@ logError(): void {
 
 </div>
 
-<!-- ## Angular Signals Component API input and output and model
+## Angular Signal Queries: viewChild, contentChild, viewChildren, contentChildren
 
 [⬆️ Back to Top](#top)
 
 <div dir="auto" align="right">
 
-في أنجولار، بقت في طريقة جديدة لكتابة الcomponents والdirectives والpipes، والطريقة دي اسمها Signal Components، وهي أبسط وأقوى من الطريقة التقليدية.
+مع ظهور الـ Signals في Angular، بقى عندنا دلوقتي طريقة جديدة تماماً لكتابة الـ Components في Angular باستخدام الـ Signal-based APIs، ومن غير الحاجة للـ Decorators.
 
-
-الSignal Components هي بديل كامل للdecorators زي ```Input``` و ```Output```. كمان بتوفر طريقة جديدة لعمل two-way binding (التواصل رايح جاي). والمفروض إن دي تبقى الطريقة المفضلة اللي تكتب بيها الcomponents الجديدة في أنجولار من دلوقتي، وبالمناسبة هي جاهزة للاستخدام حالياً.
-
-الميزة الأساسية في Signal Components إنها مش محتاجة decorators، وكمان مفيش أغلب lifecycle hooks اللي متعودين عليها، لأنها متكاملة بشكل عميق مع الإشارات (signals).
-
-لو عايز تستفيد من Signal Components، لازم تحدث لنسخة Angular 17.3 أو أعلى.
-
-في الدليل ده، حاشرح إزاي تكتب components بطريقة Signal، وإزاي تستخدم الأدوات الأساسية زي input و output و model عشان تبني Signal Components في أنجولار.
+جزء كبير من الطريقة الجديدة دي في كتابة الـ Components هو إدخال حاجة جديدة اسمها Signal-based Template Queries
 
 <div dir="auto" align="left">
 
-### Signal inputs with input()
+#### viewChild()
+
+#### contentChild()
+
+#### viewChildren()
+
+#### contentChildren()
 
 </div>
 
-الـinput() function بقت بديل للـInput() decorator، وده بيعتبر طريقة جديدة في Angular للتعامل مع الـinputs.
+الـ APIs دي بقت بديل جديد عن الـ Decorator-based Template Queries التقليدية زي ViewChild@، ContentChild@، ViewChildren@، و ContentChildren@.
 
-لكن مهم تعرف إن Input() decorator لسه شغال وهيفضل مدعوم لفترة جاية.
+🔴 بيشتغلوا بنفس الطريقة بالظبط، لكن:
 
-لما نستخدم input، القيمة اللي بنحطها للـinput property بتتحول لحاجة اسمها Signal. بمعنى إن الـSignal ده بيحتفظ دايمًا بأحدث قيمة متاحة للـinput اللي جاية من الجزء الأب أو الـparent.
+#### بقى نظامهم Signal-based
 
-مثال عملي: هنشوف إزاي نعمل input property اسمها book في BookComponent
+#### أسهل في الفهم والاستخدام
+
+#### سهل تدمجهم مع أي Signals تانية
+
+#### وفي العادي مش محتاجين تستخدم معاهم الـ Lifecycle Hooks
+
+هنتعمق في التفاصيل بتاعت الـ Signal Queries دي، وهنستكشف الـ Syntax بتاعهم، طرق استخدامهم، والمميزات اللي بتخليهم أحسن من الـ Traditional Decorator-based Queries.
 
 <div dir="auto" align="left">
 
-```typescript
-import { Component, input } from "@angular/core";
-
-@Component({...})
-class BookComponent {
- book = input<Book>()
-}
-```
+### What is viewChild()?
 
 </div>
 
-هنا استخدمنا input عشان نعمل input field اسمها book.
+الviewChild ده أسلوب بنستخدمه عشان نوصل لعناصر موجودة جوه تصميم (template) الكومبوننت بتاعنا.
 
-الفرق هنا إن input بيرجع قيمة نوعها ```InputSignal<Book>``` . وده معناه إن book مش مجرد object عادي زي الطريقة القديمة باستخدام @Input، لكنها بقت حاجة بتحافظ دايمًا على آخر قيمة جايه من الجزء الأب.
+العناصر دي ممكن تكون يا إما أجزاء (components) تانية معمولالها design في Angular أو عناصر HTML عادية زي `<div>` و `<button>`.
 
-لكن بالرغم من استخدام الطريقة الجديدة، من ناحية الجزء الأب اللي بيبعت البيانات للـBookComponent، مفيش أي تغيير. تقدر تبعت بيانات بالطريقة المعتادة:
+الـ viewChild بيعمل نفس وظيفة الـ ViewChild decorator، يعني الاتنين بيساعدونا نوصل للعناصر دي ونتعامل معاها.
+
+هنبدأ الأول إزاي نوصل لعناصر الـ HTML العادية، وبعد كده هنشوف إزاي نوصل للكومبوننتات (components)
+
 <div dir="auto" align="left">
 
-```HTML
-<book [book]="angularCoreDeepDiveBook" />
-```
-
-</div>
- <div dir="auto" align="left">
-
-```typescript
-angularCoreDeepDiveBook = {
-  title: "Angular Core Deep Dive",
-  synopsis: "A deep dive into Angular core concepts",
-};
-```
-
-</div>
-<div dir="auto" align="left">
-
-### Reading input() values
+### Querying plain HTML elements with viewChild()
 
 </div>
 
-من ناحية الـ Parent Component، كل حاجة بتفضل زي ما هي.
+عشان نجيب عنصر من الـtemplate، لازم نديله "template reference" باستخدام علامة #.
 
-لكن بالنسبة للـ Component نفسه، إزاي نقدر نجيب قيمة الـ input؟
-
-علشان نقرا القيمة، محتاجين نستدعي الـ Signal بتاع الـ book، زي أي Signal تاني في Angular:
+ده مثال على الطريقة:
 
 <div dir="auto" align="left">
 
 ```typescript
-book();
-```
-
-</div>
-
-السطر ده لما نستدعيه، هيجيب لنا أحدث قيمة موجودة في book signal، اللي فيها قيمة angularBook object.
-
-خلي بالك إن Signals دايمًا بيكون ليها قيمة، فـ ()book هترجع لنا يا إما undefined لو مفيش حاجة، أو قيمة book object.
-
-دلوقتي هنعدل الـ Component بتاعنا علشان نعرض title وsynopsis بتوع الكتاب في template بتاعه:
-
-<div dir="auto" align="left">
-
-```typescript
-import { Component, input } from "@angular/core";
-
 @Component({
   selector: "book",
-  standalone: true,
-  template: `<div class="book-card">
-    <b>{{ book()?.title }}</b>
-    <div>{{ book()?.synopsis }}</div>
-  </div> `,
+  template: `
+    <div>
+      <b #title>Title</b>
+    </div>
+  `,
 })
 class BookComponent {
-  book = input<Book>();
-}
-```
-
-</div>
-
-لاحظ إننا في template استدعينا الـ Signal بتاع ()book، وبعد كده دخلنا على الـ title وsynopsis properties.
-
-استخدمنا ?. (الـ Optional Chaining) علشان لو الـ book ممكن يبقى undefined.
-
-الكود ده شغال، لكن ممكن يبقى متعب شوية.
-
-طب إيه اللي هيحصل لو إحنا متأكدين وضامنين إن قيمة book عمرها ما هتكون undefined؟
-
-هنا بقى يظهر لنا الفرق بين نوعين من Signal Inputs اللي ممكن نستخدمهم في Angular:
-
-#### Optional Inputs
-#### Required Inputs
-
-<div dir="auto" align="left">
-
-### Optional signal inputs
-
-</div>
-
-بشكل افتراضي، inputs اللي بنعملها باستخدام ()input بتعتبر optional.
-
-ده معناه إننا مش مضطرين نحدد قيمة للـ input لما نستخدم component ده من جوه parent component.
-
-المثال اللي استخدمناه فوق مع BookComponent كان optional input.
-
-وده معناه حاجتين مهمين:
-
-أول حاجة، ممكن نستخدم BookComponent من غير ما نحدد قيمة للـ book input:
-<div dir="auto" align="left">
-
-```HTML
-<book />
-```
-
-</div>
-
-تاني حاجة، في الحالة دي، الـ book signal هيبقى قيمته undefined.
-
-لو مش عايزين تبقى القيمة الافتراضية هي undefined، ممكن كمان نحدد قيمة مبدئية للـ optional input كالتالي:
-<div dir="auto" align="left">
-
-```typescript
-const age = input<number>(0);
-```
-
-</div>
-
-كده، القيمة المبدئية للـ age input signal هتبقى 0 بدل undefined.
-
-<div dir="auto" align="left">
-
-### Making an input to be required
-
-</div>
-
-في بعض الحالات، بنحتاج إن input properties تكون required بدل ما تبقى optional. وده بيكون مفيد لما نكون عايزين نضمن إن قيمة معينة هتكون موجودة دايمًا.
-
-إزاي نعمل ده؟ ببساطة، بنستخدم input.required بالشكل ده:
-
-<div dir="auto" align="left">
-
-```typescript
-import { Component, input } from "@angular/core";
-
-@Component({
-  selector: "book",
-  standalone: true,
-  template: `<div class="book-card">
-    <b>{{ book().title }}</b>
-    <div>{{ book().synopsis }}</div>
-  </div> `,
-  styles: ``,
-})
-class BookComponent {
-  book = input.required<Book>();
-}
-```
-
-</div>
-
-فيه شوية حاجات مهمة لما بنستخدم input.required
-
-🔴 مش ممكن نحدد قيمة مبدئية للـ input signal. القيمة الأولية هتبقى هي   القيمة اللي بنمررها للـ input من الـ parent component.
-
-🔴 ماينفعش نهمل الـ book property في الـ parent component
-
-<div dir="auto" align="left">
-
-```HTML
-<book />
-```
-
-</div>
-
-لو عملنا كده، هيظهر خطأ في الـ compilation لأن الـ book input field مش optional دلوقتي!
-
-علشان نحل المشكلة دي، لازم نمرر قيمة للـ book property لما نستخدم BookComponent:
-
-<div dir="auto" align="left">
-
-```HTML
-<book [book]="angularBook" />
-```
-
-</div>
-وبكده نكون غطينا أساسيات الفرق بين optional وrequired inputs.
-
-<div dir="auto" align="left">
-
-### Setting an input property alias
-
-</div>
-
-غالبًا، بنحب نخلي اسم input property هو نفسه اسم input signal.
-
-لكن أحيانًا ممكن نحتاج ندي الـ input property اسم مختلف، وده نادرًا ما بيحصل، لكنه مفيد في بعض الحالات.
-
-لو واجهت موقف زي ده، دي الطريقة اللي تقدر تعمل بيها input alias سواء للـ optional أو required inputs:
-
-لعمل alias لـ optional input:
-
-<div dir="auto" align="left">
-
-```typescript
-book = input<Book>(null, {
-  alias: "bookInput",
-});
-```
-
-</div>
-لعمل alias لـ required input:
-
-<div dir="auto" align="left">
-
-```typescript
-book = input.required<Book>({
-  alias: "bookInput",
-});
-```
-
-</div>
-
-إزاي نستخدم الـ input alias في parent component:
-لما نيجي نستخدم الـ alias في parent component، بيكون بالشكل ده:
-<div dir="auto" align="left">
-
-```HTML
-<book [bookInput]="angularBook" />
-```
-
-</div>
-
-### 🔴 ملاحظة:
-لو حاولت تستخدم اسم الـ input property الأصلي بدل alias، زي كده:
-<div dir="auto" align="left">
-
-```HTML
-<book [book]="angularBook" />
-```
-
-</div>
-
-####  ❌ الكود مش هيشتغل، وهيطلع لك خطأ
-
-<div dir="auto" align="left">
-
-### Input value transformation: the transform function
-
-</div>
-
-في بعض الحالات النادرة، ممكن نحتاج نعدل قيمة الـ input قبل ما تتخزن في input signal.
-
-بنعمل كده عن طريق استخدام input transform، اللي بيخلينا نغير البيانات اللي جاية من parent component قبل ما تتخزن.
-
-دي الطريقة اللي نقدر نحدد بيها input transforms سواء للـ optional أو required inputs:
-
-للـ optional input:
-
-<div dir="auto" align="left">
-
-```typescript
-book = input(null, {
-  transform: (value: Book | null) => {
-    if (!value) return null;
-
-    value.title += " :TRANSFORMED";
-
-    return value;
-  },
-});
-```
-
-</div>
-
-للـ required input:
-
-<div dir="auto" align="left">
-
-```typescript
-book = input.required({
-  transform: (value: Book | null) => {
-    if (!value) return null;
-
-    value.title += " :TRANSFORMED";
-
-    return value;
-  },
-});
-```
-
-</div>
-
-####  🔴ملاحظة:
-قيمة خاصية transform لازم تكون pure function، يعني دالة بتشتغل بدون side effects (تأثيرات جانبية).
-
-في الدالة دي بنكتب منطق تحويل القيمة اللي محتاجينه، ومهم جدًا إننا نرجع قيمة من الدالة علشان الـ transform يشتغل صح.
-
-<div dir="auto" align="left">
-
-### Deriving values from signal inputs
-
-</div>
-
-بما إن input في الأساس هو مجرد signal، نقدر نعمل بيه كل اللي بنعمله مع أي signal تاني، وده بيشمل حساب derived signal منه.
-
-إزاي نقدر نعمل derived signal من input signal باستخدام computed:
-
-<div dir="auto" align="left">
-
-```typescript
-import { Component, input, computed } from "@angular/core";
-
-@Component({
-  selector: "book",
-  standalone: true,
-  template: `<div class="book-card">
-    <b>{{ book()?.title }}</b>
-    <div>{{ book()?.synopsis }}</div>
-    <div>{{ bookLength() }}</div>
-  </div> `,
-  styles: ``,
-})
-class BookComponent {
-  book = input.required<Book>();
-
-  bookLength = computed(() => this.book().title.length);
-}
-```
-
-</div>
-
-في الكود ده، bookLength هو derived signal ناتج من book signal.
-
-بمعنى، في أي وقت تتغير فيه قيمة book input signal، الـ bookLength signal هيتم حسابه من جديد.
-
-كمان ممكن نستخدم effect علشان نراقب أي تغييرات بتحصل في book signal لو حابين.
-
-خلوا في بالكم، input signal هو مجرد read-only signal، يعني مفيش حاجة خاصة بيه، تقدروا تعملوا عليه كل العمليات اللي ممكن تعملوها مع أي signal تاني.
-
-<div dir="auto" align="left">
-
-### No more need for the OnChanges lifecycle hook
-
-</div>
-
-استخدام signal inputs بدلًا من Input() decorator بيدينا فائدة مخفية وهي تبسيط عملية متابعة التغييرات في الـ input بدون الحاجة لاستخدام OnChanges lifecycle hook.
-
-خلينا نوضح ده بمثال:
-
-الطريقة التقليدية باستخدام Input@ و OnChanges:
-في الطريقة القديمة، لو عايزين نتابع تغييرات الـ input بنستخدم OnChanges بالشكل ده:
-
-<div dir="auto" align="left">
-
-```typescript
-import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
-
-@Component({
-  selector: "book",
-  standalone: true,
-  template: `<div class="book-card">
-    <b>{{ book?.title }}</b>
-    <div>{{ book?.synopsis }}</div>
-  </div> `,
-})
-class BookComponent implements OnChanges {
-  @Input() book: Book;
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes["book"]) {
-      console.log("Book changed: ", changes.book.currentValue);
-    }
-  }
-}
-```
-
-</div>
-
-الطريقة الجديدة باستخدام signals وeffect
-
-دلوقتي، مع نظام signal-based الجديد، مابقيناش محتاجين OnChanges lifecycle hook. بدل كده، بنستخدم effect لمتابعة أي تغيير يحصل في input signal بشكل مباشر:
-<div dir="auto" align="left">
-
-```typescript
-import { Component, input, effect } from "@angular/core";
-
-@Component({
-  selector: "book",
-  standalone: true,
-  template: `<div class="book-card">
-    <b>{{ book()?.title }}</b>
-    <div>{{ book()?.synopsis }}</div>
-  </div> `,
-  styles: ``,
-})
-class BookComponent {
-  book = input.required<Book>();
+  title = viewChild<ElementRef>("title");
 
   constructor() {
     effect(() => {
-      console.log("Book changed: ", this.book());
+      console.log("Title: ", this.title()?.nativeElement);
     });
   }
 }
@@ -502,271 +146,707 @@ class BookComponent {
 
 </div>
 
-### الفكرة الأساسية:
-بدون الحاجة لأي lifecycle hook خاص، مجرد استدعاء effect بيكون كافي علشان يتابع أي تغييرات تحصل في input signal.
+زي ما انت شايف، استخدمنا title # كـ template reference عشان نوصل للعنصر الـ HTML نفسه.
+
+وبعدين استخدمنا viewChild عشان نجيب العنصر اللي حطينا عليه الـ reference ده.
+
+الـ viewChild بيرجع لنا "signal" بتحتوي على العنصر اللي جبناه، بس بيكون جوه ElementRef.
+
+عشان نوصل للنتيجة اللي رجعته الـ query، كل اللي علينا إننا نتابع "الsignal" دي باستخدام أي API بيتعامل مع الإشارات زي ()effect أو ()computed.
 
 <div dir="auto" align="left">
 
-### Angular component outputs with output()
+### What is the value returned by this signal?
 
 </div>
 
-الـ output() API هو بديل مباشر للـ Output() decorator التقليدي في Angular.
+لاحظ إن عشان نوصل للعنصر الـ HTML الفعلي، لازم نستخدم خاصية nativeElement من قيمة الـ signal.
 
-رغم إن Output مش هيتم إيقافه، لكن استخدام output بيخلي كتابة الكود أكثر تناسقًا، خاصة لو كنا بنستخدم input، وبيقدم طريقة أكثر type-safe وأفضل تكاملًا مع RxJs مقارنة بالطريقة القديمة اللي بتستخدم EventEmitter.
-
-إزاي نستخدم output لتحديد component output في Angular:
+ده لأن ElementRef هو مجرد غلاف حوالين عنصر الـ DOM الحقيقي، مش العنصر نفسه.
 
 <div dir="auto" align="left">
 
-```typescript
-import { Component, output } from "@angular/core";
-
-@Component({
-  selector: "book",
-  standalone: true,
-  template: `<div class="book-card">
-    <b>{{ book()?.title }}</b>
-    <div>{{ book()?.synopsis }}</div>
-    <button (click)="onDelete()">Delete Book</button>
-  </div>`,
-})
-class BookComponent {
-  deleteBook = output<Book>();
-
-  onDelete() {
-    this.deleteBook.emit({
-      title: "Angular Deep Dive",
-      synopsis: "A deep dive into Angular core concepts",
-    });
-  }
-}
-```
+### Why did we use a generic parameter ElementRef?
 
 </div>
 
-من وجهة نظر parent component
+خد بالك كمان إننا استخدمنا الـ `<ElementRef>` في viewChild، عشان نحدد نوع القيم اللي الـ signal هترجعها.
 
-بنفس طريقة event handling المعتادة، الـ parent component ممكن يستمع لحدث
-deleteBook بالشكل ده:
+لو ماعملناش كده، الـ signal هتتعامل على إنها بترجع قيم من نوع unknown، وده مش اللي احنا عايزينه.
+
+وبكده تكون عرفت إزاي تعمل query لعناصر HTML العادية باستخدام `()viewChild` بكل بساطة!
+
+<div dir="auto" align="left">
+
+### What about AfterViewInit?
+
+</div>
+
+لاحظ إننا مش محتاجين نستخدم الـ `AfterViewInit lifecycle hook` التقليدي زي ما كنا بنعمل مع الـ `ViewChild decorator`.
+
+بدل كده، استخدمنا `()effect` كـ `signal` بسيطة عشان نستقبل إشعار لما عنصر `title` يبقى جاهز.
+
+وكمان ممكن نستخدم `()computed` عشان نستخرج قيم من الـ `title signal`.
+
+الـ `title signal` هي مجرد signal للقراءة فقط (read-only)، فده بيخليها سهلة في التعامل وبتندمج بشكل سلس مع باقي الأدوات المبنية على signals في الـ framework.
+
+ده معناه إننا بشكل عام مش هنحتاج نستخدم AfterViewInit تاني لما نشتغل باستخدام query signals بدل الـ decorator التقليدي.
+
+<div dir="auto" align="left">
+
+### What happens if the value of a template variable occurs more than once?
+
+</div>
 <div dir="auto" align="left">
 
 ```HTML
-<book (deleteBook)="deleteBookEvent($event)" />
+<div>
+  <b #title>First Title</b>
+  <b #title>Second Title</b>
+</div>
+
+<p #title>Paragraph Title</p>
 ```
 
 </div>
-وفي  deleteBookEvent، هنستقبل قيمة book اللي تم إرسالها ونقدر نستخدمها في الكود:
+
+في الحالة دي، `viewChild` هيختار أول عنصر موجود فيه `title#`، ومش هيظهر أي خطأ.
+
+ده يعني إنه لما يكون في أكتر من عنصر ليهم نفس الـ `template reference` (زي `title#` هنا)، `viewChild` دايمًا هياخد أول واحد بس ويهمله الباقي.
+
+<div dir="auto" align="left">
+
+### viewChild() and Component Queries
+
+</div>
+
+بجانب عناصر HTML العادية، نقدر كمان نجيب الـ component instances باستخدام ميزة `viewChild`.
+
+ممكن نعمل query للـ components إما باستخدام template references زي ما عملنا قبل كده، أو باستخدام كلاس الـ component نفسه.
+
+خلينا نبدأ بعمل query للـ components باستخدام template references:
+
 <div dir="auto" align="left">
 
 ```typescript
-deleteBookEvent(book: Book) {
-  console.log(book);
+@Component({
+  template: `
+    <div>
+      <book #book></book>
+    </div>
+  `,
+})
+class BookListComponent {
+  bookComponent = viewChild<BookComponent>("book");
 }
 ```
 
 </div>
 
-<div dir="auto" align="left">
+زي ما شايف، إحنا هنا بنستخدم <book/> component في الـ template، وحطينا ليه template reference باسم book.
 
-### Setting an alias on an output()
+لو مررنا الـ reference ده لـ viewChild، الـ query signal هترجع لنا الـ instance بتاع الـ BookComponent نفسه، مش عنصر الـ HTML المرتبط بيه.
+
+✨ده معناه إننا نقدر نتعامل مع الـ component instance مباشرة، زي كده:
+
+ <div dir="auto" align="left">
+
+```typescript
+this.bookComponent().title;
+this.bookComponent().hello();
+```
 
 </div>
 
-زي ما قدرنا نحدد alias للـ signal inputs، كمان ممكن نحدد alias للـ output بالطريقة دي
+خد بالك من استخدام الـ generic parameter BookComponent . البراميتر ده مهم عشان يعرف viewChild نوع الـ component اللي متوقعه من الـ query دي.
+
+وبكده تكون عرفت إزاي تستخدم viewChild عشان تجيب الـ component instances بشكل مباشر، بكل بساطة!
+
+<div dir="auto" align="left">
+
+### How does viewChild() work if the template changes?
+
+</div>
+
+الـ viewChild signal query بيعمل الـ query أول مرة لما الـ view بيتم تهيئته (initialize).
+
+لو في أي وقت العنصر اللي جبناه اتحذف أو اتعمله إعادة عرض (re-rendered) أو اتحدّث في شجرة الكومبوننت، الـ signal query هتعيد الـ query عشان تحدث نفسها بالحالة الحالية للعنصر.
+
+لو العنصر اتحذف، قيمة الـ signal query هتبقى undefined.
+
+لكن لما العنصر يتخلق تاني، الـ signal query هترجع تجيب العنصر من الـ template view مرة تانية.
+
+يعني زي ما شايف، الـ signal query بتحدّث نفسها تلقائيًا في كل مرة يحصل فيها تغيير في الـ detection run.
+
+<div dir="auto" align="left">
+
+### Setting "read" on viewChild()
+
+</div>
+
+الـ `viewChild` بتشتغل بشكل افتراضي إنها بترجع:
+
+العنصر HTML عادي مغلف في `ElementRef` لو اللي بنسأل عنه هو عنصر HTML.
+الكومبوننت نفسه لو العنصر ده هو كومبوننت.
+
+لكن في بعض الحالات ممكن نحتاج نغير السلوك ده عشان نرجع حاجة معينة مرتبطة بالعنصر ده، سواء كانت الكومبوننت نفسه أو حاجات مرتبطة بيه.
+
+مثال 1: الوصول للعنصر الـ HTML بدل الكومبوننت
+
+لو إحنا عندنا كومبوننت اسمه `<book/>` في الـ template، ومش عايزين نوصل للكومبوننت نفسه، لكن عايزين نوصل للعنصر الـ HTML اللي بيحتويه.
 
 <div dir="auto" align="left">
 
 ```typescript
-deleteBook = output<Book>({
-  alias: "deleteBookOutput",
+@Component({
+  template: `
+    <div>
+      <book #book></book>
+    </div>
+  `,
+})
+class BookListComponent {
+  bookComponent = viewChild("book", {
+    read: ElementRef,
+  });
+}
+```
+
+</div>
+
+هنا استخدمنا read: ElementRef مع viewChild. ده بيقول لـ viewChild إنها ترجع ElementRef اللي بيحتوي على العنصر HTML نفسه، مش الـ BookComponent.
+
+مثال 2: الوصول لDirective معينة مرتبطة بالعنصر
+
+ممكن يكون عندنا Directive معينة مضافة للعنصر، زي matTooltip اللي بتضيف tooltip على العنصر.
+
+<div dir="auto" align="left">
+
+```typescript
+@Component({
+  template: `
+    <div>
+      <book #book matTooltip="I'm a tooltip!"> </book>
+    </div>
+  `,
+  imports: [MatTooltip],
+})
+class BookListComponent {
+  bookComponent = viewChild("book", {
+    read: MatTooltip,
+  });
+
+  constructor() {
+    effect(() => {
+      console.log("Tooltip: ", this.bookComponent()?.message);
+    });
+  }
+}
+```
+
+</div>
+
+لو عايزين نوصل لحاجة معينة مرتبطة بالعنصر (زي الـ HTML element نفسه أو Directive معينة)، ممكن نحدد النوع اللي محتاجينه باستخدام read مع viewChild.
+
+<div dir="auto" align="left">
+
+### Making viewChild() to be required
+
+</div>
+
+بشكل افتراضي، `()viewChild` هترجع `undefined` لو العنصر اللي بنسأل عنه مش موجود في الـ template view.
+
+لكن ممكن نخلي `()viewChild` تعمل query تكون "إجبارية"، بمعنى إنها لازم تلاقي حاجة تطابق الـ query في الـ template. لو مفيش حاجة تطابق، هيظهر خطأ.
+
+<div dir="auto" align="left">
+
+```HTML
+<div>
+  <b #title>Title</b>
+</div>
+
+```
+
+</div>
+<div dir="auto" align="left">
+
+```typescript
+titleRef = viewChild.required("bold");
+```
+
+</div>
+
+في المثال ده، الـ query بتدور على عنصر بالـ reference bold، لكن مفيش عنصر بالـ reference ده، وبالتالي هيظهر الخطأ التالي:
+
+`ERROR Error: NG0951: Child query result is required but no value is available`
+
+</div>
+
+<!-- ## What is Resource API?
+
+[⬆️ Back to Top](#top)
+
+<div dir="auto" align="right">
+
+في Angular v19 حيكون فيه طريقة جديدة تقدر من خلالها تجيب بيانات من سيرفر، وتعرف إذا كانت العملية شغالة أو خلصت، وكمان تقدر تغير البيانات اللي عندك بشكل مباشر لما تحتاج. الطريقة دي بتسهل عليك متابعة الحالة، يعني لو البيانات لسه ما وصلتش، أو حصلت مشكلة، أو حتى لو وصلت وعايز تعدل عليها، كله حيكون واضح وأسهل في التعامل. الفكرة إنها بتنظم العملية كلها وتخليك تركز على شغلك من غير تعقيد.
+
+🔴 الـ Resource API الجديدة في Angular فكرتها بسيطة جدًا. خلينا نبص على أبسط مثال لاستخدامها.
+
+<div dir="auto" align="left">
+
+```typescript
+import { resource } from "@angular/core";
+
+@Component({})
+export class MyComponent {
+  todoResource = resource({
+    loader: () => {
+      return Promise.resolve({ id: 1, title: "Hello World", completed: false });
+    },
+  });
+
+  constructor() {
+    effect(() => {
+      console.log("Value: ", this.todoResource.value());
+      console.log("Status: ", this.todoResource.status());
+      console.log("Error: ", this.todoResource.error());
+    });
+  }
+}
+```
+
+</div>
+
+### 🔴 إيه اللي بيحصل هنا؟
+
+إحنا بنستخدم `resource` عشان نجيب بيانات، وهنا بنستعمل Promise بسيط جدًا كـ مثال.
+
+الـ `resource` بيرجع حاجة اسمها `WritableResource`. ده نوع بيساعدنا إننا نحدث البيانات لو احتجنا.
+
+المميز في النوع ده إنه مش بس بيخلينا نقرأ البيانات (زي القيمة الحالية أو الحالة)، لكن كمان بنقدر نعدل عليها يدويًا لو احتجنا، من غير ما نستنى الـ loader يشتغل من جديد.
+
+عشان نعرف القيمة اللي جت من الـ Resource
+
+بنستخدم `()value` عشان نجيب البيانات الحالية.
+بنستخدم `()status` عشان نعرف حالة البيانات (مثلاً: بتتحمل ولا خلصت).
+بنستخدم `()error `لو حصلت مشكلة.
+
+```
+Value: undefined
+Status: 'loading'
+Error: undefined
+
+Value: { id: 1, title: "Hello World", completed: false }
+Status: 'resolved'
+Error: undefined
+```
+
+### في الأول
+
+الValue: undefined (لإن البيانات لسه ما وصلتش).
+الStatus: 'loading' (معناها إن البيانات لسه في مرحلة التحميل).
+الError: undefined (لإن مفيش أي مشاكل).
+
+### بعد ما البيانات توصل
+
+الValue: { id: 1, title: "Hello World", completed: false } (البيانات اللي رجعت).
+
+الStatus: 'resolved' (معناها إن التحميل خلص).
+
+الError: undefined (برضه مفيش مشاكل).
+
+### Updating the data locally
+
+توضيح فكرة تحديث البيانات محليًا
+
+لما نتكلم عن تحديث البيانات محليًا باستخدام الـ `WritableResource`، إحنا بنقصد إننا نغير البيانات اللي عندنا من غير ما نعمل طلب جديد للسيرفر. دي طريقة ممتازة لو عايز الـ UI يتحدث بسرعة بناءً على تغييرات المستخدم، بدل ما تستنى رد من السيرفر.
+
+<div dir="auto" align="left">
+
+```typescript
+import { resource } from "@angular/core";
+
+@Component({
+  template: ` <button (click)="updateTodo()">Update</button> `,
+})
+export class MyComponent {
+  todoResource = resource({
+    loader: () => {
+      return Promise.resolve({ id: 1, title: "Hello World", completed: false });
+    },
+  });
+
+  updateTodo() {
+    this.todoResource.value.update((value) => {
+      if (!value) return undefined;
+
+      return { ...value, title: "updated" };
+    });
+  }
+}
+```
+
+</div>
+<div dir="auto" align="left">
+We can update the data locally by using the update method of the value signal.
+
+This will print the following:
+
+```typescript
+Value: { id: 1, title: "updated", completed: false }
+Status: 'local'
+Error: undefined
+```
+
+</div>
+
+### ليه الstatus مهمة؟
+
+الlocal: بتوضح إن التعديل ده حصل محليًا.
+
+ده بيساعدك لو عايز تفرق بين البيانات اللي جت من السيرفر وبين اللي تم تعديلها يدويًا.
+
+### Loading the data
+
+تحميل البيانات من السيرفر
+
+دلوقتي هنشوف إزاي نستخدم الـ `resource` عشان نجيب بيانات من السيرفر باستخدام API حقيقي زي JSONPlaceholder.
+
+<div dir="auto" align="left">
+
+```typescript
+interface Todo {
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
+@Component()
+export class MyComponent {
+  todosResource = resource({
+    loader: () => {
+      return fetch(`https://jsonplaceholder.typicode.com/todos?_limit=10`).then(
+        (res) => res.json() as Promise<Todo[]>
+      );
+    },
+  });
+}
+```
+
+</div>
+
+### شرح الكود
+
+تعريف واجهة (Interface)
+
+عرّفنا الـ Todo عشان نحدد شكل البيانات اللي راجعة (id, title, completed).
+
+### إنشاء resource
+
+استخدمنا loader لكتابة دالة بتحمل البيانات من السيرفر باستخدام fetch.
+الطلب بيسحب 10 عناصر من قائمة todos.
+
+### بداية العمل
+
+أول ما يتم إنشاء todosResource، بيبدأ الطلب على طول.
+أثناء ما الطلب شغال، القيمة (value) بتكون undefined، والحالة (status) بتكون 'loading'.
+
+### لما الطلب يخلص
+
+القيمة (value) هتتحول للبيانات اللي جت من السيرفر.
+الحالة (status) هتكون 'resolved'.
+
+### ✨ النتيجة
+
+أثناء التحميل
+
+<div dir="auto" align="left">
+
+```typescript
+Value: undefined;
+Status: "loading";
+Error: undefined;
+```
+
+</div>
+
+بعد انتهاء التحميل
+
+<div dir="auto" align="left">
+
+```typescript
+Value: [
+  { id: 1, title: "Hello World", completed: false },
+  { id: 2, title: "Hello World", completed: false },
+  ...
+]
+Status: 'resolved'
+Error: undefined
+```
+
+</div>
+
+### ملاحظات:
+
+الحالة (status)
+
+ال'loading': الطلب شغال.
+
+ال'resolved': البيانات وصلت بنجاح.
+
+ال'error': لو حصلت مشكلة أثناء التحميل.
+
+### مرونة الـ resource:
+
+بمجرد ما البيانات توصل، تقدر تعرضها مباشرة في الـ UI.
+لو حصلت مشكلة، الـ error هتوضح لك السبب.
+
+### Refreshing the data
+
+في بعض الأحيان، ممكن تحتاج تعيد تحميل البيانات (refresh) بناءً على تفاعل المستخدم، زي لما يضغط على زرار.
+
+<div dir="auto" align="left">
+
+```typescript
+import { resource } from "@angular/core";
+
+@Component({
+  template: ` <button (click)="refresh()">Refresh</button> `,
+})
+export class MyComponent {
+  todosResource = resource({
+    loader: () => {
+      return fetch(`https://jsonplaceholder.typicode.com/todos?_limit=10`).then(
+        (res) => res.json() as Promise<Todo[]>
+      );
+    },
+  });
+
+  refresh() {
+    this.todosResource.refresh();
+  }
+}
+```
+
+</div>
+
+الميثود `()refresh` اللي موجودة في الـ resource بتشتغل على إعادة تشغيل الـ loader مرة تانية لتحميل البيانات من جديد.
+
+### ملاحظة مهمة
+
+لو استدعيت `()refresh` أكتر من مرة في نفس الوقت
+
+مش هيبدأ طلب جديد إلا بعد انتهاء الطلب الحالي.
+
+ده معناه إن الطلبات مش هتتكرر أو تتداخل، وده نفس السلوك اللي بنشوفه مع exhaustMap في RxJS.
+
+### Loading specific date based on other signals
+
+تحميل البيانات بناءً على Signals
+
+لما نحتاج نحمل بيانات بناءً على Signal زي todoId، الميثود loader لوحدها مش بتتتبع تغييرات الـ Signal بشكل تلقائي. يعني لو todoId اتغيرت، الـ load مش هيتم استدعاؤه مرة تانية تلقائيًا.
+
+<div dir="auto" align="left">
+
+```typescript
+import { resource } from "@angular/core";
+
+@Component()
+export class MyComponent {
+  todoId = signal(1); // Signal لتحديد ID المطلوب
+
+  todoResource = resource({
+    loader: () => {
+      return fetch(
+        `https://jsonplaceholder.typicode.com/todos/${this.todoId()}`
+      ).then((res) => res.json() as Promise<Todo>);
+    },
+  });
+}
+```
+
+This will work fine, but one this to notice is that `loader` is `untracked` and that means, that if the todoId signal changes, the load won't be called again. Let's make it more reactive!
+
+</div>
+
+### ❌المشكلة
+
+رغم إن todoId عبارة عن Signal، الـ loader هنا مش بيتتبع التغييرات اللي بتحصل في todoId.
+لو غيرت قيمة todoId، البيانات مش هتتحدث تلقائيًا.
+
+### Separate the request and the loader
+
+عند الحاجة إلى جعل البيانات تتحدث تلقائيًا عند تغيير Signal مثل `todoId`، يمكننا استخدام خاصية `request` داخل الـ `resource`. الـ `request` تتيح تمرير Signal أو مجموعة من Signals ليتم تتبعها تلقائيًا.
+
+<div dir="auto" align="left">
+
+```typescript
+todoResource = resource({
+  request: this.todoId,
+  loader: ({ request: todoId }) => {
+    return fetch(`https://jsonplaceholder.typicode.com/todos/${todoId}`).then(
+      (res) => res.json() as Promise<Todo>
+    );
+  },
 });
 ```
 
 </div>
-إزاي parent component يستخدم الـ alias:
-لما نحدد alias، الـ parent component هيستخدم الاسم الجديد deleteBookOutput للاستماع للحدث:
-<div dir="auto" align="left">
 
-```HTML
-<book (deleteBookOutput)="deleteBookEvent($event)" />
-```
+تم تمرير this.todoId كـ Signal.
 
-</div>
+لما تتغير قيمة todoId، الـ loader يتم استدعاؤه تلقائيًا لتحميل البيانات الجديدة.
 
-<div dir="auto" align="left">
+الloader يستقبل القيمة الحالية لـ todoId عبر الخاصية request.
+يقوم بعمل طلب البيانات بناءً على هذه القيمة.
 
-### output() RxJs Interoperability using outputFromObservable()
+### التعامل مع الطلبات غير المكتملة (Unfinished Requests)
 
-</div>
-
-زي ما وضحنا، الـ ()output مش مبني على signals، لكنه أكتر type-safe من الـ Output@ التقليدي، وبيوفر تكامل أفضل مع RxJs.
-
-واحدة من الميزات القوية هي إننا نقدر بسهولة نعمل output signal بيصدر القيم من Observable.
-
-علشان نعمل ده، بنستخدم outputFromObservable، ودي الطريقة:
+إذا تغيرت قيمة todoId أثناء وجود طلب سابق قيد التنفيذ، يمكن إلغاء الطلب القديم باستخدام خاصية `abortSignal`.
 
 <div dir="auto" align="left">
 
 ```typescript
-import { Component } from "@angular/core";
-import { outputFromObservable } from "@angular/core/rxjs-interop";
-import { of } from "rxjs";
+todoResource = resource({
+  request: this.todoId,
+  loader: ({ request: todoId, abortSignal }) => {
+    return fetch(`https://jsonplaceholder.typicode.com/todos/${todoId}`, {
+      signal: abortSignal,
+    }).then((res) => res.json() as Promise<Todo>);
+  },
+});
+```
 
-@Component({
-  selector: "book",
-  standalone: true,
-  template: `<div class="book-card">
-    <b>{{ book()?.title }}</b>
-    <div>{{ book()?.synopsis }}</div>
-  </div>`,
-})
-class BookComponent {
-  deleteBook = outputFromObservable<Book>(
-    of({
-      title: "Angular Core Deep Dive",
-      synopsis: "A deep dive into the core features of Angular.",
-    })
-  );
+</div>
+
+### استخدام طلب يعتمد على إشارات متعددة (Multiple Signals)
+
+<div dir="auto" align="left">
+
+```typescript
+limit = signal(10);
+query = signal("");
+
+todosResource = resource({
+  request: () => ({ limit: this.limit(), query: this.query() }),
+  loader: ({ request, abortSignal }) => {
+    const { limit, query } = request as { limit: number; query: string };
+    return fetch(
+      `https://jsonplaceholder.typicode.com/todos?_limit=${limit}&query=${query}`,
+      { signal: abortSignal }
+    ).then((res) => res.json() as Promise<Todo[]>);
+  },
+});
+```
+
+</div>
+
+### فايدة الـ abortSignal
+الـ abortSignal بتستخدم لإلغاء الطلبات اللي لسه شغالة (Unfinished Requests) لما يحصل تغيير يستدعي طلب جديد. وده بيحسن الأداء ويمنع التداخل بين الطلبات.
+
+### الموقف اللي محتاج فيه abortSignal
+
+لو المستخدم غيّر القيم بسرعة:
+
+مثلاً: المستخدم زوّد limit من 10 لـ 20 لـ 30 في وقت قليل.
+كل قيمة جديدة بتحتاج طلب جديد للبيانات.
+
+بدون abortSignal: الطلبات القديمة هتكمل لحد ما تخلص، وده هيستهلك موارد السيرفر
+
+مع abortSignal: الطلب القديم يتلغي أول ما يبدأ طلب جديد.
+لو حصل تغيير في أكثر من Signal مع بعض:
+
+زي تغيير limit وquery في نفس الوقت.
+abortSignal يضمن إن الطلبات القديمة تُلغى بسرعة.
+
+### What happens when we have a request in progress and update data locally?
+عندك طلب بيانات شغال (جاري تحميل البيانات من السيرفر).
+
+في نفس الوقت، قررت إنك تعدّل البيانات محليًا (من غير ما تستنى الرد من السيرفر).
+
+#### اللي بيحصل:
+البيانات المحلية تتحدث فورًا:
+
+أول ما تعدّل البيانات، Angular Resource API بتقوم بتحديث البيانات اللي عندك مباشرة في الواجهة (Local Update).
+
+يعني المستخدم هيشوف التحديث الجديد بدون انتظار.
+
+إلغاء الطلب الجاري:
+
+الطلب اللي كان شغال من السيرفر (request in progress) يتم إلغاؤه تلقائيًا.
+السبب: البيانات اللي كان هيجيبها الطلب مبقتش لازمة لأنك بالفعل عدّلتها محليًا.
+
+### Create more reusable resources
+
+عن طريق فصل القيم التفاعلية (reactive values) عن الـ loader
+ممكن ننقل loader logic إلى function مستقلة ونستخدمها في أماكن مختلفة بسهولة.
+
+الكود قبل التعديل:
+
+<div dir="auto" align="left">
+
+```typescript
+todoResource = resource({
+    request: this.todoId,
+    loader: ({ request: todoId, abortSignal }) => {
+        return fetch(
+          `https://jsonplaceholder.typicode.com/todos/${todoId}`,
+          { signal: abortSignal }
+        ).then((res) => res.json() as Promise<Todo>);
+    },
+});
+```
+
+</div>
+
+الكود بعد التعديل:
+<div dir="auto" align="left">
+
+```typescript
+import { ResourceLoaderParams } from "@angular/core";
+
+function todoLoader({ request: todoId, abortSignal }: ResourceLoaderParams<number>): Promise<Todo> {
+    return fetch(
+      `https://jsonplaceholder.typicode.com/todos/${todoId}`,
+      { signal: abortSignal }
+    ).then((res) => res.json() as Promise<Todo>);
+}
+
+todoResource = resource({ request: this.todoId, loader: todoLoader });
+```
+
+</div>
+
+الـ function دي بتنقل loader logic الخارجي بعيدًا عن الـ resource.
+
+بتعتمد على النوع ResourceLoaderParams عشان تحصل على المعلومات اللي محتاجة زي request و abortSignal.
+
+### RxResource -> The Observable based resource API
+
+في Angular، الاعتماد على Observables لعمليات تحميل البيانات هو أمر شائع. باستخدام rxResource، يمكننا استخدام Observables بدلاً من Signals وPromises لتحميل البيانات بشكل أكثر تفاعلية ومرونة.
+
+<div dir="auto" align="left">
+
+```typescript
+import { rxResource } from "@angular/core/rxjs-interop";
+
+@Component()
+export class MyComponent {
+  limit = signal(10);
+
+  todosResource = rxResource({
+    request: this.limit,
+    loader: (limit) => {
+      return this.http.get<Todo[]>(
+        `https://jsonplaceholder.typicode.com/todos?_limit=${limit}`
+      );
+    },
+  });
 }
 ```
 
 </div>
 
-🚀 الميزة هنا هي إننا نقدر نربط بين Observables وoutputs في Angular بشكل مباشر، وده بيسهل الشغل مع streams وتكامل RxJs، خصوصًا لو بنعتمد على reactive programming.
-
-<div dir="auto" align="left">
-
-### output() RxJs interoperability with outputToObservable()
-
-</div>
-
-زي ما قدرنا نحول Observable لـ output باستخدام outputFromObservable، ممكن كمان نحول output إلى Observable باستخدام outputToObservable.
-
-دي الطريقة:
-
-<div dir="auto" align="left">
-
-```typescript
-import { Component } from "@angular/core";
-import { output, outputToObservable } from "@angular/core/rxjs-interop";
-
-@Component({
-  selector: "book",
-  standalone: true,
-  template: `<div class="book-card">
-    <b>{{ book()?.title }}</b>
-    <div>{{ book()?.synopsis }}</div>
-    <button (click)="onDelete()">Delete Book</button>
-  </div>`,
-})
-class BookComponent {
-  deleteBook = output<Book>();
-
-  deleteBookObservable$ = outputToObservable(this.deleteBook);
-
-  constructor() {
-    this.deleteBookObservable$.subscribe((book: Book) => {
-      console.log("Book emitted: ", book);
-    });
-  }
-
-  onDelete() {
-    this.deleteBook.emit({
-      title: "Angular Core Deep Dive",
-      synopsis: "A deep dive into Angular core concepts",
-    });
-  }
-}
-```
-
-</div>
-
-استخدمنا outputToObservable لتحويل deleteBook output إلى Observable اسمه deleteBookObservable$.
-
-دلوقتي أي قيمة بيصدرها deleteBook output، هيتم استقبالها برضه في deleteBookObservable$.
-
-استخدمنا subscribe لمتابعة القيم الصادرة وطباعة أي book object جديد في الكونسول.
-
-🚀 الميزة هنا هي إننا نقدر نشتغل مع outputs كـ Observables، وده بيسهل التكامل مع RxJs وreactive programming.
-
-<div dir="auto" align="left">
-
-### What is the model() API?
-
-</div>
-
-بالإضافة إلى ```()input``` و ```()output```، أضافت Angular API جديدة اسمها ```()model```، واللي بنستخدمها لإنشاء model inputs.
-
-#### ما هو Model Input؟
-الModel Input هو نوع خاص من inputs بيكون writeable، يعني قابل للقراءة والكتابة! وده معناه إننا بنقدر نعمل two-way data binding بين الـ parent component والـ child component.
-
-ببساطة،  بيسمح للـ parent component إنه يمرر بيانات للـ child component، وفي نفس الوقت، child component يقدر يرجع بيانات للـ parent component.
-
-مثال على استخدام ```()model```
-خلينا نشوف مثال يوضح استخدام ```()model``` في two-way binding:
-
-<div dir="auto" align="left">
-
-```typescript
-import { Component, model } from "@angular/core";
-
-@Component({
-  selector: "book",
-  standalone: true,
-  template: `<div class="book-card">
-    <input [(ngModel)]="bookModel().title" />
-    <div>{{ bookModel().synopsis }}</div>
-    <button (click)="updateBook()">Update Book</button>
-  </div>`,
-})
-class BookComponent {
-  bookModel = model<Book>();
-
-  updateBook() {
-    const updatedBook = {
-      ...this.bookModel(),
-      title: "Updated Title",
-    };
-    this.bookModel.set(updatedBook); // Emit updated data to the parent
-  }
-}
-```
-
-</div>
-
-الـ parent component ممكن يمرر قيمة للـ model باستخدام [(bookModel)] بالطريقة المعتادة.
-child component يقدر يقرأ أو يعدل قيمة الـ model input، ولما يعمل تعديل باستخدام ()set, البيانات الجديدة بتترجع للـ parent component مباشرة.
-
-من منظور parent component:
-<div dir="auto" align="left">
-
-```HTML
-<book [(bookModel)]="parentBook"></book>
-```
-
-</div>
-الـ parentBook هتتحدث تلقائيًا لما child component يغير قيمة الـ model.
-
-<div dir="auto" align="left">
-
-### When to use model()?
-
-</div>
-
-في بعض الحالات، مثلًا لو عندنا date picker component بيحتوي على قيمة رئيسية (زي قيمة date نفسها)، ```()model```ممكن يكون مفيد جدًا. في المثال ده:
-
-الparent component هيحدد initial value للتاريخ.
-
-الchild component يقدر يرجع القيم المحدثة للـ parent لما المستخدم يغيرها.
-
- ✨ومع ذلك، في الغالب:
-
-يفضل استخدام inputs وoutputs العادية لأنها أكثر وضوحًا وأسهل في الفهم.
-
-ال```()model``` لو تم استخدامها بدون سبب قوي، ممكن تؤدي لكتابة كود صعب الفهم وصعب تتبعه أثناء الـ debugging.
-
-تخيل إنك بتستخدم model input عبر عدة مستويات من components متداخلة، هيبقى صعب تعرف مصدر قيمة معينة أثناء تتبع الأخطاء.
 
 </div> -->
 
